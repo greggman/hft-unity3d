@@ -23,11 +23,12 @@ public class PlayerSpawner : MonoBehaviour
         options.gameId = gameId;
 
         m_server = new GameServer(options, gameObject);
-        m_server.Init();
 
         m_server.OnPlayerConnect += StartNewPlayer;
         m_server.OnConnect += Connected;
         m_server.OnDisconnect += Disconnected;
+
+        m_server.Init();
     }
 
     void StartNewPlayer(object sender, PlayerConnectMessageArgs e)
@@ -50,6 +51,8 @@ public class PlayerSpawner : MonoBehaviour
 
     void Disconnected(object sender, EventArgs e)
     {
+        Debug.Log("Quitting");
+        Application.Quit();
     }
 
     void Cleanup()
