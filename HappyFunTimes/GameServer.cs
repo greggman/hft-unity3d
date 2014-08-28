@@ -40,9 +40,14 @@ namespace HappyFunTimes {
 public class GameServer {
 
     public class Options {
+        public Options() {
+            cwd = System.IO.Directory.GetCurrentDirectory();
+        }
         public string gameId;
-        public string controllerUrl;    // not used!
+        public string controllerUrl;    // not used! left over so things don't break
         public bool showMessages;
+        public bool disconnectPlayersIfGameDisconnects;
+        public string cwd;                // don't set this. it will be set automatically
     };
 
     public GameServer(Options options, GameObject gameObject) {
@@ -54,13 +59,14 @@ public class GameServer {
         m_gameSystem = new GameSystem(this);
 
         m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
+		m_eventProcessor.Init(this);
     }
 
     public void Init() {
-        Init("ws://localhost:8080");
+        Init("ws://localhost:18679");
     }
 
-    public void Init(string url/* = "ws://localhost:8080" */) {
+    public void Init(string url/* = "ws://localhost:18679" */) {
 
         if (m_socket == null) {
             m_socket = new WebSocket(url);
@@ -93,6 +99,7 @@ public class GameServer {
     private Options m_options;
     private bool m_connected = false;
     private int m_totalPlayerCount = 0;
+    private bool m_gotMessages = false;
     private WebSocket m_socket;
     private Dictionary<int, NetPlayer> m_players;
     private List<String> m_sendQueue;
@@ -133,23 +140,19 @@ public class GameServer {
         // Inform the relayserver we're a server
         SendCmd("server", -1, m_options);
 
-        OnConnect.Emit(this, new EventArgs());
+        QueueEvent(delegate() {
+            OnConnect.Emit(this, new EventArgs());
+        });
     }
 
     private void SocketClosed(object sender, CloseEventArgs e) {
         //invoke when socket closed
         Debug.Log("connection closed");
-        m_connected = false;
-
-        OnDisconnect.Emit(this, new EventArgs());
-        while (m_players.Count > 0) {
-            Dictionary<int, NetPlayer>.Enumerator i = m_players.GetEnumerator();
-            i.MoveNext();
-            RemovePlayer(i.Current.Key);
-        }
+        Cleanup();
     }
 
     private void SocketMessage(object sender, MessageEventArgs e) {
+        m_gotMessages = true;
         //invoke when socket message
         if ( e!= null && e.Type == Opcode.Text) {
             try {
@@ -174,9 +177,28 @@ public class GameServer {
     }
 
     private void SocketError(object sender, ErrorEventArgs e) {
-        //invoke when socket error
-        Debug.Log("socket error: " + e.Message);
+        if (!m_gotMessages) {
+            Debug.Log("Could not connect to HappyFunTimes. Is it running?");
+        } else {
+            //invoke when socket error
+            Debug.Log("socket error: " + e.Message);
+        }
+        Cleanup();
+    }
+
+    private void Cleanup()
+    {
         m_connected = false;
+
+        QueueEvent(delegate() {
+            OnDisconnect.Emit(this, new EventArgs());
+        });
+
+        while (m_players.Count > 0) {
+            Dictionary<int, NetPlayer>.Enumerator i = m_players.GetEnumerator();
+            i.MoveNext();
+            RemovePlayer(i.Current.Key);
+        }
     }
 
     private void StartPlayer(int id, string name) {
@@ -190,7 +212,7 @@ public class GameServer {
 
         NetPlayer player = new NetPlayer(this, id);
         m_players[id] = player;
-        m_eventProcessor.QueueEvent(delegate() {
+        QueueEvent(delegate() {
             // UGH! This is not thread safe because someone might add handler to OnPlayerConnect
             // Odds or low though.
             OnPlayerConnect.Emit(this, new PlayerConnectMessageArgs(player));
@@ -214,7 +236,7 @@ public class GameServer {
         if (!m_players.TryGetValue(id, out player)) {
             return;
         }
-        m_eventProcessor.QueueEvent(delegate() {
+        QueueEvent(delegate() {
             player.Disconnect();
         });
         m_players.Remove(id);

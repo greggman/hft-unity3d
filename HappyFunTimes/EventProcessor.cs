@@ -44,9 +44,13 @@ public class EventProcessor : MonoBehaviour {
         }
     }
 
-    void Start() {
+    public EventProcessor() {
         m_queuedEvents = new List<Action>();
         m_executingEvents = new List<Action>();
+    }
+
+    public void Init(GameServer server) {
+        m_server = server;
     }
 
     void Update() {
@@ -59,6 +63,10 @@ public class EventProcessor : MonoBehaviour {
                 e();
             }
         }
+    }
+
+    void OnApplicationExit() {
+        m_server.Close();
     }
 
     private void MoveQueuedEventsToExecuting() {
@@ -76,6 +84,7 @@ public class EventProcessor : MonoBehaviour {
     private System.Object m_queueLock = new System.Object();
     private List<Action> m_queuedEvents;
     private List<Action> m_executingEvents;
+    private GameServer m_server;
 }
 
 
