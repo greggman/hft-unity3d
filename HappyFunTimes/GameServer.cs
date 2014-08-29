@@ -42,6 +42,7 @@ public class GameServer {
     public class Options {
         public Options() {
             cwd = System.IO.Directory.GetCurrentDirectory();
+            disconnectPlayersIfGameDisconnects = true;
         }
         public string gameId;
         public string controllerUrl;    // not used! left over so things don't break
@@ -59,7 +60,7 @@ public class GameServer {
         m_gameSystem = new GameSystem(this);
 
         m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
-		m_eventProcessor.Init(this);
+        m_eventProcessor.Init(this);
     }
 
     public void Init() {
@@ -156,6 +157,11 @@ public class GameServer {
         //invoke when socket message
         if ( e!= null && e.Type == Opcode.Text) {
             try {
+                // Handle ping.
+                if (e.Data == "P") {
+                    Send("P");
+                    return;
+                }
                 MessageToClient m = m_deserializer.Deserialize<MessageToClient>(e.Data);
                 // TODO: make this a dict to callback
                 if (m.cmd.Equals("start")) {
