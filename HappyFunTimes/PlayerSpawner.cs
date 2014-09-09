@@ -37,7 +37,7 @@ public class PlayerSpawner : MonoBehaviour
         SpawnInfo spawnInfo = new SpawnInfo();
         spawnInfo.netPlayer = e.netPlayer;
         spawnInfo.name = "Player" + (++m_count);
-        gameObject.SendMessage("InitalizeNetPlayer", spawnInfo);
+        gameObject.SendMessage("InitializeNetPlayer", spawnInfo);
     }
 
     void Start ()
