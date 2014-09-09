@@ -158,7 +158,7 @@ public class GameServer {
         if ( e!= null && e.Type == Opcode.Text) {
             try {
                 // Handle ping.
-                if (e.Data == "P") {
+            	    if (e.Data == "P") {
                     Send("P");
                     return;
                 }
