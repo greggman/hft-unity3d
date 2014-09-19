@@ -41,7 +41,7 @@ public class GameServer {
 
     public class Options {
         public Options() {
-            cwd = System.IO.Directory.GetCurrentDirectory();
+            cwd = Application.dataPath;
             disconnectPlayersIfGameDisconnects = true;
         }
         public string gameId;
@@ -158,7 +158,7 @@ public class GameServer {
         if ( e!= null && e.Type == Opcode.Text) {
             try {
                 // Handle ping.
-            	    if (e.Data == "P") {
+                if (e.Data == "P") {
                     Send("P");
                     return;
                 }

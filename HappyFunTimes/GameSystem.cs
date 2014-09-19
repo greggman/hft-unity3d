@@ -48,6 +48,7 @@ public class GameSystem {
     }
 
     private void OnExit(MessageExit data) {
+        Debug.Log("quit!");
         Application.Quit();
     }
 
