@@ -30,15 +30,20 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 namespace HappyFunTimes {
 
 public class PlayerConnectMessageArgs : EventArgs {
-    public PlayerConnectMessageArgs(NetPlayer _netPlayer) {
+    public PlayerConnectMessageArgs(NetPlayer _netPlayer, string _name, Dictionary<string, object> _data) {
         netPlayer = _netPlayer;
+        name = _name;
+        data = _data;
     }
 
     public NetPlayer netPlayer;
+    public string name;
+    public Dictionary<string, object> data;
 };
 
 }

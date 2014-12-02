@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{554A0027-C03D-4D04-946D-2A34E43CC586}</ProjectGuid>
+    <ProjectGuid>{97F1A61A-1B41-4878-BA21-9A029AA49791}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>HappyFunTimes</RootNamespace>
-    <AssemblyName>HappyFunTimes</AssemblyName>
+    <RootNamespace>HappyFunTimesEditor</RootNamespace>
+    <AssemblyName>HappyFunTimesEditor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <ReleaseVersion>0.2</ReleaseVersion>
   </PropertyGroup>
@@ -36,24 +36,15 @@
       <HintPath>..\..\..\..\..\Applications\Unity\Unity.app\Contents\Frameworks\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="DeJson">
-      <HintPath>libs\DeJson.dll</HintPath>
+      <HintPath>..\HappyFunTimes\libs\DeJson.dll</HintPath>
     </Reference>
-    <Reference Include="websocket-sharp">
-      <HintPath>libs\websocket-sharp.dll</HintPath>
+    <Reference Include="UnityEditor">
+      <HintPath>..\..\..\..\..\Applications\Unity\Unity.app\Contents\Frameworks\Managed\UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="MessageCmd.cs" />
-    <Compile Include="NetPlayer.cs" />
-    <Compile Include="GameServer.cs" />
-    <Compile Include="EventProcessor.cs" />
-    <Compile Include="ClientMessageArgs.cs" />
-    <Compile Include="PlayerConnectMessageArgs.cs" />
-    <Compile Include="PlayerDisconnectMessageArgs.cs" />
-    <Compile Include="PlayerSpawner.cs" />
-    <Compile Include="GameSystem.cs" />
-    <Compile Include="ArgParser.cs" />
+    <Compile Include="HFTWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

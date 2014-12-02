@@ -4,11 +4,11 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes. 
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("HappyFunTimes")]
-[assembly: AssemblyDescription(".NET Support for HappyFunTimes")]
+[assembly: AssemblyTitle("HappyFunTimesEditor")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Greggman")]
-[assembly: AssemblyProduct("HappyFunTimes")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
 [assembly: AssemblyCopyright("Gregg Tavares")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

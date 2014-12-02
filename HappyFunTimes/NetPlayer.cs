@@ -36,8 +36,12 @@ using System.Collections.Generic;
 
 namespace HappyFunTimes {
 
+/// <summary>
+/// This object represent the connections between a player's phone and this game.
+/// </summary>
 public class NetPlayer {
 
+    public delegate void UntypedCmdEventHandler(Dictionary<string, object> data);
     public delegate void TypedCmdEventHandler<T>(T eventArgs) where T : MessageCmdData;
 
     private class CmdConverter<T> where T : MessageCmdData
@@ -46,7 +50,7 @@ public class NetPlayer {
             m_handler = handler;
         }
 
-        public void Callback(GameServer server, MessageCmdData data) {
+        public void Callback(GameServer server, MessageCmdData data, Dictionary<string, object> dict) {
             server.QueueEvent(delegate() {
                 m_handler((T)data);
             });
@@ -55,8 +59,27 @@ public class NetPlayer {
         TypedCmdEventHandler<T> m_handler;
     }
 
-    public NetPlayer(GameServer server, int id) {
+    private class UntypedCmdConverter {
+        public UntypedCmdConverter(UntypedCmdEventHandler handler) {
+            m_handler = handler;
+        }
+
+        public void Callback(GameServer server, MessageCmdData data, Dictionary<string, object> dict) {
+            server.QueueEvent(delegate() {
+                object mcd = null;
+                // dict is the MessageCmd. We want dict for the MessageCmdData inside the MessageCmd
+                // It might not exist
+                dict.TryGetValue("data", out mcd);
+                m_handler((Dictionary<string, object>)mcd);
+            });
+        }
+
+        UntypedCmdEventHandler m_handler;
+    }
+
+    public NetPlayer(GameServer server, string id) {
         m_server = server;
+        m_connected = true;
         m_id = id;
         m_handlers = new Dictionary<string, CmdEventHandler>();
         m_deserializer = new Deserializer();
@@ -64,27 +87,132 @@ public class NetPlayer {
         m_deserializer.RegisterCreator(m_mcdc);
     }
 
+    /// <summary>
+    /// Lets you register a command to be called when message comes in from this player.
+    ///
+    /// The callback you register must have a CmdName attribute. That attibute will determine
+    /// which event the callback gets dispatched for.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// [CmdName("color")]
+    /// private class MessageColor : MessageCmdData {
+    ///     public string color = "";    // in CSS format rgb(r,g,b)
+    /// };
+    ///
+    /// ...
+    /// netPlayer.RegisterCmdHandler<MessageColor>(OnColor);
+    /// ...
+    /// void OnColor(MessageColor) {
+    ///   Debug.Log("received msg with color: " + color);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="callback">Typed callback</param>
     public void RegisterCmdHandler<T>(TypedCmdEventHandler<T> callback) where T : MessageCmdData {
         string name = MessageCmdDataNameDB.GetCmdName(typeof(T));
         if (name == null) {
             throw new System.InvalidOperationException("no CmdNameAttribute on " + typeof(T).Name);
         }
+        RegisterCmdHandler<T>(name, callback);
+    }
+
+    /// <summary>
+    /// Lets you register a command to be called when a message comes in from this player.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// private class MessageColor : MessageCmdData {
+    ///     public string color = "";    // in CSS format rgb(r,g,b)
+    /// };
+    ///
+    /// ...
+    /// newPlayer.RegisterCmdHandler("color", OnColor);
+    /// ...
+    /// void OnColor(MessageColor) {
+    ///   Debug.Log("received msg with color: " + color);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="name">command to call callback for</param>
+    /// <param name="callback">Typed callback</param>
+    public void RegisterCmdHandler<T>(string name, TypedCmdEventHandler<T> callback) where T : MessageCmdData {
         CmdConverter<T> converter = new CmdConverter<T>(callback);
         m_handlers[name] = converter.Callback;
-        m_mcdc.RegisterCreator(typeof(T));
+        m_mcdc.RegisterCreator(name, typeof(T));
     }
 
+    /// <summary>
+    /// Lets you register a command to be called when a message is sent from this player.
+    ///
+    /// This the most low-level basic version of RegisterCmdHandler. The function registered
+    /// will be called with a Dictionary<string, object> with whatever data is passed in.
+    /// You can either pull the data out directly OR you can call Deserializer.Deserilize
+    /// with a type and have the data extracted for you.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// ...
+    /// netPlayer.RegisterCmdHandler("color", OnColor);
+    /// ...
+    /// void OnColor(Dictionary<string, object> data) {
+    ///   Debug.Log("received msg with color: " + data["color"]);
+    /// }
+    /// </code>
+    /// or
+    /// <code>
+    /// private class MessageColor : MessageCmdData {
+    ///     public string color = "";    // in CSS format rgb(r,g,b)
+    /// };
+    /// ...
+    /// gameServer.RegisterCmdHandler("color", OnColor);
+    /// ...
+    /// void OnColor(Dictionary<string, object> data) {
+    ///   Deserializer d = new Deserializer();
+    ///   MessageColor msg = d.Deserialize<MessageColor>(data);
+    ///   Debug.Log("received msg with color: " + msg.color);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="name">command to call callback for</param>
+    /// <param name="callback">Typed callback</param>
+    public void RegisterCmdHandler(string name, UntypedCmdEventHandler callback) {
+        UntypedCmdConverter converter = new UntypedCmdConverter(callback);
+        m_handlers[name] = converter.Callback;
+        m_mcdc.RegisterCreator(name, typeof(Dictionary<string, object>));
+    }
 
     /// <param name="server">This needs the server because messages need to be queued as they need to be delivered on anther thread</param>.
-    private delegate void CmdEventHandler(GameServer server, MessageCmdData cmdData);
+    private delegate void CmdEventHandler(GameServer server, MessageCmdData cmdData, Dictionary<string, object> dict);
 
-    public void SendCmd(MessageCmdData data) { // Make it Ob's name is the message.
-        string name = MessageCmdDataNameDB.GetCmdName(data.GetType());
-        MessageCmd msgCmd = new MessageCmd(name, data);
-        m_server.SendCmd("client", m_id, msgCmd);
+    private void SendCmd(string cmd, MessageCmdData data)
+    {
+        if (m_connected)
+        {
+            m_server.SendCmd(cmd, data, m_id);
+        }
     }
 
-    public void SendUnparsedEvent(Dictionary<string, object> data) {
+    /// <summary>
+    /// Sends a message to this player's phone
+    /// </summary>
+    /// <param name="data">The message. It must be derived from MessageCmdData and must have a
+    /// CmdName attribute</param>
+    /// <example>
+    /// <code>
+    /// </code>
+    /// </example>
+    public void SendCmd(MessageCmdData data) {
+        SendCmd("client", data);
+    }
+
+    public void SendUnparsedEvent(Dictionary<string, object> data)
+    {
+        if (!m_connected)
+        {
+            return;
+        }
+
         // If there are no handlers registered then the object using this NetPlayer
         // has not been instantiated yet. The issue is the GameSever makes a NetPlayer.
         // It then has to queue an event to start that player so that it can be started
@@ -106,7 +234,7 @@ public class NetPlayer {
                 Debug.LogError("unhandled NetPlayer cmd: " + cmd.cmd);
                 return;
             }
-            handler(m_server, cmd.data);
+            handler(m_server, cmd.data, data);
         } catch (Exception ex) {
             Debug.LogException(ex);
         }
@@ -117,10 +245,30 @@ public class NetPlayer {
         OnDisconnect(this, new EventArgs());
     }
 
+    private class MessageSwitchGame : MessageCmdData {
+        public string gameId;
+        public MessageCmdData data;
+
+        public MessageSwitchGame(string id, MessageCmdData d) {
+            gameId = id;
+            data = d;
+        }
+    }
+
+    public void SwitchGame(string gameId, MessageCmdData data)
+    {
+        if (m_connected)
+        {
+            m_server.SendSysCmd("switchGame", m_id, new MessageSwitchGame(gameId, data));
+            m_connected = false;
+        }
+    }
+
     public event EventHandler<EventArgs> OnDisconnect;
 
     private GameServer m_server;
-    private int m_id;
+    private string m_id;
+    private bool m_connected;
     private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
     private Deserializer m_deserializer;
     private MessageCmdDataCreator m_mcdc;

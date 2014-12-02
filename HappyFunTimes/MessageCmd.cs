@@ -159,6 +159,10 @@ public class MessageCmdDataCreator : Deserializer.CustomCreator {
         m_creators[name] = new TypeBasedCreator(type);
     }
 
+    public void RegisterCreator(string name, System.Type type) {
+        m_creators[name] = new TypeBasedCreator(type);
+    }
+
     public override object Create(Dictionary<string, object> src, Dictionary<string, object> parentSrc) {
         string typeName = (string)parentSrc["cmd"];
         Creator creator;

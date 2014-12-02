@@ -42,7 +42,7 @@ public class GameSystem {
     private NetPlayer m_netPlayer;
 
     public GameSystem(GameServer server) {
-        m_netPlayer = new NetPlayer(server, -1);
+        m_netPlayer = new NetPlayer(server, "-1");
 
         m_netPlayer.RegisterCmdHandler<MessageExit>(OnExit);
     }
