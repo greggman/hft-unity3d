@@ -5,10 +5,10 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("HappyFunTimesEditor")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("HappyFunTimes Unity3D Editor Plugin")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
+[assembly: AssemblyCompany("Greggman")]
+[assembly: AssemblyProduct("HappyFunTimes")]
 [assembly: AssemblyCopyright("Gregg Tavares")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

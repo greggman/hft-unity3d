@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle("HappyFunTimes")]
-[assembly: AssemblyDescription(".NET Support for HappyFunTimes")]
+[assembly: AssemblyDescription("Unity3D Support for HappyFunTimes")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Greggman")]
 [assembly: AssemblyProduct("HappyFunTimes")]

@@ -173,6 +173,9 @@ public class GameServer {
 
         m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
         m_eventProcessor.Init(this);
+
+        m_gameObject.AddComponent("HFTRunner");
+        m_gameObject.SendMessage("HFTInitializeRunner", this);
     }
 
     /// <summary>
@@ -187,24 +190,34 @@ public class GameServer {
     /// </summary>
     /// <param name="url"></param>
     public void Init(string url/* = "ws://localhost:18679" */) {
+        m_url = url;
+        Connect();
+    }
 
+    public void Connect()
+    {
         if (m_socket == null) {
-            m_socket = new WebSocket(url);
+Debug.Log("GS:Connect");
+            m_gotMessages = false;
+            m_socket = new WebSocket(m_url);
             m_socket.OnOpen += SocketOpened;
             m_socket.OnMessage += SocketMessage;
             m_socket.OnClose += SocketClosed;
             m_socket.OnError += SocketError;
-
-            m_socket.Connect ();
+            m_socket.Connect();
         }
-
     }
 
     public void Close() {
-        if (m_connected) {
-            m_connected = false;
+        if (m_socket != null) {
+            Cleanup();
             m_socket.Close();
+            m_socket.OnOpen -= SocketOpened;
+            m_socket.OnMessage -= SocketMessage;
+            m_socket.OnClose -= SocketClosed;
+            m_socket.OnError -= SocketError;
             m_socket = null;
+Debug.Log("GS:Close");
         }
     }
 
@@ -314,6 +327,7 @@ public class GameServer {
     public event EventHandler<PlayerConnectMessageArgs> OnPlayerConnect;
     public event EventHandler<EventArgs> OnConnect;
     public event EventHandler<EventArgs> OnDisconnect;
+    public event EventHandler<EventArgs> OnConnectFailure;
 
     /// <summary>
     /// Id of the machine assigned by HappyFunTimes.
@@ -362,6 +376,7 @@ public class GameServer {
     private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
     private MessageCmdDataCreator m_mcdc;
     private string m_id = null;
+    private string m_url;
 
     public class MessageToClient {
         public string cmd;  // command 'server', 'update'
@@ -387,7 +402,7 @@ public class GameServer {
 
     private void SocketOpened(object sender, System.EventArgs e) {
         //invoke when socket opened
-        Debug.Log("socket opened");
+        Debug.Log("Connnected to HappyFunTimes");
         m_connected = true;
 
         List<String>.Enumerator i = m_sendQueue.GetEnumerator();
@@ -406,7 +421,7 @@ public class GameServer {
 
     private void SocketClosed(object sender, CloseEventArgs e) {
         //invoke when socket closed
-        Debug.Log("connection closed");
+        Debug.Log("Disconnected from HappyFunTimes");
         Cleanup();
     }
 
@@ -450,20 +465,27 @@ public class GameServer {
     private void SocketError(object sender, ErrorEventArgs e) {
         if (!m_gotMessages) {
             Debug.Log("Could not connect to HappyFunTimes. Is it running?");
+            Close();
+            QueueEvent(delegate() {
+                OnConnectFailure.Emit(this, new EventArgs());
+            });
         } else {
             //invoke when socket error
             Debug.Log("socket error: " + e.Message);
+            Cleanup();
         }
-        Cleanup();
     }
 
     private void Cleanup()
     {
+        bool wasConnected = m_connected;
         m_connected = false;
 
-        QueueEvent(delegate() {
-            OnDisconnect.Emit(this, new EventArgs());
-        });
+        if (wasConnected) {
+            QueueEvent(delegate() {
+                OnDisconnect.Emit(this, new EventArgs());
+            });
+        }
 
         while (m_players.Count > 0) {
             Dictionary<string, NetPlayer>.Enumerator i = m_players.GetEnumerator();
@@ -481,7 +503,7 @@ public class GameServer {
             name = "Player" + (++m_totalPlayerCount);
         }
 
-        NetPlayer player = new NetPlayer(this, id);
+        NetPlayer player = new RealNetPlayer(this, id);
         m_players[id] = player;
         QueueEvent(delegate() {
             // UGH! This is not thread safe because someone might add handler to OnPlayerConnect

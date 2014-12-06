@@ -54,6 +54,8 @@
     <Compile Include="PlayerSpawner.cs" />
     <Compile Include="GameSystem.cs" />
     <Compile Include="ArgParser.cs" />
+    <Compile Include="RealNetPlayer.cs" />
+    <Compile Include="LocalNetPlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -36,11 +36,8 @@ using System.Collections.Generic;
 
 namespace HappyFunTimes {
 
-/// <summary>
-/// This object represent the connections between a player's phone and this game.
-/// </summary>
-public class NetPlayer {
-
+public abstract class NetPlayer
+{
     public delegate void UntypedCmdEventHandler(Dictionary<string, object> data);
     public delegate void TypedCmdEventHandler<T>(T eventArgs) where T : MessageCmdData;
 
@@ -77,10 +74,13 @@ public class NetPlayer {
         UntypedCmdEventHandler m_handler;
     }
 
-    public NetPlayer(GameServer server, string id) {
+    /// <param name="server">This needs the server because messages need to be queued as they need to be delivered on anther thread</param>.
+    private delegate void CmdEventHandler(GameServer server, MessageCmdData cmdData, Dictionary<string, object> dict);
+
+    public NetPlayer(GameServer server)
+    {
         m_server = server;
         m_connected = true;
-        m_id = id;
         m_handlers = new Dictionary<string, CmdEventHandler>();
         m_deserializer = new Deserializer();
         m_mcdc = new MessageCmdDataCreator();
@@ -182,17 +182,6 @@ public class NetPlayer {
         m_mcdc.RegisterCreator(name, typeof(Dictionary<string, object>));
     }
 
-    /// <param name="server">This needs the server because messages need to be queued as they need to be delivered on anther thread</param>.
-    private delegate void CmdEventHandler(GameServer server, MessageCmdData cmdData, Dictionary<string, object> dict);
-
-    private void SendCmd(string cmd, MessageCmdData data)
-    {
-        if (m_connected)
-        {
-            m_server.SendCmd(cmd, data, m_id);
-        }
-    }
-
     /// <summary>
     /// Sends a message to this player's phone
     /// </summary>
@@ -202,9 +191,17 @@ public class NetPlayer {
     /// <code>
     /// </code>
     /// </example>
-    public void SendCmd(MessageCmdData data) {
-        SendCmd("client", data);
+    public abstract void SendCmd(MessageCmdData data);
+
+    public abstract void SendCmd(string cmd, MessageCmdData data);
+
+    public virtual void Disconnect()
+    {
+        m_connected = false;
+        OnDisconnect(this, new EventArgs());
     }
+
+    public abstract void SwitchGame(string gameId, MessageCmdData data);
 
     public void SendUnparsedEvent(Dictionary<string, object> data)
     {
@@ -238,42 +235,35 @@ public class NetPlayer {
         } catch (Exception ex) {
             Debug.LogException(ex);
         }
-
     }
 
-    public void Disconnect() {
-        OnDisconnect(this, new EventArgs());
-    }
-
-    private class MessageSwitchGame : MessageCmdData {
-        public string gameId;
-        public MessageCmdData data;
-
-        public MessageSwitchGame(string id, MessageCmdData d) {
-            gameId = id;
-            data = d;
-        }
-    }
-
-    public void SwitchGame(string gameId, MessageCmdData data)
-    {
-        if (m_connected)
-        {
-            m_server.SendSysCmd("switchGame", m_id, new MessageSwitchGame(gameId, data));
-            m_connected = false;
-        }
-    }
 
     public event EventHandler<EventArgs> OnDisconnect;
 
-    private GameServer m_server;
-    private string m_id;
-    private bool m_connected;
     private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
     private Deserializer m_deserializer;
     private MessageCmdDataCreator m_mcdc;
-};
+    private bool m_connected;
+    private GameServer m_server;
 
+    protected Deserializer Deserializer{
+        get {
+            return m_deserializer;
+        }
+    }
+
+    protected bool Connected {
+        get {
+            return m_connected;
+        }
+    }
+
+    protected GameServer Server {
+        get {
+            return m_server;
+        }
+    }
+}
 
 }
 

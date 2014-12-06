@@ -28,34 +28,62 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-using System.Collections.Generic;
+
 using UnityEngine;
+using DeJson;
+using System;
+using System.Collections.Generic;
 
 namespace HappyFunTimes {
 
-public class GameSystem {
+/// <summary>
+/// This object represent a Local player, one not on the net.
+/// </summary>
+public class LocalNetPlayer : NetPlayer {
 
-    [CmdName("exit")]
-    private class MessageExit : MessageCmdData {
-    };
-
-    private NetPlayer m_netPlayer;
-
-    public GameSystem(GameServer server) {
-        m_netPlayer = new RealNetPlayer(server, "-1");
-
-        m_netPlayer.RegisterCmdHandler<MessageExit>(OnExit);
+    public LocalNetPlayer(GameServer server) : base(server) {
     }
 
-    private void OnExit(MessageExit data) {
-        Debug.Log("quit!");
-        Application.Quit();
+    /// <summary>
+    /// Sends a message to this player's phone
+    /// </summary>
+    /// <param name="data">The message. It must be derived from MessageCmdData and must have a
+    /// CmdName attribute</param>
+    /// <example>
+    /// <code>
+    /// </code>
+    /// </example>
+    public override void SendCmd(MessageCmdData data) {
+        // No-op because this is a local player.
     }
 
-    public void HandleUnparsedCommand(Dictionary<string, object> cmd) {
-        m_netPlayer.SendUnparsedEvent(cmd);
+    public override void SendCmd(string cmd, MessageCmdData data) {
+        // No-op because this is a local player.
     }
+
+    public override void SwitchGame(string gameId, MessageCmdData data)
+    {
+        if (Connected)
+        {
+            Disconnect();
+        }
+    }
+
+    public void SendEvent(MessageCmdData data)
+    {
+        string cmd = MessageCmdDataNameDB.GetCmdName(data.GetType());
+        SendEvent(cmd, data);
+    }
+
+    public void SendEvent(string cmd, MessageCmdData data)
+    {
+        MessageCmd msgCmd = new MessageCmd(cmd, data);
+        string json = Serializer.Serialize(msgCmd);
+        Dictionary<string, object>dict = base.Deserializer.Deserialize<Dictionary<string, object> >(json);
+        SendUnparsedEvent(dict);
+    }
+};
+
 
 }
 
-}  // namespace HappyFunTimes
