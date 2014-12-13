@@ -78,7 +78,7 @@ public class PlayerSpawner : MonoBehaviour
         GameObject gameObject = (GameObject)Instantiate(prefabToSpawnForPlayer);
         SpawnInfo spawnInfo = new SpawnInfo();
         spawnInfo.netPlayer = netPlayer;
-        spawnInfo.name = (name != null) ? name : ("Player" + (++m_count));
+        spawnInfo.name = !String.IsNullOrEmpty(name) ? name : ("Player" + (++m_count));
         spawnInfo.data = data;
         gameObject.SendMessage("InitializeNetPlayer", spawnInfo);
     }

@@ -390,7 +390,6 @@ namespace HappyFunTimesEditor
 
     public class HFTWindow : EditorWindow
     {
-//        private static HFTUIInfo s_uiInfo;
         [SerializeField]
         private HFTUIInfo m_uiInfo;
 
@@ -402,8 +401,7 @@ namespace HappyFunTimesEditor
             Debug.Log("init");
         }
 
-        [MenuItem("Window/HappyFunTimes/PackageInfo")]
-        static void ShowWindow () {
+        static public void ShowWindow () {
             // Get existing open window or if none, make a new one:
             GetWindow<HFTWindow>();
         }

@@ -174,8 +174,11 @@ public class GameServer {
         m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
         m_eventProcessor.Init(this);
 
-        m_gameObject.AddComponent("HFTRunner");
-        m_gameObject.SendMessage("HFTInitializeRunner", this);
+        // TODO: See if we can check if HFTRunner exists before trying to add it.
+        object o = m_gameObject.AddComponent("HFTRunner");
+        if (o != null) {
+            m_gameObject.SendMessage("HFTInitializeRunner", this);
+        }
     }
 
     /// <summary>
@@ -197,7 +200,6 @@ public class GameServer {
     public void Connect()
     {
         if (m_socket == null) {
-Debug.Log("GS:Connect");
             m_gotMessages = false;
             m_socket = new WebSocket(m_url);
             m_socket.OnOpen += SocketOpened;
@@ -217,7 +219,6 @@ Debug.Log("GS:Connect");
             m_socket.OnClose -= SocketClosed;
             m_socket.OnError -= SocketError;
             m_socket = null;
-Debug.Log("GS:Close");
         }
     }
 
@@ -357,6 +358,15 @@ Debug.Log("GS:Close");
         }
         private set {
         }
+    }
+
+    /// <summary>
+    /// Gets the base HTTP url
+    /// </summary>
+    /// <returns>The base HTTP url. Example "http://localhost:18679"</returns>
+    public string GetBaseHttpUrl() {
+        System.Uri uri = new System.Uri(m_url);
+        return "http://" + uri.Host + ":" + uri.Port + "/";
     }
 
     private Options m_options;

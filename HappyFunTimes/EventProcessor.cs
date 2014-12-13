@@ -31,6 +31,7 @@
 
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace HappyFunTimes {
@@ -44,16 +45,17 @@ public class EventProcessor : MonoBehaviour {
         }
     }
 
-    public EventProcessor() {
+    public void Init(GameServer server) {
+        m_server = server;
         m_queuedEvents = new List<Action>();
         m_executingEvents = new List<Action>();
     }
 
-    public void Init(GameServer server) {
-        m_server = server;
+    void Update() {
+        ProcessEvents();
     }
 
-    void Update() {
+    void ProcessEvents() {
         MoveQueuedEventsToExecuting();
 
         if (m_executingEvents != null) {

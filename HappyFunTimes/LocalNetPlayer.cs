@@ -37,12 +37,144 @@ using System.Collections.Generic;
 namespace HappyFunTimes {
 
 /// <summary>
-/// This object represent a Local player, one not on the net.
+/// This object represent a Local player, one not on the net.x
 /// </summary>
 public class LocalNetPlayer : NetPlayer {
 
     public LocalNetPlayer(GameServer server) : base(server) {
+        m_gameHandlers = new Dictionary<string, GameCmdEventHandler>();
+        m_gameMcdc = new MessageCmdDataCreator();
     }
+
+    public delegate void UntypedGameCmdEventHandler(Dictionary<string, object> data);
+    public delegate void TypedGameCmdEventHandler<T>(T eventArgs) where T : MessageCmdData;
+
+    private class GameCmdConverter<T> where T : MessageCmdData
+    {
+        public GameCmdConverter(TypedGameCmdEventHandler<T> handler) {
+            m_handler = handler;
+        }
+
+        public void Callback(MessageCmdData data) {
+            m_handler((T)data);
+        }
+
+        TypedGameCmdEventHandler<T> m_handler;
+    }
+
+    private class UntypedGameCmdConverter {
+        public UntypedGameCmdConverter(UntypedGameCmdEventHandler handler) {
+            m_handler = handler;
+        }
+
+        public void Callback(MessageCmdData data) {
+            string json = Serializer.Serialize(data);
+            Dictionary<string, object> dict = (new Deserializer()).Deserialize<Dictionary<string, object> >(json);
+            m_handler(dict);
+        }
+
+        UntypedGameCmdEventHandler m_handler;
+    }
+
+    /// <param name="server">This needs the server because messages need to be queued as they need to be delivered on anther thread</param>.
+    private delegate void GameCmdEventHandler(MessageCmdData cmdData);
+
+
+    /// <summary>
+    /// Lets you register a command to be called when message comes in from this player.
+    ///
+    /// The callback you register must have a CmdName attribute. That attibute will determine
+    /// which event the callback gets dispatched for.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// [CmdName("color")]
+    /// private class MessageColor : MessageCmdData {
+    ///     public string color = "";    // in CSS format rgb(r,g,b)
+    /// };
+    ///
+    /// ...
+    /// netPlayer.RegisterCmdHandler<MessageColor>(OnColor);
+    /// ...
+    /// void OnColor(MessageColor) {
+    ///   Debug.Log("received msg with color: " + color);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="callback">Typed callback</param>
+    public void RegisterGameCmdHandler<T>(TypedGameCmdEventHandler<T> callback) where T : MessageCmdData {
+        string name = MessageCmdDataNameDB.GetCmdName(typeof(T));
+        if (name == null) {
+            throw new System.InvalidOperationException("no CmdNameAttribute on " + typeof(T).Name);
+        }
+        RegisterGameCmdHandler<T>(name, callback);
+    }
+
+    /// <summary>
+    /// Lets you register a command to be called when a message comes in from this player.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// private class MessageColor : MessageCmdData {
+    ///     public string color = "";    // in CSS format rgb(r,g,b)
+    /// };
+    ///
+    /// ...
+    /// newPlayer.RegisterCmdHandler("color", OnColor);
+    /// ...
+    /// void OnColor(MessageColor) {
+    ///   Debug.Log("received msg with color: " + color);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="name">command to call callback for</param>
+    /// <param name="callback">Typed callback</param>
+    public void RegisterGameCmdHandler<T>(string name, TypedGameCmdEventHandler<T> callback) where T : MessageCmdData {
+        GameCmdConverter<T> converter = new GameCmdConverter<T>(callback);
+        m_gameHandlers[name] = converter.Callback;
+        m_gameMcdc.RegisterCreator(name, typeof(T));
+    }
+
+    /// <summary>
+    /// Lets you register a command to be called when a message is sent from this player.
+    ///
+    /// This the most low-level basic version of RegisterCmdHandler. The function registered
+    /// will be called with a Dictionary<string, object> with whatever data is passed in.
+    /// You can either pull the data out directly OR you can call Deserializer.Deserilize
+    /// with a type and have the data extracted for you.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// ...
+    /// netPlayer.RegisterCmdHandler("color", OnColor);
+    /// ...
+    /// void OnColor(Dictionary<string, object> data) {
+    ///   Debug.Log("received msg with color: " + data["color"]);
+    /// }
+    /// </code>
+    /// or
+    /// <code>
+    /// private class MessageColor : MessageCmdData {
+    ///     public string color = "";    // in CSS format rgb(r,g,b)
+    /// };
+    /// ...
+    /// gameServer.RegisterCmdHandler("color", OnColor);
+    /// ...
+    /// void OnColor(Dictionary<string, object> data) {
+    ///   Deserializer d = new Deserializer();
+    ///   MessageColor msg = d.Deserialize<MessageColor>(data);
+    ///   Debug.Log("received msg with color: " + msg.color);
+    /// }
+    /// </code>
+    /// </example>
+    /// <param name="name">command to call callback for</param>
+    /// <param name="callback">Typed callback</param>
+    public void RegisterGameCmdHandler(string name, UntypedGameCmdEventHandler callback) {
+        UntypedGameCmdConverter converter = new UntypedGameCmdConverter(callback);
+        m_gameHandlers[name] = converter.Callback;
+        m_gameMcdc.RegisterCreator(name, typeof(Dictionary<string, object>));
+    }
+
 
     /// <summary>
     /// Sends a message to this player's phone
@@ -54,11 +186,24 @@ public class LocalNetPlayer : NetPlayer {
     /// </code>
     /// </example>
     public override void SendCmd(MessageCmdData data) {
-        // No-op because this is a local player.
+        string cmd = MessageCmdDataNameDB.GetCmdName(data.GetType());
+        SendCmd(cmd, data);
     }
 
     public override void SendCmd(string cmd, MessageCmdData data) {
-        // No-op because this is a local player.
+        try {
+            GameCmdEventHandler handler;
+            if (!m_gameHandlers.TryGetValue(cmd, out handler)) {
+                if (m_debug) {
+                    Debug.LogError("unhandled LocalNetPlayer cmd: " + cmd);
+                }
+                return;
+            }
+            handler(data);
+        } catch (Exception ex) {
+            Debug.LogException(ex);
+        }
+
     }
 
     public override void SwitchGame(string gameId, MessageCmdData data)
@@ -82,6 +227,10 @@ public class LocalNetPlayer : NetPlayer {
         Dictionary<string, object>dict = base.Deserializer.Deserialize<Dictionary<string, object> >(json);
         SendUnparsedEvent(dict);
     }
+
+    private bool m_debug = false;
+    private MessageCmdDataCreator m_gameMcdc;
+    private Dictionary<string, GameCmdEventHandler> m_gameHandlers;  // handlers by command name
 };
 
 
