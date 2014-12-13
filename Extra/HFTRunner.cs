@@ -72,7 +72,7 @@ namespace HappyFunTimes
                     System.Diagnostics.Process.Start("osascript", @"-e '
 tell application ""Terminal""
   tell window 1
-    do script ""DEBUG=game,game-group,relayserver,hftgame,hft-server,player hft start""
+    do script ""hft start""
   end tell
 end tell
 '");
