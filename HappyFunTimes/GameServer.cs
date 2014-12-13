@@ -431,7 +431,9 @@ public class GameServer {
 
     private void SocketClosed(object sender, CloseEventArgs e) {
         //invoke when socket closed
-        Debug.Log("Disconnected from HappyFunTimes");
+        if (m_connected) {
+            Debug.Log("Disconnected from HappyFunTimes");
+        }
         Cleanup();
     }
 
