@@ -174,10 +174,12 @@ public class GameServer {
         m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
         m_eventProcessor.Init(this);
 
-        // TODO: See if we can check if HFTRunner exists before trying to add it.
-        object o = m_gameObject.AddComponent("HFTRunner");
-        if (o != null) {
-            m_gameObject.SendMessage("HFTInitializeRunner", this);
+        Type t = Type.GetType("HappyFunTimesEditor.HFTRunner");
+        if (t != null) {
+            object o = m_gameObject.AddComponent(t);
+            if (o != null) {
+                m_gameObject.SendMessage("HFTInitializeRunner", this);
+            }
         }
     }
 
