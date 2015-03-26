@@ -33,7 +33,7 @@ using UnityEditor;
 using System.Collections;
 using System.IO;
 
-namespace HappyFunTimes
+namespace HappyFunTimesEditor
 {
     public class HFTRunner : MonoBehaviour {
 
