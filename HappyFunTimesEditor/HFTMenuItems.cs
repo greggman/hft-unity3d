@@ -36,7 +36,7 @@ namespace HappyFunTimesEditor {
 public class HFTMenuItems {
     [MenuItem("Window/HappyFunTimes/Docs", false, 1)]
     static void Docs() {
-        Application.OpenURL("http://greggman.github.io/happyfuntimes/docs/unitydocs.md");
+        Application.OpenURL("http://docs.happyfuntimes.net/unity3d");
     }
 
     [MenuItem("Window/HappyFunTimes/Package Editor", false, 2)]
@@ -57,6 +57,11 @@ public class HFTMenuItems {
     [MenuItem("Window/HappyFunTimes/Examples/Character Controller Example", false, 5)]
     static void ExampleCharacterController() {
         Application.OpenURL("http://greggman.github.io/hft-unitycharacterexample/");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Device Orientation and Acceleration", false, 6)]
+    static void ExampleMultiDeviceOrientationAndAcceleration() {
+        Application.OpenURL("http://greggman.github.io/hft-unity-deviceorientation-and-accel/");
     }
 
     [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example", false, 6)]
@@ -81,10 +86,8 @@ public class HFTMenuItems {
     //[MenuItem("Window/HappyFunTimes/Publish Game", false, 10)]
     //static void Publish() {
     //}
-
-
 }
 
-}  // namespace HappyFunTimes
+}  // namespace HappyFunTimesEditor
 
 
