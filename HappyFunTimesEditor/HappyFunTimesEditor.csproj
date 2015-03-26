@@ -48,4 +48,10 @@
     <Compile Include="HFTMenuItems.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\HappyFunTimes\HappyFunTimes.csproj">
+      <Project>{554A0027-C03D-4D04-946D-2A34E43CC586}</Project>
+      <Name>HappyFunTimes</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
