@@ -174,11 +174,19 @@ public class GameServer {
         m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
         m_eventProcessor.Init(this);
 
-        Type t = Type.GetType("HappyFunTimesEditor.HFTRunner");
-        if (t != null) {
-            object o = m_gameObject.AddComponent(t);
-            if (o != null) {
-                m_gameObject.SendMessage("HFTInitializeRunner", this);
+        string[] names = new string[] {
+            "HappyFunTimes.HFTRunner",
+            "HappyFunTimes.HFTRunner, Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",            "HFTRunner",
+            "HFTRunner",
+        };
+        foreach (string name in names) {
+            System.Type t = System.Type.GetType(name);
+            if (t != null) {
+                object o = m_gameObject.AddComponent(t);
+                if (o != null) {
+                    m_gameObject.SendMessage("HFTInitializeRunner", this);
+                }
+                break;
             }
         }
     }
