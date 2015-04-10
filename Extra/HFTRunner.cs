@@ -29,11 +29,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 using UnityEngine;
-using UnityEditor;
+using HappyFunTimes;
 using System.Collections;
 using System.IO;
 
-namespace HappyFunTimesEditor
+namespace HappyFunTimes
 {
     public class HFTRunner : MonoBehaviour {
 
@@ -117,7 +117,7 @@ end tell
                 System.Threading.Thread.Sleep(1000);
             }
 
-            EditorUtility.DisplayDialog(
+            UnityEditor.EditorUtility.DisplayDialog(
                 "HappyFunTimes",
                 "Could not find HappyFunTimes",
                 "Ok");
@@ -163,7 +163,7 @@ end tell
         void FindIt()
         {
             #if UNITY_EDITOR_OSX
-            string path = EditorUtility.OpenFilePanel(
+            string path = UnityEditor.EditorUtility.OpenFilePanel(
                 "Select HappyFunTimes",
                 "/Applications",
                 "");
@@ -172,7 +172,7 @@ end tell
                 RunHFT();
             }
             #elif UNITY_EDITOR_WIN
-            string path = EditorUtility.OpenFilePanel(
+            string path = UnityEditor.EditorUtility.OpenFilePanel(
                 "Select HappyFunTimes start.js",
                 System.Environment.GetFolderPath(System.Environment.SpecialFolder.ProgramFiles),
                 ".js");
@@ -190,7 +190,7 @@ end tell
 
         void AskAboutHappyFunTimesApp()
         {
-            int result = EditorUtility.DisplayDialogComplex(
+            int result = UnityEditor.EditorUtility.DisplayDialogComplex(
                 "HappyFunTimes",
                 "Could not find HappyFunTimes",
                 "Install It",
