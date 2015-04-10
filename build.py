@@ -32,7 +32,10 @@ def BuildUnityPlugin():
   p = platform.system().lower()
   mdtool_path = "mdtool" if not p == 'darwin' else "/Applications/Unity/MonoDevelop.app/Contents/MacOS/mdtool"
   cmd = sh.Command(mdtool_path)
-  result = cmd.build("HappyFunTimes.sln")
+  result = cmd.build("-c:Release", "-t:Clean", "HappyFunTimes.sln")
+  if result.exit_code:
+    raise ShError(result)
+  result = cmd.build("-c:Release", "-t:Build", "HappyFunTimes.sln")
   if result.exit_code:
     raise ShError(result)
   log(result)
