@@ -36,7 +36,7 @@ namespace HappyFunTimesEditor {
 public class HFTMenuItems {
     [MenuItem("Window/HappyFunTimes/Docs", false, 1)]
     static void Docs() {
-        Application.OpenURL("http://docs.happyfuntimes.net/unity3d");
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity");
     }
 
     [MenuItem("Window/HappyFunTimes/Package Editor", false, 2)]
@@ -46,27 +46,27 @@ public class HFTMenuItems {
 
     [MenuItem("Window/HappyFunTimes/Examples/Simple Example", false, 3)]
     static void ExampleSimple() {
-        Application.OpenURL("http://greggman.github.io/hft-unitysimple/");
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unitysimple");
     }
 
     [MenuItem("Window/HappyFunTimes/Examples/2D Platform Example", false, 4)]
     static void Example2DPlatformer() {
-        Application.OpenURL("http://greggman.github.io/hft-unity2dplatformer/");
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity2dplatformer");
     }
 
     [MenuItem("Window/HappyFunTimes/Examples/Character Controller Example", false, 5)]
     static void ExampleCharacterController() {
-        Application.OpenURL("http://greggman.github.io/hft-unitycharacterexample/");
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unitycharacterexample");
     }
 
     [MenuItem("Window/HappyFunTimes/Examples/Device Orientation and Acceleration", false, 6)]
     static void ExampleMultiDeviceOrientationAndAcceleration() {
-        Application.OpenURL("http://greggman.github.io/hft-unity-deviceorientation-and-accel/");
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-deviceorientation-and-accel");
     }
 
     [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example", false, 6)]
     static void ExampleMultiMachine() {
-        Application.OpenURL("http://greggman.github.io/hft-unity-multi-game-example/");
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-multi-game-example");
     }
 
     [MenuItem("Window/HappyFunTimes/HappyFunTimes Installer", false, 7)]
