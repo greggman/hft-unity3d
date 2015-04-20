@@ -48,6 +48,7 @@ namespace HappyFunTimes {
 /// </code>
 /// You can then read those options with
 /// <code>
+/// <![CDATA[
 /// using HappyFunTimes;
 ///
 /// ...
@@ -63,6 +64,7 @@ namespace HappyFunTimes {
 ///    if (p.Contains("debug")) {
 ///      debug = true;
 ///    }
+/// ]]>
 /// </code>
 /// </example>
 /// <returns></returns>

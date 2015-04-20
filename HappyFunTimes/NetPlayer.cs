@@ -95,6 +95,7 @@ public abstract class NetPlayer
     /// </summary>
     /// <example>
     /// <code>
+    /// <![CDATA[
     /// [CmdName("color")]
     /// private class MessageColor : MessageCmdData {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
@@ -106,6 +107,7 @@ public abstract class NetPlayer
     /// void OnColor(MessageColor) {
     ///   Debug.Log("received msg with color: " + color);
     /// }
+    /// ]]>
     /// </code>
     /// </example>
     /// <param name="callback">Typed callback</param>
@@ -146,21 +148,24 @@ public abstract class NetPlayer
     /// Lets you register a command to be called when a message is sent from this player.
     ///
     /// This the most low-level basic version of RegisterCmdHandler. The function registered
-    /// will be called with a Dictionary<string, object> with whatever data is passed in.
+    /// will be called with a Dictionary&lt;string, object&gt; with whatever data is passed in.
     /// You can either pull the data out directly OR you can call Deserializer.Deserilize
     /// with a type and have the data extracted for you.
     /// </summary>
     /// <example>
     /// <code>
+    /// <![CDATA[
     /// ...
     /// netPlayer.RegisterCmdHandler("color", OnColor);
     /// ...
     /// void OnColor(Dictionary<string, object> data) {
     ///   Debug.Log("received msg with color: " + data["color"]);
     /// }
+    /// ]]>
     /// </code>
     /// or
     /// <code>
+    /// <![CDATA[
     /// private class MessageColor : MessageCmdData {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
     /// };
@@ -172,6 +177,7 @@ public abstract class NetPlayer
     ///   MessageColor msg = d.Deserialize<MessageColor>(data);
     ///   Debug.Log("received msg with color: " + msg.color);
     /// }
+    /// ]]>
     /// </code>
     /// </example>
     /// <param name="name">command to call callback for</param>

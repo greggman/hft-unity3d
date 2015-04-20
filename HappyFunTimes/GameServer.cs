@@ -244,6 +244,7 @@ public class GameServer {
     /// </summary>
     /// <example>
     /// <code>
+    /// <![CDATA[
     /// [CmdName("color")]
     /// private class MessageColor : MessageCmdData {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
@@ -255,6 +256,7 @@ public class GameServer {
     /// void OnColor(MessageColor) {
     ///   Debug.Log("received msg with color: " + color);
     /// }
+    /// ]]>
     /// </code>
     /// </example>
     /// <param name="callback">Typed callback</param>
@@ -293,24 +295,29 @@ public class GameServer {
 
 
     /// <summary>
+    /// <![CDATA[
     /// Lets you register a command to be called when the game is directly sent a message.
     ///
     /// This the most low-level basic version of RegisterCmdHandler. The function registered
     /// will be called with a Dictionary<string, object> with whatever data is passed in.
     /// You can either pull the data out directly OR you can call Deserializer.Deserilize
     /// with a type and have the data extracted for you.
+    /// ]]>
     /// </summary>
     /// <example>
     /// <code>
+    /// <![CDATA[
     /// ...
     /// gameServer.RegisterCmdHandler("color", OnColor);
     /// ...
     /// void OnColor(Dictionary<string, object> data) {
     ///   Debug.Log("received msg with color: " + data["color"]);
     /// }
+    /// ]]>
     /// </code>
     /// or
     /// <code>
+    /// <![CDATA[
     /// private class MessageColor : MessageCmdData {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
     /// };
@@ -322,6 +329,7 @@ public class GameServer {
     ///   MessageColor msg = d.Deserialize<MessageColor>(data);
     ///   Debug.Log("received msg with color: " + msg.color);
     /// }
+    /// ]]>
     /// </code>
     /// </example>
     /// <param name="name">command to call callback for</param>
