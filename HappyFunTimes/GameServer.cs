@@ -497,7 +497,9 @@ public class GameServer {
             Debug.Log("Could not connect to HappyFunTimes. Is it running?");
             Close();
             QueueEvent(delegate() {
-                OnConnectFailure.Emit(this, new EventArgs());
+                if (OnConnectFailure != null) {
+                    OnConnectFailure.Emit(this, new EventArgs());
+                }
             });
         } else {
             //invoke when socket error
@@ -513,7 +515,9 @@ public class GameServer {
 
         if (wasConnected) {
             QueueEvent(delegate() {
-                OnDisconnect.Emit(this, new EventArgs());
+                if (OnDisconnect != null) {
+                    OnDisconnect.Emit(this, new EventArgs());
+                }
             });
         }
 
@@ -533,12 +537,23 @@ public class GameServer {
             name = "Player" + (++m_totalPlayerCount);
         }
 
-        NetPlayer player = new RealNetPlayer(this, id);
+        RealNetPlayer.Options options = new RealNetPlayer.Options();
+        if (data != null) {
+            DeJson.Deserializer deserializer = new DeJson.Deserializer();
+            HFTPlayerStartData startData = deserializer.Deserialize<HFTPlayerStartData>(data);
+            if (startData != null) {
+                options.sessionId = startData.__hft_session_id__;
+            }
+        }
+
+        NetPlayer player = new RealNetPlayer(this, id, options);
         m_players[id] = player;
         QueueEvent(delegate() {
             // UGH! This is not thread safe because someone might add handler to OnPlayerConnect
             // Odds are low though?
-            OnPlayerConnect.Emit(this, new PlayerConnectMessageArgs(player, name, data));
+            if (OnPlayerConnect != null) {
+                OnPlayerConnect.Emit(this, new PlayerConnectMessageArgs(player, name, data));
+            }
         });
     }
 
@@ -559,7 +574,9 @@ public class GameServer {
         m_id = data.id;
 
         QueueEvent(delegate() {
-            OnConnect.Emit(this, new EventArgs());
+            if (OnConnect != null) {
+                OnConnect.Emit(this, new EventArgs());
+            }
         });
     }
 
@@ -643,6 +660,13 @@ public class GameServer {
     public void BroadcastCmdToGames(MessageCmdData data) {
         SendCmd("bcastToGames", data);
     }
+
+    // HFT system data that comes when the player starts
+    class HFTPlayerStartData : MessageCmdData // don't think this needs to inherit from MessageCmdData
+    {
+        public string __hft_session_id__ = "";
+    }
+
 };
 
 }
