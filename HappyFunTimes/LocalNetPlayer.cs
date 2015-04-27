@@ -41,9 +41,14 @@ namespace HappyFunTimes {
 /// </summary>
 public class LocalNetPlayer : NetPlayer {
 
-    public LocalNetPlayer(GameServer server) : base(server) {
+    public class Options {
+        public string sessionId = "";
+    }
+
+    public LocalNetPlayer(GameServer server, Options options = null) : base(server) {
         m_gameHandlers = new Dictionary<string, GameCmdEventHandler>();
         m_gameMcdc = new MessageCmdDataCreator();
+        m_sessionId = options == null ? options.sessionId : "";
     }
 
     public delegate void UntypedGameCmdEventHandler(Dictionary<string, object> data);
@@ -236,7 +241,12 @@ public class LocalNetPlayer : NetPlayer {
         SendUnparsedEvent(dict);
     }
 
+    public override string GetSessionId() {
+        return m_sessionId;
+    }
+
     private bool m_debug = false;
+    private string m_sessionId = "";
     private MessageCmdDataCreator m_gameMcdc;
     private Dictionary<string, GameCmdEventHandler> m_gameHandlers;  // handlers by command name
 };

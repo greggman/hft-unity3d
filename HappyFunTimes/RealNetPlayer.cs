@@ -42,8 +42,13 @@ namespace HappyFunTimes {
 /// </summary>
 public class RealNetPlayer : NetPlayer {
 
-    public RealNetPlayer(GameServer server, string id) : base(server) {
+    public class Options {
+        public string sessionId = "";
+    }
+
+    public RealNetPlayer(GameServer server, string id, Options options = null) : base(server) {
         m_id = id;
+        m_sessionId = options != null ? options.sessionId : "";
     }
 
     private void SendLowLevelCmd(string cmd, MessageCmdData data)
@@ -58,7 +63,7 @@ public class RealNetPlayer : NetPlayer {
     {
         if (Connected)
         {
-            Server.SendCmd(cmd, data, m_id);
+            Server.SendCmd(cmd, subCmd, data, m_id);
         }
     }
 
@@ -98,7 +103,12 @@ public class RealNetPlayer : NetPlayer {
         }
     }
 
+    public override string GetSessionId() {
+        return m_sessionId;
+    }
+
     private string m_id;
+    private string m_sessionId;
 };
 
 

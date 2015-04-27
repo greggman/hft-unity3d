@@ -189,6 +189,33 @@ public abstract class NetPlayer
     }
 
     /// <summary>
+    /// Unregisters the command handler for a given MessageCmdData. Gets the Command name from the MessgeCmdData's
+    /// CmdData attribute.
+    /// </summary>
+    /// <returns>true if there was a command handler, false if not</returns>
+    public bool UnregisterCmdHandler<T>() where T : MessageCmdData {
+        string name = MessageCmdDataNameDB.GetCmdName(typeof(T));
+        return UnregisterCmdHandler(name);
+    }
+
+    /// <summary>
+    /// Unregisters the command handler for the specified command
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns>true if there was a command handler, false if not</returns>
+    public bool UnregisterCmdHandler(string name) {
+        return m_handlers.Remove(name);
+    }
+
+    /// <summary>
+    /// Removes all handlers
+    /// </summary>
+    public void RemoveAllHandlers() {
+        OnDisconnect = null;
+        m_handlers.Clear();
+    }
+
+    /// <summary>
     /// Sends a message to this player's phone
     /// </summary>
     /// <param name="data">The message. It must be derived from MessageCmdData and must have a
@@ -201,10 +228,15 @@ public abstract class NetPlayer
 
     public abstract void SendCmd(string cmd, MessageCmdData data);
 
+    public void SendCmd(string cmd) {
+        SendCmd(cmd, new MessageCmdData());
+    }
+
     public virtual void Disconnect()
     {
         m_connected = false;
         OnDisconnect(this, new EventArgs());
+        RemoveAllHandlers();
     }
 
     public abstract void SwitchGame(string gameId, MessageCmdData data);
@@ -243,6 +275,7 @@ public abstract class NetPlayer
         }
     }
 
+    public abstract string GetSessionId();
 
     public event EventHandler<EventArgs> OnDisconnect;
 
@@ -252,7 +285,7 @@ public abstract class NetPlayer
     private bool m_connected;
     private GameServer m_server;
 
-    protected Deserializer Deserializer{
+    protected Deserializer Deserializer {
         get {
             return m_deserializer;
         }
