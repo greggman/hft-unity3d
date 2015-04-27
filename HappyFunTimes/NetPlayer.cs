@@ -235,7 +235,9 @@ public abstract class NetPlayer
     public virtual void Disconnect()
     {
         m_connected = false;
-        OnDisconnect(this, new EventArgs());
+        if (OnDisconnect != null) {
+            OnDisconnect(this, new EventArgs());
+        }
         RemoveAllHandlers();
     }
 
