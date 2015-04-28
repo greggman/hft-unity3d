@@ -43,9 +43,10 @@ public class LocalNetPlayer : NetPlayer {
 
     public class Options {
         public string sessionId = "";
+        public string name = "LocalPlayer";
     }
 
-    public LocalNetPlayer(GameServer server, Options options = null) : base(server) {
+    public LocalNetPlayer(GameServer server, Options options = null) : base(server, options != null ? options.name : "LocalPlayer") {
         m_gameHandlers = new Dictionary<string, GameCmdEventHandler>();
         m_gameMcdc = new MessageCmdDataCreator();
         m_sessionId = options == null ? options.sessionId : "";

@@ -53,16 +53,6 @@ public class PlayerConnector : MonoBehaviour
         }
     }
 
-    [CmdName("setName")]
-    private class MessageSetName : MessageCmdData {
-        public MessageSetName() {  // needed for deserialization
-        }
-        public MessageSetName(string _name) {
-            name = _name;
-        }
-        public string name = "";
-    };
-
     void StartConnection() {
         GameServer.Options options = new GameServer.Options();
         options.gameId = gameId;
@@ -121,20 +111,10 @@ public class PlayerConnector : MonoBehaviour
         });
     }
 
-    void SetNetPlayerName(NetPlayer netPlayer, MessageSetName data) {
-        // Find netplayer
-        NetPlayerState netPlayerState = GetWaitingNetPlayerState(netPlayer);
-        if (netPlayerState != null) {
-            netPlayerState.name = data.name;
-        }
-    }
-
     void SendSpawnInfoToGameObject(string msg, GameObject gameObject, NetPlayerState netPlayerState) {
-        string name = netPlayerState.name;
-
         SpawnInfo spawnInfo = new SpawnInfo();
         spawnInfo.netPlayer = netPlayerState.netPlayer;
-        spawnInfo.name = !String.IsNullOrEmpty(name) ? name : ("Player" + (++m_count));
+        spawnInfo.name = netPlayerState.netPlayer.Name;
         spawnInfo.data = netPlayerState.data;
         gameObject.SendMessage(msg, spawnInfo);
     }
@@ -183,9 +163,6 @@ public class PlayerConnector : MonoBehaviour
     void AddWaitingPlayer(NetPlayerState netPlayerState) {
         NetPlayer netPlayer = netPlayerState.netPlayer;
         netPlayer.RemoveAllHandlers();
-        netPlayer.RegisterCmdHandler<MessageSetName>(delegate(MessageSetName msgdata) {
-            SetNetPlayerName(netPlayer, msgdata);
-        });
         netPlayer.OnDisconnect += RemoveNetPlayer;
         m_waitingPlayers.Add(netPlayerState);
 
@@ -194,7 +171,7 @@ public class PlayerConnector : MonoBehaviour
 
     void StartNewPlayer(object sender, PlayerConnectMessageArgs e)
     {
-        NetPlayerState netPlayerState = new NetPlayerState(e.netPlayer, "", e.data);
+        NetPlayerState netPlayerState = new NetPlayerState(e.netPlayer, e.data);
         string id = e.netPlayer.GetSessionId();
         if (id.Length > 0) {
             // Check if there is a slot with this id
@@ -218,7 +195,7 @@ public class PlayerConnector : MonoBehaviour
 
     public void StartLocalPlayer(NetPlayer netPlayer, string name = "", Dictionary<string, object> data = null)
     {
-        AddWaitingPlayer(new NetPlayerState(netPlayer, name, data));
+        AddWaitingPlayer(new NetPlayerState(netPlayer, data));
         StartWaitingPlayers();
     }
 
@@ -328,13 +305,11 @@ public class PlayerConnector : MonoBehaviour
 
     // The state of NetPlayers (people with phones).
     class NetPlayerState {
-        public NetPlayerState(NetPlayer _netPlayer, string _name, Dictionary<string, object> _data) {
+        public NetPlayerState(NetPlayer _netPlayer, Dictionary<string, object> _data) {
             netPlayer = _netPlayer;
-            name = _name;
             data = _data;
         }
         public NetPlayer netPlayer;
-        public string name;
         public Dictionary<string, object> data;
     };
 
@@ -342,7 +317,6 @@ public class PlayerConnector : MonoBehaviour
     private List<NetPlayerState> m_waitingPlayers = new List<NetPlayerState>();
     private PlayerState[] m_playerState;
     private GameServer m_server;
-    private int m_count;
 };
 
 }   // namespace HappyFunTimes

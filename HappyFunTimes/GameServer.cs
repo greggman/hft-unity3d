@@ -546,7 +546,7 @@ public class GameServer {
             }
         }
 
-        NetPlayer player = new RealNetPlayer(this, id, options);
+        NetPlayer player = new RealNetPlayer(this, id, name, options);
         m_players[id] = player;
         QueueEvent(delegate() {
             // UGH! This is not thread safe because someone might add handler to OnPlayerConnect

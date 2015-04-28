@@ -46,7 +46,7 @@ public class RealNetPlayer : NetPlayer {
         public string sessionId = "";
     }
 
-    public RealNetPlayer(GameServer server, string id, Options options = null) : base(server) {
+    public RealNetPlayer(GameServer server, string id, string name, Options options = null) : base(server, name) {
         m_id = id;
         m_sessionId = options != null ? options.sessionId : "";
     }

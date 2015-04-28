@@ -77,7 +77,7 @@ public abstract class NetPlayer
     /// <param name="server">This needs the server because messages need to be queued as they need to be delivered on anther thread</param>.
     private delegate void CmdEventHandler(GameServer server, MessageCmdData cmdData, Dictionary<string, object> dict);
 
-    public NetPlayer(GameServer server)
+    public NetPlayer(GameServer server, string name)
     {
         m_server = server;
         m_connected = true;
@@ -85,6 +85,9 @@ public abstract class NetPlayer
         m_deserializer = new Deserializer();
         m_mcdc = new MessageCmdDataCreator();
         m_deserializer.RegisterCreator(m_mcdc);
+        m_name = name;
+
+        AddHandlers();
     }
 
     /// <summary>
@@ -212,7 +215,18 @@ public abstract class NetPlayer
     /// </summary>
     public void RemoveAllHandlers() {
         OnDisconnect = null;
+        OnNameChange = null;
+        OnBusy = null;
         m_handlers.Clear();
+
+        AddHandlers();
+    }
+
+    void AddHandlers() {
+        RegisterCmdHandler<MessageSetName>("setName", IgnoreSetNameMsg);
+        RegisterCmdHandler<MessageSetName>("_hft_setname_", HandleSetNameMsg);
+        RegisterCmdHandler<MessageBusy>("busy", IgnoreBusyMsg);
+        RegisterCmdHandler<MessageBusy>("_hft_busy_", HandleBusyMsg);
     }
 
     /// <summary>
@@ -277,15 +291,71 @@ public abstract class NetPlayer
         }
     }
 
+    void IgnoreSetNameMsg(MessageSetName unused) {
+        // Do nothing
+    }
+
+    void IgnoreBusyMsg(MessageBusy unused) {
+        // Do nothing
+    }
+
+    void HandleSetNameMsg(MessageSetName data) {
+        if (data.name.Length > 0 && data.name != m_name) {
+            m_name = data.name;
+            if (OnNameChange != null) {
+                OnNameChange(this, new EventArgs());
+            }
+        }
+    }
+
+    void HandleBusyMsg(MessageBusy data) {
+        if (data.busy != m_busy) {
+            m_busy = data.busy;
+            if (OnBusy != null) {
+                OnBusy(this, new EventArgs());
+            }
+        }
+    }
+
     public abstract string GetSessionId();
+    public string Name {
+        get {
+            return m_name;
+        }
+    }
+    public bool Busy {
+        get {
+            return m_busy;
+        }
+    }
 
     public event EventHandler<EventArgs> OnDisconnect;
+    public event EventHandler<EventArgs> OnNameChange;
+    public event EventHandler<EventArgs> OnBusy;
+
+    // Message when player changes their name.
+    private class MessageSetName : MessageCmdData
+    {
+        public MessageSetName() {  // needed for deserialization
+        }
+        public MessageSetName(string _name) {
+            name = _name;
+        }
+        public string name = "";
+    }
+
+    // Message then player is busy (on system menu)
+    private class MessageBusy : MessageCmdData {
+        public bool busy = false;
+    }
 
     private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
     private Deserializer m_deserializer;
     private MessageCmdDataCreator m_mcdc;
     private bool m_connected;
     private GameServer m_server;
+    private string m_name;
+    private bool m_busy = false;
 
     protected Deserializer Deserializer {
         get {
