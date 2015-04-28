@@ -82,6 +82,7 @@ public abstract class NetPlayer
         m_server = server;
         m_connected = true;
         m_handlers = new Dictionary<string, CmdEventHandler>();
+        m_internalHandlers = new Dictionary<string, CmdEventHandler>();
         m_deserializer = new Deserializer();
         m_mcdc = new MessageCmdDataCreator();
         m_deserializer.RegisterCreator(m_mcdc);
@@ -144,6 +145,12 @@ public abstract class NetPlayer
     public void RegisterCmdHandler<T>(string name, TypedCmdEventHandler<T> callback) where T : MessageCmdData {
         CmdConverter<T> converter = new CmdConverter<T>(callback);
         m_handlers[name] = converter.Callback;
+        m_mcdc.RegisterCreator(name, typeof(T));
+    }
+
+    private void RegisterInternalCmdHandler<T>(string name, TypedCmdEventHandler<T> callback) where T : MessageCmdData {
+        CmdConverter<T> converter = new CmdConverter<T>(callback);
+        m_internalHandlers[name] = converter.Callback;
         m_mcdc.RegisterCreator(name, typeof(T));
     }
 
@@ -218,15 +225,13 @@ public abstract class NetPlayer
         OnNameChange = null;
         OnBusy = null;
         m_handlers.Clear();
-
-        AddHandlers();
     }
 
     void AddHandlers() {
-        RegisterCmdHandler<MessageSetName>("setName", IgnoreSetNameMsg);
-        RegisterCmdHandler<MessageSetName>("_hft_setname_", HandleSetNameMsg);
-        RegisterCmdHandler<MessageBusy>("busy", IgnoreBusyMsg);
-        RegisterCmdHandler<MessageBusy>("_hft_busy_", HandleBusyMsg);
+        RegisterInternalCmdHandler<MessageSetName>("setName", IgnoreSetNameMsg);
+        RegisterInternalCmdHandler<MessageSetName>("_hft_setname_", HandleSetNameMsg);
+        RegisterInternalCmdHandler<MessageBusy>("busy", IgnoreBusyMsg);
+        RegisterInternalCmdHandler<MessageBusy>("_hft_busy_", HandleBusyMsg);
     }
 
     /// <summary>
@@ -264,6 +269,21 @@ public abstract class NetPlayer
             return;
         }
 
+        // This is kind of round about. The issue is we queue message
+        // if there are no handlers as that means no one has had time
+        // to register any and those message will be lost.
+        //
+        // That's great but we can also call RemoveAllHanders. PlayerConnector
+        // does this. Players that are waiting have all messages disconnected.
+        // That means if they are waiting for 2-3 mins, with a poorly designed
+        // controller there could be tons of messages queued up.
+        //
+        // So, only allow queuing messages once. After that they're never
+        // queued.
+        if (m_handlers.Count > 0) {
+            m_haveHandlers = true;
+        }
+
         // If there are no handlers registered then the object using this NetPlayer
         // has not been instantiated yet. The issue is the GameSever makes a NetPlayer.
         // It then has to queue an event to start that player so that it can be started
@@ -271,7 +291,7 @@ public abstract class NetPlayer
         // come through. So, if there are no handlers then we add an event to run the
         // command later. It's the same queue that will birth the object that needs the
         // message.
-        if (m_handlers.Count == 0) {
+        if (!m_haveHandlers) {
             m_server.QueueEvent(delegate() {
                 SendUnparsedEvent(data);
             });
@@ -282,8 +302,10 @@ public abstract class NetPlayer
             MessageCmd cmd = m_deserializer.Deserialize<MessageCmd>(data);
             CmdEventHandler handler;
             if (!m_handlers.TryGetValue(cmd.cmd, out handler)) {
-                Debug.LogError("unhandled NetPlayer cmd: " + cmd.cmd);
-                return;
+                if (!m_internalHandlers.TryGetValue(cmd.cmd, out handler)) {
+                    Debug.LogError("unhandled NetPlayer cmd: " + cmd.cmd);
+                    return;
+                }
             }
             handler(m_server, cmd.data, data);
         } catch (Exception ex) {
@@ -349,10 +371,17 @@ public abstract class NetPlayer
         public bool busy = false;
     }
 
+    // We need to separate m_internalHandlers because we check if
+    // m_handlers.count is 0. If it is we assume no one has had
+    // a chance to add any handlers and we queue the messages
+    // instead of processing them. If we registered internal handlers
+    // to m_handlers we'd couldn't check that.
     private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
+    private Dictionary<string, CmdEventHandler> m_internalHandlers;  // handlers by command name
     private Deserializer m_deserializer;
     private MessageCmdDataCreator m_mcdc;
     private bool m_connected;
+    private bool m_haveHandlers = false;
     private GameServer m_server;
     private string m_name;
     private bool m_busy = false;
