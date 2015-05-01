@@ -82,16 +82,20 @@ end tell
             #elif UNITY_EDITOR_WIN
                 // See if we can find HappyFunTimes
                 // Use registry!!!
+                bool ask = false;
                 if (System.String.IsNullOrEmpty(exePath) || !File.Exists(exePath)) {
+                    ask = true;
                     object loc = LocalRegistryGetKey(
                         "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Greggman HappyFunTimes",
                         "InstallLocation");
-                    if (loc != null) {
+                    if (loc != null && !System.String.IsNullOrEmpty((string)loc)) {
                         exePath = System.IO.Path.Combine(StripQuotes((string)loc), "node.exe");
-                        if (!File.Exists(exePath)) {
-                            AskAboutHappyFunTimesApp();
-                        }
+                        ask = !File.Exists(exePath);
                     }
+                }
+                if (ask) {
+                    AskAboutHappyFunTimesApp();
+                    return;
                 }
                 string nodePath;
                 string startPath;
@@ -156,7 +160,7 @@ end tell
 
         void Install()
         {
-            Application.OpenURL("http://superhappyfuntimes.net/install");
+            Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/install.html");
             Application.Quit();
         }
 
