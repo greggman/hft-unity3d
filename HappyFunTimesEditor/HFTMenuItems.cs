@@ -39,51 +39,66 @@ public class HFTMenuItems {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity");
     }
 
-    [MenuItem("Window/HappyFunTimes/Package Editor", false, 2)]
-    static void PackageEditor() {
-        HFTWindow.ShowWindow();
+    [MenuItem("Window/HappyFunTimes/Troubleshooting", false, 2)]
+    static void HappyFunTimesTroubleShooting() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/troubleshooting.html");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Simple Example", false, 3)]
+    [MenuItem("Window/HappyFunTimes/Support", false, 3)]
+    static void HappyFunTimesSupport() {
+        Application.OpenURL("http://github.com/greggman/HappyFunTimes/issues");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Simple Example", false, 4)]
     static void ExampleSimple() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unitysimple");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/2D Platform Example", false, 4)]
+    [MenuItem("Window/HappyFunTimes/Examples/2D Platform Example", false, 5)]
     static void Example2DPlatformer() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity2dplatformer");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Character Controller Example", false, 5)]
+    [MenuItem("Window/HappyFunTimes/Examples/Character Controller Example", false, 6)]
     static void ExampleCharacterController() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unitycharacterexample");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Device Orientation and Acceleration", false, 6)]
+    [MenuItem("Window/HappyFunTimes/Examples/Device Orientation and Acceleration Example", false, 7)]
     static void ExampleMultiDeviceOrientationAndAcceleration() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-deviceorientation-and-accel");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example", false, 6)]
+    [MenuItem("Window/HappyFunTimes/Examples/Players in Scene Example", false, 8)]
+    static void ExamplePlayersInScene() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unityplayersinscene");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example", false, 9)]
     static void ExampleMultiMachine() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-multi-game-example");
     }
 
-    [MenuItem("Window/HappyFunTimes/HappyFunTimes Installer", false, 7)]
+    [MenuItem("Window/HappyFunTimes/HappyFunTimes Installer", false, 10)]
     static void HappyFunTimesInstaller() {
-        Application.OpenURL("http://superhappyfuntimes.net/install");
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/install.html");
     }
 
-    [MenuItem("Window/HappyFunTimes/SuperHappyFunTimes", false, 8)]
+    [MenuItem("Window/HappyFunTimes/SuperHappyFunTimes", false, 11)]
     static void SuperHappyFunTimes() {
         Application.OpenURL("http://superhappyfuntimes.net");
     }
 
-    //[MenuItem("Window/HappyFunTimes/Export", false, 9)]
+    [MenuItem("Window/HappyFunTimes/Package Editor", false, 12)]
+    static void PackageEditor() {
+        HFTWindow.ShowWindow();
+    }
+
+    //[MenuItem("Window/HappyFunTimes/Export", false, 13)]
     //static void Export() {
     //}
     //
-    //[MenuItem("Window/HappyFunTimes/Publish Game", false, 10)]
+    //[MenuItem("Window/HappyFunTimes/Publish Game", false, 14)]
     //static void Publish() {
     //}
 }
