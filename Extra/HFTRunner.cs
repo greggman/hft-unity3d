@@ -107,13 +107,13 @@ end tell
                     startPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(exePath), "start.js");
                 }
                 System.Diagnostics.ProcessStartInfo psi = new System.Diagnostics.ProcessStartInfo();
-                psi.FileName = nodePath;
-                psi.Arguments = "\"" + startPath + "\"";
+                psi.FileName = "cmd.exe";
+                psi.Arguments = "/c \"\"" + nodePath + "\" \"" + startPath + "\"\"";
                 psi.LoadUserProfile = true;
                 System.Diagnostics.Process.Start(psi);
             #endif
             // Try for 5 seconds?
-            for (int count = 0; count < 5; ++count) {
+            for (int count = 0; count < 10; ++count) {
                 if (CheckForHFT()) {
                     m_gameServer.Connect();
                     return;
