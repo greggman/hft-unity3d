@@ -49,34 +49,64 @@ public class HFTMenuItems {
         Application.OpenURL("http://github.com/greggman/HappyFunTimes/issues");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Simple Example", false, 4)]
+    [MenuItem("Window/HappyFunTimes/Examples/Simple Example/UnityPackage", false, 4)]
     static void ExampleSimple() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unitysimple");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/2D Platform Example", false, 5)]
+    [MenuItem("Window/HappyFunTimes/Examples/Simple Example/Docs", false, 4)]
+    static void ExampleSimpleDocs() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unitysimple");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/2D Platform Example/UnityPackage", false, 5)]
     static void Example2DPlatformer() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity2dplatformer");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Character Controller Example", false, 6)]
+    [MenuItem("Window/HappyFunTimes/Examples/2D Platform Example/Docs", false, 5)]
+    static void Example2DPlatformerDocs() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unity2dplatformer");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Character Controller Example/UnityPackage", false, 6)]
     static void ExampleCharacterController() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unitycharacterexample");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Device Orientation and Acceleration Example", false, 7)]
+    [MenuItem("Window/HappyFunTimes/Examples/Character Controller Example/Docs", false, 6)]
+    static void ExampleCharacterControllerDocs() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unitycharacterexample");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Device Orientation and Acceleration Example/UnityPackage", false, 7)]
     static void ExampleMultiDeviceOrientationAndAcceleration() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-deviceorientation-and-accel");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Players in Scene Example", false, 8)]
+    [MenuItem("Window/HappyFunTimes/Examples/Device Orientation and Acceleration Example/Docs", false, 7)]
+    static void ExampleMultiDeviceOrientationAndAccelerationDocs() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unity-deviceorientation-and-accel");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Players in Scene Example/UnityPackage", false, 8)]
     static void ExamplePlayersInScene() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unityplayersinscene");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example", false, 9)]
+    [MenuItem("Window/HappyFunTimes/Examples/Players in Scene Example/Docs", false, 8)]
+    static void ExamplePlayersInSceneDocs() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unityplayersinscene");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example/UnityPackage", false, 9)]
     static void ExampleMultiMachine() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-multi-game-example");
+    }
+
+    [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example/Docs", false, 9)]
+    static void ExampleMultiMachineDocs() {
+        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unity-multi-game-example");
     }
 
     [MenuItem("Window/HappyFunTimes/HappyFunTimes Installer", false, 10)]
