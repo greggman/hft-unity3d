@@ -84,7 +84,10 @@ public class GameServer {
         {
             cwd = Application.dataPath;
             disconnectPlayersIfGameDisconnects = true;
-            url = "ws://localhost:18679";
+            url = System.Environment.GetEnvironmentVariable("HFT_URL");
+            if (url == null) {
+                url = "ws://localhost:18679";
+            }
 
             // Prefix all HFT arguments with "hft-" so user can filter them out
             ArgParser p = new ArgParser();
@@ -152,6 +155,22 @@ public class GameServer {
         /// don't set this. it will be set automatically
         ///</summary>
         public string cwd;
+
+        /// <summary>
+        /// Files for the Controller.
+        /// The key is the path to the file relative to
+        /// `Assets/WebPlayerTemplates/HappyFunTimes` so
+        /// for example
+        ///
+        ///     options.files["controller.html"] = controllerHTMLContent;
+        ///     options.files["scripts/controller.js"] = controllerJSContent;
+        ///     options.files["css/controller.css"] = controllerCSSContent;
+        ///
+        /// This allows the game to provide all the files HappyFunTimes
+        /// to server to the controller so that no external files are
+        /// needed.
+        /// </summary>
+        public Dictionary<string, string> files;
     };
 
     /// <summary>
