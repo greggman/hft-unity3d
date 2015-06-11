@@ -216,7 +216,7 @@ namespace HappyFunTimes
                     ""happyFunTimes"": {
                       ""gameId"": ""???id???"",
                       ""category"": ""game"",
-                      ""apiVersion"": ""1.15.0"",
+                      ""apiVersion"": ""1.12.0"",
                       ""gameType"": ""Unity3D"",
                       ""minPlayers"": 1
                     }
