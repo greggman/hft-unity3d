@@ -232,6 +232,7 @@ public abstract class NetPlayer
         RegisterInternalCmdHandler<MessageSetName>("_hft_setname_", HandleSetNameMsg);
         RegisterInternalCmdHandler<MessageBusy>("busy", IgnoreBusyMsg);
         RegisterInternalCmdHandler<MessageBusy>("_hft_busy_", HandleBusyMsg);
+        RegisterInternalCmdHandler<MessageLog>("_hft_log_", HandleLogMsg);
     }
 
     /// <summary>
@@ -339,6 +340,15 @@ public abstract class NetPlayer
         }
     }
 
+    private string errorStr = @"error";
+    void HandleLogMsg(MessageLog data) {
+        if (errorStr.Equals(data.type, StringComparison.Ordinal)) {
+            Debug.LogError(data.msg);
+        } else {
+            Debug.Log(data.msg);
+        }
+    }
+
     public abstract string GetSessionId();
     public string Name {
         get {
@@ -369,6 +379,11 @@ public abstract class NetPlayer
     // Message then player is busy (on system menu)
     private class MessageBusy : MessageCmdData {
         public bool busy = false;
+    }
+
+    private class MessageLog : MessageCmdData {
+        public string type = "";
+        public string msg = "";
     }
 
     // We need to separate m_internalHandlers because we check if
