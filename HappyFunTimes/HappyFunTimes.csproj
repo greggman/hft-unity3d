@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>HappyFunTimes</RootNamespace>
     <AssemblyName>HappyFunTimes</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <ReleaseVersion>0.6</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -58,6 +58,7 @@
     <Compile Include="LocalNetPlayer.cs" />
     <Compile Include="Package.cs" />
     <Compile Include="PlayerConnector.cs" />
+    <Compile Include="PlayerManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

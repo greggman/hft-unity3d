@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>HappyFunTimesEditor</RootNamespace>
     <AssemblyName>HappyFunTimesEditor</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <ReleaseVersion>0.6</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
