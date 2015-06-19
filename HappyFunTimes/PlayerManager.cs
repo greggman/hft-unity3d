@@ -188,7 +188,6 @@ public class PlayerManager
     /// Call this to rotate an active player out and start the next waiting player.
     /// </summary>
     /// <param name="netPlayer">The NetPlayer of the player to return</param>
-    /// <returns></returns>
     public void ReturnPlayer(NetPlayer netPlayer) {
         NetPlayerState netPlayerState = GetActiveNetPlayerState(netPlayer);
         if (netPlayerState != null) {
@@ -216,8 +215,6 @@ public class PlayerManager
     /// Returns all the current players to the waiting list
     /// and gets new ones if any are waiting
     /// </summary>
-    /// <param name=""></param>
-    /// <returns></returns>
     public void FlushCurrentPlayers() {
         for (int pndx = 0; pndx < m_playerState.Length; ++pndx) {
             PlayerState playerState = m_playerState[pndx];
