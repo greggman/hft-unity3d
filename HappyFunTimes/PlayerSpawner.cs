@@ -50,11 +50,34 @@ public class PlayerSpawner : MonoBehaviour
     public bool showMessages = false;
     public bool allowMultipleGames;
 
+    [Header("0 = unlimited")]
+    public int maxPlayers = 0;
+
     public GameServer server
     {
         get
         {
             return m_server;
+        }
+    }
+
+    /// <summary>
+    /// Call this to rotate an active player out and start the next waiting player.
+    /// </summary>
+    /// <param name="netPlayer">The NetPlayer of the player to return</param>
+    public void ReturnPlayer(NetPlayer netPlayer) {
+        if (m_playerManager) {
+            m_playerManager.ReturnPlayer(netPlayer);
+        }
+    }
+
+    /// <summary>
+    /// Returns all the current players to the waiting list
+    /// and gets new ones if any are waiting
+    /// </summary>
+    public void FlushCurrentPlayers() {
+        if (m_playerManager) {
+            m_playerManager.FlushCurrentPlayers();
         }
     }
 
@@ -66,36 +89,56 @@ public class PlayerSpawner : MonoBehaviour
 
         m_server = new GameServer(options, gameObject);
 
-        m_server.OnPlayerConnect += StartNewPlayer;
         m_server.OnConnect += Connected;
         m_server.OnDisconnect += Disconnected;
 
         m_server.Init();
+
+        if (maxPlayers > 0) {
+            int timeoutForDisconnectedPlayerToReconnect = 0;
+            m_playerManager = new PlayerManager(m_server, gameObject, maxPlayers, timeoutForDisconnectedPlayerToReconnect, GetPrefab);
+        } else {
+            m_server.OnPlayerConnect += StartNewPlayer;
+        }
     }
 
-    void StartPlayer(NetPlayer netPlayer, string name, Dictionary<string, object> data)
+    void StartPlayer(NetPlayer netPlayer, Dictionary<string, object> data)
     {
         GameObject gameObject = (GameObject)Instantiate(prefabToSpawnForPlayer);
         SpawnInfo spawnInfo = new SpawnInfo();
         spawnInfo.netPlayer = netPlayer;
-        spawnInfo.name = !String.IsNullOrEmpty(name) ? name : ("Player" + (++m_count));
+        spawnInfo.name = netPlayer.Name;
         spawnInfo.data = data;
         gameObject.SendMessage("InitializeNetPlayer", spawnInfo);
     }
 
+    GameObject GetPrefab(int ndx) {
+        return (GameObject)Instantiate(prefabToSpawnForPlayer);
+    }
+
     void StartNewPlayer(object sender, PlayerConnectMessageArgs e)
     {
-        StartPlayer(e.netPlayer, "", e.data);
+        StartPlayer(e.netPlayer, e.data);
     }
 
     public void StartLocalPlayer(NetPlayer netPlayer, string name = "", Dictionary<string, object> data = null)
     {
-        StartPlayer(netPlayer, name, data);
+        if (m_playerManager != null) {
+            m_playerManager.StartLocalPlayer(netPlayer, name, data);
+        } else {
+            StartPlayer(netPlayer, data);
+        }
     }
 
     void Start ()
     {
         StartConnection();
+    }
+
+    void Update() {
+        if (m_playerManager != null) {
+            m_playerManager.Update();
+        }
     }
 
     void Connected(object sender, EventArgs e)
@@ -134,7 +177,7 @@ public class PlayerSpawner : MonoBehaviour
     }
 
     private GameServer m_server;
-    private int m_count;
+    private PlayerManager m_playerManager;
 };
 
 }   // namespace HappyFunTimes
