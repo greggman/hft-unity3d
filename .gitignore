@@ -1,6 +1,8 @@
-node_modules
 bin
-*.userprefs
+node_modules
+bower_components
+Temp
+Library
 .DS_Store
 *~
 *.swp
@@ -14,9 +16,13 @@ temp
 *.pyc
 *.orig
 .project
-*.meta
 *.vpj
 *.vpw
 *.vpwhistu
 *.vtg
+*.csproj
+*.unityproj
+*.sln
+*.user
+*.userprefs
 
