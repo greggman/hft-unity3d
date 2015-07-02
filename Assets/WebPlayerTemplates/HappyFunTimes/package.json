@@ -2,7 +2,7 @@
   "dependencies": {},
   "description": "A super simple 2D platform game in Unity.",
   "happyFunTimes": {
-    "apiVersion": "1.12.0",
+    "apiVersion": "1.13.0",
     "category": "example",
     "gameId": "unity2dplatformer",
     "gameType": "Unity3D",
