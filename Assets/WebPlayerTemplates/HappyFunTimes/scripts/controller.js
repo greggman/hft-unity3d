@@ -127,7 +127,8 @@ requirejs([
       lrpads: true,
     },
     "touch": {
-      orientation: "none",
+      orientation: "portrait",
+      orientationOptional: true,
     },
   };
 
@@ -175,7 +176,7 @@ requirejs([
     elem.className = classes.join(" ");
 
     var layout = layouts[controllerType];
-    commonUI.setOrientation(layout.orientation);
+    commonUI.setOrientation(layout.orientation, layout.orientationOptional);
 
     globals.provideOrientation  = controllerOptions.provideOrientation;
     globals.provideAcceleration = controllerOptions.provideAcceleration;
