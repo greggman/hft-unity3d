@@ -101,6 +101,12 @@ public class HFTGamepad : MonoBehaviour {
     }
   }
 
+  public NetPlayer NetPlayer {
+    get {
+      return m_netPlayer;
+    }
+  }
+
   public event System.EventHandler<System.EventArgs> OnNameChange;
 
   [HideInInspector]

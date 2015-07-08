@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CubePlayerScript : MonoBehaviour {
+public class PhonePlayerScript : MonoBehaviour {
 
     public float rotationSpeed = 5.0f;
     public float moveSpeed = 5.0f;
@@ -34,6 +34,9 @@ public class CubePlayerScript : MonoBehaviour {
 
         SetName(m_gamepad.Name);
         SetColor(m_gamepad.Color);
+
+        // Notify us if the name changes.
+        m_gamepad.OnNameChange += ChangeName;
     }
 
     // Update is called once per frame
@@ -89,5 +92,11 @@ public class CubePlayerScript : MonoBehaviour {
         Vector2 size = m_guiStyle.CalcSize(m_guiName);
         m_nameRect.width  = size.x + 12;
         m_nameRect.height = size.y + 5;
+    }
+
+    // Called when the user changes their name.
+    void ChangeName(object sender, System.EventArgs e)
+    {
+        SetName(m_gamepad.Name);
     }
 }

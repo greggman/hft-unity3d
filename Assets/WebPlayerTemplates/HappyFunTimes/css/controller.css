@@ -216,7 +216,7 @@ svg, img {
 .layout-1lrpad-1button #buttonB { display: none; }
 .layout-1lrpad-1button #lrpad   { left:    30px; }
 .layout-1lrpad-1button #touch   { display: none; }
-.layout-1lrpad-2button #orient  { display: none; }
+.layout-1lrpad-1button #orient  { display: none; }
 
 .layout-1lrpad-2button #dpad1   { display: none; }
 .layout-1lrpad-2button #dpad2   { display: none; }
