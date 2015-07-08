@@ -17,7 +17,6 @@ public class BirdScript : MonoBehaviour {
     // the player.
     public Color baseColor;
 
-    private bool m_oldJumpPressed = false;  // true if pressed just now
     private float m_groundRadius = 0.2f;
     private bool m_grounded = false;
     private bool m_facingRight = true;
@@ -25,6 +24,7 @@ public class BirdScript : MonoBehaviour {
     private Rigidbody2D m_rigidbody2d;
     private Material m_material;
     private HFTGamepad m_gamepad;
+    private HFTInput m_hftInput;
     private GUIStyle m_guiStyle = new GUIStyle();
     private GUIContent m_guiName = new GUIContent("");
     private Rect m_nameRect = new Rect(0,0,0,0);
@@ -40,6 +40,8 @@ public class BirdScript : MonoBehaviour {
         m_material = GetComponent<Renderer>().material;
         m_gamepad = GetComponent<HFTGamepad>();
 
+        m_hftInput = new HFTInput(m_gamepad);
+
         SetColor(m_playerNumber++);
         SetName(m_gamepad.Name);
 
@@ -49,8 +51,9 @@ public class BirdScript : MonoBehaviour {
 
     void Update()
     {
-        bool jumpPressed = m_gamepad.buttons[0].pressed || Input.GetKeyDown("space");
-        bool jumpJustPressed = !m_oldJumpPressed && jumpPressed;
+        m_hftInput.Update();
+
+        bool jumpJustPressed = m_hftInput.GetButtonDown("fire1") || Input.GetKeyDown("space");
         // If we're on the ground AND we just pressed jump (or space)
         if (m_grounded && jumpJustPressed)
         {
@@ -58,7 +61,8 @@ public class BirdScript : MonoBehaviour {
             m_animator.SetBool("Ground", m_grounded);
             m_rigidbody2d.AddForce(new Vector2(0, jumpForce));
         }
-        m_oldJumpPressed = jumpPressed;
+
+        m_hftInput.LateUpdate();
     }
 
     void MoveToRandomSpawnPoint()
@@ -124,7 +128,7 @@ public class BirdScript : MonoBehaviour {
         m_animator.SetFloat("vSpeed", m_rigidbody2d.velocity.y);
 
         // Get left/right input (get both phone and local input)
-        float move = m_gamepad.axes[HFTGamepad.AXIS_DPAD0_X] + Input.GetAxis("Horizontal");
+        float move = m_hftInput.GetAxis("Horizontal") + Input.GetAxis("Horizontal");
 
         // Pass that to the animator
         m_animator.SetFloat("Speed", Mathf.Abs(move));

@@ -45,6 +45,7 @@ public class HFTGamepad : MonoBehaviour {
     c_1lrpad_2button,
     c_1lrpad,
     c_touch,
+    c_orient,
   }
 
   [System.Serializable]
@@ -110,6 +111,7 @@ public class HFTGamepad : MonoBehaviour {
   // Manages the connection between this object and the phone.
   private NetPlayer m_netPlayer;
   private Color m_color = new Color(0.0f, 1.0f, 0.0f);
+  private static int s_colorCount = 0;
 
   private ControllerOptions m_oldControllerOptions = new ControllerOptions();
 
@@ -180,6 +182,24 @@ public class HFTGamepad : MonoBehaviour {
     // then tell it can play.
     m_netPlayer.SendCmd("play");
     SendControllerOptions();
+    SetDefaultColor();
+  }
+
+  void SetDefaultColor() {
+    int colorNdx = s_colorCount++;
+    // Pick a color
+    float hue = (((colorNdx & 0x01) << 5) |
+                 ((colorNdx & 0x02) << 3) |
+                 ((colorNdx & 0x04) << 1) |
+                 ((colorNdx & 0x08) >> 1) |
+                 ((colorNdx & 0x10) >> 3) |
+                 ((colorNdx & 0x20) >> 5)) / 64.0f;
+    float value = (colorNdx & 0x08) != 0 ? 0.5f : 1.0f;
+    float sat   = (colorNdx & 0x04) != 0 ? 0.5f : 1.0f;
+    float alpha = 1.0f;
+
+    Vector4 hsva = new Vector4(hue, sat, value, alpha);
+    this.Color = ColorUtils.HSVAToColor(hsva);
   }
 
   void Remove(object sender, System.EventArgs e)

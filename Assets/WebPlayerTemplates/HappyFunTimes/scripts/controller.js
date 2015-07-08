@@ -130,6 +130,10 @@ requirejs([
       orientation: "portrait",
       orientationOptional: true,
     },
+    "orient": {
+      orientation: "portrait",
+      orientationOptional: true,
+    },
   };
 
   function to255(v) {
