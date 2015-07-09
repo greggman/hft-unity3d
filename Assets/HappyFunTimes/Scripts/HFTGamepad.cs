@@ -214,7 +214,7 @@ public class HFTGamepad : MonoBehaviour {
     float alpha = 1.0f;
 
     Vector4 hsva = new Vector4(hue, sat, value, alpha);
-    m_color = ColorUtils.HSVAToColor(hsva);
+    m_color = HFTColorUtils.HSVAToColor(hsva);
   }
 
   void Remove(object sender, System.EventArgs e)

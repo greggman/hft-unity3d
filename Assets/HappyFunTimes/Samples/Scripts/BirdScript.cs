@@ -89,7 +89,7 @@ public class BirdScript : MonoBehaviour {
         float satAdjust   = (colorNdx & 0x04) != 0 ? -0.5f : 0.0f;
 
         // get the hsva for the baseColor
-        Vector4 hsva = ColorUtils.ColorToHSVA(baseColor);
+        Vector4 hsva = HFTColorUtils.ColorToHSVA(baseColor);
 
         // adjust that base color by the amount we picked
         hsva.x += hueAdjust;
@@ -97,7 +97,7 @@ public class BirdScript : MonoBehaviour {
         hsva.z += valueAdjust;
 
         // now get the adjusted color.
-        Color playerColor = ColorUtils.HSVAToColor(hsva);
+        Color playerColor = HFTColorUtils.HSVAToColor(hsva);
 
         // Create a 1 pixel texture for the OnGUI code to draw the label
         Color[] pix = new Color[1];
