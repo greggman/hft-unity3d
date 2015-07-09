@@ -1,6 +1,6 @@
 using UnityEngine;
 
-class HFTGyroscope {
+public class HFTGyroscope {
 
     // Returns the attitude (ie, orientation in space) of the device.
     public Quaternion attitude

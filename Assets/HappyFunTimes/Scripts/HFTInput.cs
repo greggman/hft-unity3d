@@ -2,12 +2,13 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-class HFTInput {
+public class HFTInput {
 
     public HFTInput(HFTGamepad gamepad)
     {
         m_gamepad = gamepad;
 
+        m_buttonState = new bool[gamepad.buttons.Length];
         m_lastButtonState = new bool[gamepad.buttons.Length];
 
         SpecifyAxisNameToAxisIndex("Horizontal", 0);
@@ -181,8 +182,8 @@ class HFTInput {
         int buttonIndex = -1;
         bool value = false;
         m_buttonMap.TryGetValue(buttonName, out buttonIndex);
-        if (buttonIndex >= 0 && buttonIndex < m_gamepad.buttons.Length) {
-            value = m_gamepad.buttons[buttonIndex].pressed;
+        if (buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
+            value = m_buttonState[buttonIndex];
         } else {
             Debug.LogError("Unknown button:" + buttonName);
         }
@@ -195,8 +196,8 @@ class HFTInput {
         int buttonIndex = -1;
         bool value = false;
         m_buttonMap.TryGetValue(buttonName, out buttonIndex);
-        if (buttonIndex >= 0 && buttonIndex < m_gamepad.buttons.Length) {
-            value = m_gamepad.buttons[buttonIndex].pressed && !m_lastButtonState[buttonIndex];
+        if (buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
+            value = m_buttonState[buttonIndex] && !m_lastButtonState[buttonIndex];
         } else {
             Debug.LogError("Unknown button:" + buttonName);
         }
@@ -209,8 +210,8 @@ class HFTInput {
         int buttonIndex = -1;
         bool value = false;
         m_buttonMap.TryGetValue(buttonName, out buttonIndex);
-        if (buttonIndex >= 0 && buttonIndex < m_gamepad.buttons.Length) {
-            value = !m_gamepad.buttons[buttonIndex].pressed && m_lastButtonState[buttonIndex];
+        if (buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
+            value = !m_buttonState[buttonIndex] && m_lastButtonState[buttonIndex];
         } else {
             Debug.LogError("Unknown button:" + buttonName);
         }
@@ -291,6 +292,11 @@ class HFTInput {
 
     public void Update()
     {
+        for (int ii = 0; ii < m_gamepad.buttons.Length; ++ii) {
+            m_lastButtonState[ii] = m_buttonState[ii];
+            m_buttonState[ii] = m_gamepad.buttons[ii].pressed;
+        }
+
         float alpha = m_gamepad.axes[HFTGamepad.AXIS_ORIENTATION_ALPHA]; // Z
         float beta  = m_gamepad.axes[HFTGamepad.AXIS_ORIENTATION_BETA]; // X'
         float gamma = m_gamepad.axes[HFTGamepad.AXIS_ORIENTATION_GAMMA]; // Y''
@@ -311,15 +317,13 @@ class HFTInput {
     }
 
     public void LateUpdate() {
-        for (int ii = 0; ii < m_gamepad.buttons.Length; ++ii) {
-            m_lastButtonState[ii] = m_gamepad.buttons[ii].pressed;
-        }
     }
 
     private HFTGamepad m_gamepad;
     private Dictionary<string, int> m_axisMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, int> m_buttonMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
     private int m_accelerationEventCount = 0;
+    private bool[] m_buttonState;
     private bool[] m_lastButtonState;
     private bool m_anyKey = false;
     private bool m_anyKeyDown = false;

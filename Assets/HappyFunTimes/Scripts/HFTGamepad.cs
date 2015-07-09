@@ -73,8 +73,6 @@ public class HFTGamepad : MonoBehaviour {
     public bool provideOrientation = false;
     public bool provideAcceleration = false;
     public bool provideRotationRate = false;
-
-
   }
 
   public ControllerOptions controllerOptions;
@@ -83,6 +81,7 @@ public class HFTGamepad : MonoBehaviour {
     for (int ii = 0; ii < buttons.Length; ++ii) {
       buttons[ii] = new Button();
     }
+    SetDefaultColor();
   }
 
   public Color Color {
@@ -91,7 +90,7 @@ public class HFTGamepad : MonoBehaviour {
       }
       set {
           m_color = value;
-          m_netPlayer.SendCmd("color", new MessageColor(m_color));
+          SendColor();
       }
   }
 
@@ -188,7 +187,13 @@ public class HFTGamepad : MonoBehaviour {
     // then tell it can play.
     m_netPlayer.SendCmd("play");
     SendControllerOptions();
-    SetDefaultColor();
+    SendColor();
+  }
+
+  void SendColor() {
+    if (m_netPlayer != null) {
+      m_netPlayer.SendCmd("color", new MessageColor(m_color));
+    }
   }
 
   void SetDefaultColor() {
@@ -205,7 +210,7 @@ public class HFTGamepad : MonoBehaviour {
     float alpha = 1.0f;
 
     Vector4 hsva = new Vector4(hue, sat, value, alpha);
-    this.Color = ColorUtils.HSVAToColor(hsva);
+    m_color = ColorUtils.HSVAToColor(hsva);
   }
 
   void Remove(object sender, System.EventArgs e)
