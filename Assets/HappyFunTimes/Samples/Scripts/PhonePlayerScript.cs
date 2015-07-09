@@ -24,7 +24,7 @@ public class PhonePlayerScript : MonoBehaviour {
     void Start () {
         m_renderer = GetComponent<Renderer>();
         m_gamepad = GetComponent<HFTGamepad>();
-        m_hftInput = new HFTInput(m_gamepad);
+        m_hftInput = GetComponent<HFTInput>();
 
         int playerNdx = s_playerCount++;
         transform.position = new Vector3(
@@ -41,8 +41,6 @@ public class PhonePlayerScript : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        m_hftInput.Update();
-
         Quaternion q = Quaternion.Slerp(transform.rotation, m_hftInput.gyro.attitude, rotationSpeed * Time.deltaTime);
         transform.rotation = q;
 
@@ -52,8 +50,6 @@ public class PhonePlayerScript : MonoBehaviour {
         speed = speed * moveFriction;
 
         transform.Translate(Vector3.up * Time.deltaTime * speed);
-
-        m_hftInput.LateUpdate();
     }
 
     private float CenterOut(int v) {

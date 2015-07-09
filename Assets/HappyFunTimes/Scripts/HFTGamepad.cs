@@ -81,7 +81,6 @@ public class HFTGamepad : MonoBehaviour {
     for (int ii = 0; ii < buttons.Length; ++ii) {
       buttons[ii] = new Button();
     }
-    SetDefaultColor();
   }
 
   public Color Color {
@@ -190,6 +189,10 @@ public class HFTGamepad : MonoBehaviour {
     SendColor();
   }
 
+  void Awake() {
+    SetDefaultColor();
+  }
+
   void SendColor() {
     if (m_netPlayer != null) {
       m_netPlayer.SendCmd("color", new MessageColor(m_color));
@@ -198,6 +201,7 @@ public class HFTGamepad : MonoBehaviour {
 
   void SetDefaultColor() {
     int colorNdx = s_colorCount++;
+
     // Pick a color
     float hue = (((colorNdx & 0x01) << 5) |
                  ((colorNdx & 0x02) << 3) |

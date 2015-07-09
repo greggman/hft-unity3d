@@ -2,15 +2,10 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class HFTInput {
+[RequireComponent (typeof (HFTGamepad))]
+public class HFTInput : MonoBehaviour {
 
-    public HFTInput(HFTGamepad gamepad)
-    {
-        m_gamepad = gamepad;
-
-        m_buttonState = new bool[gamepad.buttons.Length];
-        m_lastButtonState = new bool[gamepad.buttons.Length];
-
+    public HFTInput() {
         SpecifyAxisNameToAxisIndex("Horizontal", 0);
         SpecifyAxisNameToAxisIndex("Vertical", 1);
         SpecifyAxisNameToAxisIndex("Horizontal2", 2);
@@ -18,6 +13,14 @@ public class HFTInput {
 
         SpecifyButtonNameToButtonIndex("Fire1", 0);
         SpecifyButtonNameToButtonIndex("Fire2", 1);
+    }
+
+    void Awake()
+    {
+        m_gamepad = GetComponent<HFTGamepad>();
+
+        m_buttonState = new bool[m_gamepad.buttons.Length];
+        m_lastButtonState = new bool[m_gamepad.buttons.Length];
     }
 
     //Last measured linear acceleration of a device in three-dimensional space. (Read Only)
@@ -88,6 +91,7 @@ public class HFTInput {
     }
 
     //Controls enabling and disabling of IME input composition.
+    [HideInInspector]
     public IMECompositionMode imeCompositionMode = IMECompositionMode.Auto;
 
     //Does the user have an IME keyboard input source selected?
@@ -290,7 +294,7 @@ public class HFTInput {
         m_buttonMap.Add(buttonName, buttonIndex);
     }
 
-    public void Update()
+    void Update()
     {
         for (int ii = 0; ii < m_gamepad.buttons.Length; ++ii) {
             m_lastButtonState[ii] = m_buttonState[ii];
@@ -314,9 +318,6 @@ public class HFTInput {
         m_gyro.rotationRateUnbiased.x = m_gamepad.axes[HFTGamepad.AXIS_ROTATION_RATE_ALPHA];
         m_gyro.rotationRateUnbiased.y = m_gamepad.axes[HFTGamepad.AXIS_ROTATION_RATE_BETA];
         m_gyro.rotationRateUnbiased.z = m_gamepad.axes[HFTGamepad.AXIS_ROTATION_RATE_GAMMA];
-    }
-
-    public void LateUpdate() {
     }
 
     private HFTGamepad m_gamepad;

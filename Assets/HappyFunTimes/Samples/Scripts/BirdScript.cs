@@ -39,8 +39,7 @@ public class BirdScript : MonoBehaviour {
         m_rigidbody2d = GetComponent<Rigidbody2D>();
         m_material = GetComponent<Renderer>().material;
         m_gamepad = GetComponent<HFTGamepad>();
-
-        m_hftInput = new HFTInput(m_gamepad);
+        m_hftInput = GetComponent<HFTInput>();
 
         SetColor(m_playerNumber++);
         SetName(m_gamepad.Name);
@@ -51,8 +50,6 @@ public class BirdScript : MonoBehaviour {
 
     void Update()
     {
-        m_hftInput.Update();
-
         bool jumpJustPressed = m_hftInput.GetButtonDown("fire1") || Input.GetKeyDown("space");
         // If we're on the ground AND we just pressed jump (or space)
         if (m_grounded && jumpJustPressed)
@@ -61,8 +58,6 @@ public class BirdScript : MonoBehaviour {
             m_animator.SetBool("Ground", m_grounded);
             m_rigidbody2d.AddForce(new Vector2(0, jumpForce));
         }
-
-        m_hftInput.LateUpdate();
     }
 
     void MoveToRandomSpawnPoint()
