@@ -85,8 +85,8 @@ public class BirdScript : MonoBehaviour {
                            ((colorNdx & 0x08) >> 1) |
                            ((colorNdx & 0x10) >> 3) |
                            ((colorNdx & 0x20) >> 5)) / 64.0f;
-        float valueAdjust = (colorNdx & 0x08) != 0 ? -0.5f : 0.0f;
-        float satAdjust   = (colorNdx & 0x04) != 0 ? -0.5f : 0.0f;
+        float valueAdjust = (colorNdx & 0x20) != 0 ? -0.5f : 0.0f;
+        float satAdjust   = (colorNdx & 0x10) != 0 ? -0.5f : 0.0f;
 
         // get the hsva for the baseColor
         Vector4 hsva = HFTColorUtils.ColorToHSVA(baseColor);
@@ -99,10 +99,12 @@ public class BirdScript : MonoBehaviour {
         // now get the adjusted color.
         Color playerColor = HFTColorUtils.HSVAToColor(hsva);
 
+        // Tell the gamepad to change color
+        m_gamepad.Color = playerColor;
+
         // Create a 1 pixel texture for the OnGUI code to draw the label
         Color[] pix = new Color[1];
         pix[0] = playerColor;
-        m_gamepad.Color = pix[0];  // Tell the gamepad to change color
         Texture2D tex = new Texture2D(1, 1);
         tex.SetPixels(pix);
         tex.Apply();

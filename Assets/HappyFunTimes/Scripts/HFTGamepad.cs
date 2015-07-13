@@ -209,8 +209,8 @@ public class HFTGamepad : MonoBehaviour {
                  ((colorNdx & 0x08) >> 1) |
                  ((colorNdx & 0x10) >> 3) |
                  ((colorNdx & 0x20) >> 5)) / 64.0f;
-    float value = (colorNdx & 0x08) != 0 ? 0.5f : 1.0f;
-    float sat   = (colorNdx & 0x04) != 0 ? 0.5f : 1.0f;
+    float sat   = (colorNdx & 0x10) != 0 ? 0.5f : 1.0f;
+    float value = (colorNdx & 0x20) != 0 ? 0.5f : 1.0f;
     float alpha = 1.0f;
 
     Vector4 hsva = new Vector4(hue, sat, value, alpha);
