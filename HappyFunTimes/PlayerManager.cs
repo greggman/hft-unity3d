@@ -94,12 +94,12 @@ public class PlayerManager
         });
     }
 
-    void SendSpawnInfoToGameObject(string msg, GameObject gameObject, NetPlayerState netPlayerState) {
+    void SendSpawnInfoToGameObject(string msg, GameObject gameObject, NetPlayerState netPlayerState, SendMessageOptions sendMessageOptions = SendMessageOptions.RequireReceiver) {
         SpawnInfo spawnInfo = new SpawnInfo();
         spawnInfo.netPlayer = netPlayerState.netPlayer;
         spawnInfo.name = netPlayerState.netPlayer.Name;
         spawnInfo.data = netPlayerState.data;
-        gameObject.SendMessage(msg, spawnInfo);
+        gameObject.SendMessage(msg, spawnInfo, sendMessageOptions);
     }
 
     void StartActivePlayer(GameObject gameObject, PlayerState playerState, NetPlayerState netPlayerState) {
@@ -151,7 +151,7 @@ public class PlayerManager
 
         // Execute WaitingNetPlayer on the GameObject using this class. In otherwords
         // the game object with the PlayerConnector or PlayerSpawer script component
-        SendSpawnInfoToGameObject("WaitingNetPlayer", m_gameObject, netPlayerState);
+        SendSpawnInfoToGameObject("WaitingNetPlayer", m_gameObject, netPlayerState, SendMessageOptions.DontRequireReceiver);
     }
 
     void StartNewPlayer(object sender, PlayerConnectMessageArgs e)
