@@ -193,6 +193,10 @@ public class GameServer {
         m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
         m_eventProcessor.Init(this);
 
+        SendMessageToRunner("HFTInitializeRunner");
+    }
+
+    private void SendMessageToRunner(string msg) {
         string[] names = new string[] {
             "HappyFunTimes.HFTRunner",
             "HappyFunTimes.HFTRunner, Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",            "HFTRunner",
@@ -201,9 +205,12 @@ public class GameServer {
         foreach (string name in names) {
             System.Type t = System.Type.GetType(name);
             if (t != null) {
-                object o = m_gameObject.AddComponent(t);
+                object o = m_gameObject.GetComponent(t);
+                if (o == null) {
+                    o = m_gameObject.AddComponent(t);
+                }
                 if (o != null) {
-                    m_gameObject.SendMessage("HFTInitializeRunner", this);
+                    m_gameObject.SendMessage(msg, this);
                 }
                 break;
             }
@@ -433,7 +440,13 @@ public class GameServer {
 
     private class MessageGameStart {
         public string id = "";
+        public bool needNewHFT = false;
     };
+
+    private class MessageLogMessage {
+        public string type = "";
+        public string msg = "";
+    }
 
     private class RelayServerCmd {
         public RelayServerCmd(string _cmd, string _id, object _data) {
@@ -501,6 +514,8 @@ public class GameServer {
                     RemovePlayer(m.id);
                 } else if (m.cmd.Equals("system")) {
                     DoSysCommand(m.data);
+                } else if (m.cmd.Equals("log")) {
+                    LogMessage(m.data);
                 } else {
                     Debug.LogError("unknown client message: " + m.cmd);
                 }
@@ -552,17 +567,18 @@ public class GameServer {
             return;
         }
 
-        if (string.IsNullOrEmpty(name)) {
-            name = "Player" + (++m_totalPlayerCount);
-        }
-
         RealNetPlayer.Options options = new RealNetPlayer.Options();
         if (data != null) {
             DeJson.Deserializer deserializer = new DeJson.Deserializer();
             HFTPlayerStartData startData = deserializer.Deserialize<HFTPlayerStartData>(data);
             if (startData != null) {
                 options.sessionId = startData.__hft_session_id__;
+                name = startData.__hft_name__;
             }
+        }
+
+        if (string.IsNullOrEmpty(name)) {
+            name = "Player" + (++m_totalPlayerCount);
         }
 
         NetPlayer player = new RealNetPlayer(this, id, name, options);
@@ -591,12 +607,28 @@ public class GameServer {
     private void StartGame(string id, Dictionary<string, object> cmd) {
         MessageGameStart data = m_deserializer.Deserialize<MessageGameStart>(cmd);
         m_id = data.id;
+        if (data.needNewHFT) {
+            QueueEvent(delegate() {
+                Debug.LogError("This game needs a newer version of HappyFunTimes");
+                SendMessageToRunner("HFTNeedNewHFT");
+                Application.Quit();
+            });
+        } else {
+            QueueEvent(delegate() {
+                if (OnConnect != null) {
+                    OnConnect.Emit(this, new EventArgs());
+                }
+            });
+        }
+    }
 
-        QueueEvent(delegate() {
-            if (OnConnect != null) {
-                OnConnect.Emit(this, new EventArgs());
-            }
-        });
+    private void LogMessage(Dictionary<string, object> cmd) {
+        MessageLogMessage data = m_deserializer.Deserialize<MessageLogMessage>(cmd);
+        if (data.type == "error") {
+            Debug.LogError(data.msg);
+        } else {
+            Debug.Log(data.msg);
+        }
     }
 
     private void UpdateGame(string id, Dictionary<string, object> data) {
@@ -684,6 +716,7 @@ public class GameServer {
     class HFTPlayerStartData : MessageCmdData // don't think this needs to inherit from MessageCmdData
     {
         public string __hft_session_id__ = "";
+        public string __hft_name__ = "";
     }
 
 };
