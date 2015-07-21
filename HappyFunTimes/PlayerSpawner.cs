@@ -66,7 +66,7 @@ public class PlayerSpawner : MonoBehaviour
     /// </summary>
     /// <param name="netPlayer">The NetPlayer of the player to return</param>
     public void ReturnPlayer(NetPlayer netPlayer) {
-        if (m_playerManager) {
+        if (m_playerManager != null) {
             m_playerManager.ReturnPlayer(netPlayer);
         }
     }
@@ -76,7 +76,7 @@ public class PlayerSpawner : MonoBehaviour
     /// and gets new ones if any are waiting
     /// </summary>
     public void FlushCurrentPlayers() {
-        if (m_playerManager) {
+        if (m_playerManager != null) {
             m_playerManager.FlushCurrentPlayers();
         }
     }
