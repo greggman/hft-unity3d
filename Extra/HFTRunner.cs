@@ -46,6 +46,16 @@ namespace HappyFunTimes
             m_gameServer.OnConnectFailure += Run;
         }
 
+        public void HFTNeedNewHFT(GameServer gs)
+        {
+            #if UNITY_EDITOR
+            UnityEditor.EditorUtility.DisplayDialog(
+                "HappyFunTimes",
+                "This game needs a newer version of HappyFunTimes",
+                "Ok");
+            #endif
+        }
+
         void Run(object sender, System.EventArgs args)
         {
             #if UNITY_EDITOR
