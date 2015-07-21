@@ -255,8 +255,10 @@ public abstract class NetPlayer
     public virtual void Disconnect()
     {
         m_connected = false;
-        if (OnDisconnect != null) {
-            OnDisconnect(this, new EventArgs());
+
+        EventHandler<EventArgs> handler = OnDisconnect;
+        if (handler != null) {
+            handler(this, new EventArgs());
         }
         RemoveAllHandlers();
     }
@@ -325,8 +327,9 @@ public abstract class NetPlayer
     void HandleSetNameMsg(MessageSetName data) {
         if (data.name.Length > 0 && data.name != m_name) {
             m_name = data.name;
-            if (OnNameChange != null) {
-                OnNameChange(this, new EventArgs());
+            EventHandler<EventArgs> handler = OnNameChange;
+            if (handler != null) {
+                handler(this, new EventArgs());
             }
         }
     }
@@ -334,8 +337,9 @@ public abstract class NetPlayer
     void HandleBusyMsg(MessageBusy data) {
         if (data.busy != m_busy) {
             m_busy = data.busy;
-            if (OnBusy != null) {
-                OnBusy(this, new EventArgs());
+            EventHandler<EventArgs> handler = OnBusy;
+            if (handler != null) {
+                handler(this, new EventArgs());
             }
         }
     }
