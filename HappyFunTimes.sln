@@ -22,6 +22,6 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = HappyFunTimes\HappyFunTimes.csproj
-		version = 0.8
+		version = 1.1
 	EndGlobalSection
 EndGlobal
