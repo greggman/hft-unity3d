@@ -1,9 +1,8 @@
 HappyFunTimes-Unity3D
 =====================
 
-Unity3D libraries for [HappyFunTimes](http://greggman.github.io/HappyFunTimes).
+Unity3D libraries for [HappyFunTimes](http://docs.happyfuntimes.net).
 
-It's probably easist to clone an existing game or to download this from the asset store but otherwise you can build it from source
-here or [download the DLLs from the releases](https://github.com/greggman/hft-unity3d/releases).
-
+You can get this from the [Unity Asset Store](http://u3d.as/content/greggman/happy-fun-times)
+or you can [download it directly here](http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-gamepad")
 
