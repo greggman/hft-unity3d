@@ -375,6 +375,36 @@ requirejs([
     event.preventDefault();
   });
 
+  var isTouched = false;
+  function handleTouchDown() {
+    isTouched = true;
+    client.sendCmd('button', { id: 18, pressed: true });
+  }
+
+  function handleTouchUp() {
+    isTouched = false;
+    client.sendCmd('button', { id: 18, pressed: false });
+  }
+
+  function handleTouchOut() {
+    client.sendCmd('button', { id: 18, pressed: false });
+  }
+
+  function handleTouchEnter() {
+    if (isTouched) {
+      client.sendCmd('button', { id: 18, pressed: true });
+    }
+  }
+
+  $("touch").addEventListener('pointerdown', handleTouchDown);
+  $("touch").addEventListener('pointerup', handleTouchUp);
+  $("touch").addEventListener('pointerout', handleTouchOut);
+  $("touch").addEventListener('pointerenter', handleTouchEnter);
+  $("orient").addEventListener('pointerdown', handleTouchDown);
+  $("orient").addEventListener('pointerup', handleTouchUp);
+  $("orient").addEventListener('pointerout', handleTouchOut);
+  $("orient").addEventListener('pointerenter', handleTouchEnter);
+
   var gn = new GyroNorm();
 
   function handleOrientationData(data) {

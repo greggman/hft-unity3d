@@ -37,7 +37,7 @@ class TouchPlayer : MonoBehaviour {
         Vector3 coords = Camera.main.WorldToScreenPoint(transform.position);
         m_nameRect.x = coords.x - size.x * 0.5f - 5.0f;
         m_nameRect.y = Screen.height - coords.y - 30.0f;
-        GUI.Box(m_nameRect, m_name, m_guiStyle);
+        GUI.Box(m_nameRect, m_name + (m_gamepad.buttons[HFTGamepad.BUTTON_TOUCH].pressed ? "*" : ""), m_guiStyle);
     }
 
     void SetName(string name) {

@@ -28,6 +28,7 @@ public class HFTGamepad : MonoBehaviour {
   public const int BUTTON_DPAD1_RIGHT = 19;
   public const int BUTTON_DPAD1_TOP = 16;
   public const int BUTTON_DPAD1_BOTTOM = 17;
+  public const int BUTTON_TOUCH = 18;
 
   public class Button {
     public bool pressed = false;
@@ -110,7 +111,7 @@ public class HFTGamepad : MonoBehaviour {
   [HideInInspector]
   public float[] axes = new float[15];
   [HideInInspector]
-  public Button[] buttons = new Button[18];
+  public Button[] buttons = new Button[19];
 
   // Manages the connection between this object and the phone.
   private NetPlayer m_netPlayer;
