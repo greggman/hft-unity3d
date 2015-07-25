@@ -14,9 +14,9 @@ your Unity project very quickly.
 
 <img src="Assets/WebPlayerTemplates/HappyFunTimes/screenshot.png" />
 
-The included sample is basically [the 2D platformer example](https://unity3d.com/learn/tutorials/modules/beginner/2d) from the
-unity website with HappyFunTimes control added as well as a generic controller. A example showing using orientation and
-an example showing using the phone as a touch pad.
+Samples include a 2D platformer example inspired by [this tutorial from the unity website](https://unity3d.com/learn/tutorials/modules/beginner/2d)
+unity website but with HappyFunTimes control added. There is also an example showing using orientation and
+another example showing using the phone as a touch pad.
 
 ## Docs
 
