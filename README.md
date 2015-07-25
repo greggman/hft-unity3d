@@ -25,5 +25,11 @@ another example showing using the phone as a touch pad.
 You can get this from the [Unity Asset Store](http://u3d.as/content/greggman/happy-fun-times)
 or you can [download it directly here](http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-gamepad)
 
-[Docs can be found here](http://docs.happyfuntimes.net/docs/unity/).
+## Changelist
+
+### 1.2
+
+*   added HFTGamepad.BUTTON_TOUCH for whether or not the user is touching the screen
+    on the orientation and touch controllers.
+
 
