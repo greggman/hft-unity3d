@@ -32,4 +32,6 @@ or you can [download it directly here](http://docs.happyfuntimes.net/docs/unity/
 *   added HFTGamepad.BUTTON_TOUCH for whether or not the user is touching the screen
     on the orientation and touch controllers.
 
+*   added ability to play sound through controller
+
 

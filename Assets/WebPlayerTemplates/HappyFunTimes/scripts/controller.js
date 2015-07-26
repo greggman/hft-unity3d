@@ -40,6 +40,7 @@ requirejs([
     'hft/misc/strings',
     'hft/misc/touch',
     '../3rdparty/chroma.min',
+    './bower_components/hft-utils/dist/audio',
 //    '../3rdparty/gyronorm.complete.min',
   ], function(
     commonUI,
@@ -49,7 +50,8 @@ requirejs([
     mobileHacks,
     strings,
     touch,
-    chroma /*,
+    chroma,
+    AudioManager /*,
     GyroNorm */) {
 
   var $ = document.getElementById.bind(document);
@@ -84,6 +86,7 @@ requirejs([
 
   var fullElem = $("full");
   var client = new GameClient();
+  var audioManager = new AudioManager();
 
   var layouts = {
     "1button": {
@@ -203,11 +206,26 @@ requirejs([
     fullElem.style.display = "none";
   }
 
+  function handleLoadSounds(data) {
+    audioManager.loadSounds(data.sounds);
+  }
+
+  var playingSounds = {};
+
+  function handlePlaySound(data) {
+    var sound = audioManager.playSound(data.name, 0, data.loop);
+    if (data.remember) {
+      handleStopSound(data);
+      playingSounds[data.name] = sound;
+    }
+  }
+
   client.addEventListener('color', handleColor);
   client.addEventListener('options', handleOptions);
   client.addEventListener('full', handleFull);
   client.addEventListener('play', handlePlay);
-
+  client.addEventListener('loadSounds', handleLoadSounds);
+  client.addEventListener('playSound', handlePlaySound);
 
   // This way of making buttons probably looks complicated but
   // it lets us easily make more buttons.
