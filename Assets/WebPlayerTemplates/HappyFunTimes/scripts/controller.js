@@ -382,35 +382,71 @@ requirejs([
     ],
   });
 
+  var baseButtonNdx = 18
+  var maxIndex = 10;
+  var usedIndices = [];
+  var pointerIdToIndex = {};
+  function getPointerIndex(e, start) {
+    var index = pointerIdToIndex[e.pointerId];
+    if (index === undefined) {
+      for (var ii = 0; ii < maxIndex; ++ii) {
+        if (!usedIndices[ii]) {
+          usedIndices[ii] = start;
+          index = ii;
+          break;
+        }
+      }
+      if (index === undefined) {
+        throw "what";
+      }
+      pointerIdToIndex[e.pointerId] = index;
+    }
+    if (!start) {
+      delete pointerIdToIndex[e.pointerId];
+      usedIndices[index] = undefined;
+    }
+    return index;
+  }
+
   // Setup the touch area
   $("touch").addEventListener('pointermove', function(event) {
     var target = event.target;
     var position = input.getRelativeCoordinates(target, event);
     client.sendCmd('touch', {
+      id: getPointerIndex(event, true),
       x: position.x / target.clientWidth  * 1000 | 0,
       y: position.y / target.clientHeight * 1000 | 0,
     });
     event.preventDefault();
   });
 
-  var isTouched = false;
-  function handleTouchDown() {
-    isTouched = true;
-    client.sendCmd('button', { id: 18, pressed: true });
+  var isTouched = {};
+  function handleTouchDown(e) {
+    isTouched[e.pointerId] = true;
+    client.sendCmd('button', { id: getPointerIndex(e, true) + baseButtonNdx, pressed: true });
   }
 
-  function handleTouchUp() {
-    isTouched = false;
-    client.sendCmd('button', { id: 18, pressed: false });
+  function handleTouchUp(e) {
+    isTouched[e.pointerId] = false;
+    client.sendCmd('button', { id: getPointerIndex(e, false) + baseButtonNdx, pressed: false });
   }
 
-  function handleTouchOut() {
-    client.sendCmd('button', { id: 18, pressed: false });
+  function handleTouchOut(e) {
+    client.sendCmd('button', { id: getPointerIndex(e, false) + baseButtonNdx, pressed: false });
   }
 
-  function handleTouchEnter() {
-    if (isTouched) {
-      client.sendCmd('button', { id: 18, pressed: true });
+  function handleTouchLeave(e) {
+    client.sendCmd('button', { id: getPointerIndex(e, false) + baseButtonNdx, pressed: false });
+  }
+
+  function handleTouchCancel(e) {
+    isTouched[e.pointerId] = false;
+    client.sendCmd('button', { id: getPointerIndex(e, false) + baseButtonNdx, pressed: false });
+  }
+
+  function handleTouchEnter(e) {
+    if (isTouched[e.pointerId]) {
+      client.sendCmd('button', { id: getPointerIndex(e, true) + baseButtonNdx, pressed: true });
     }
   }
 
@@ -418,10 +454,14 @@ requirejs([
   $("touch").addEventListener('pointerup', handleTouchUp);
   $("touch").addEventListener('pointerout', handleTouchOut);
   $("touch").addEventListener('pointerenter', handleTouchEnter);
+  $("touch").addEventListener('pointerleave', handleTouchLeave);
+  $("touch").addEventListener('pointercancel', handleTouchCancel);
   $("orient").addEventListener('pointerdown', handleTouchDown);
   $("orient").addEventListener('pointerup', handleTouchUp);
   $("orient").addEventListener('pointerout', handleTouchOut);
   $("orient").addEventListener('pointerenter', handleTouchEnter);
+  $("orient").addEventListener('pointerleave', handleTouchLeave);
+  $("orient").addEventListener('pointercancel', handleTouchCancel);
 
   var gn = new GyroNorm();
 

@@ -3,9 +3,24 @@ using System;
 using System.Collections.Generic;
 
 [RequireComponent (typeof (HFTGamepad))]
-public class HFTInput : MonoBehaviour {
+public class HFTInput : MonoBehaviour
+{
+    public class Touch {
+        public Vector2 deltaPosition = new Vector2();
+        public float deltaTime = 0;
+        public int fingerId = 0;
+        public TouchPhase phase = TouchPhase.Canceled;
+        public Vector2 rawPosition = new Vector2();
+        public int tapCount = 0;
+    }
 
-    public HFTInput() {
+    public HFTInput()
+    {
+        for (int ii = 0; ii < m_touches.Length; ++ii)
+        {
+            m_touches[ii] = new Touch();
+        }
+
         SpecifyAxisNameToAxisIndex("Horizontal", 0);
         SpecifyAxisNameToAxisIndex("Vertical", 1);
         SpecifyAxisNameToAxisIndex("Horizontal2", 2);
@@ -21,6 +36,7 @@ public class HFTInput : MonoBehaviour {
 
         m_buttonState = new bool[m_gamepad.buttons.Length];
         m_lastButtonState = new bool[m_gamepad.buttons.Length];
+        m_lastPosition = new float[m_gamepad.axes.Length];
     }
 
     //Last measured linear acceleration of a device in three-dimensional space. (Read Only)
@@ -127,19 +143,19 @@ public class HFTInput : MonoBehaviour {
     //Property indicating whether the system handles multiple touches.
     public bool multiTouchEnabled
     {
-        get { return false; } // TODO?
+        get { return true; }
     }
 
     //Enables/Disables mouse simulation with touches. By default this option is enabled.
     public bool simulateMouseWithTouches
     {
-        get { return false; } // TODO?
+        get { return true; }
     }
 
     //Number of touches. Guaranteed not to change throughout the frame. (Read Only)
     public int touchCount
     {
-        get { return 0; } // TODO?
+        get { return m_touches.Length; }
     }
 
     //Returns list of objects representing status of all touches during last frame. (Read Only) (Allocates temporary variables).
@@ -151,7 +167,7 @@ public class HFTInput : MonoBehaviour {
     //Returns whether the device on which application is currently running supports touch input.
     public bool touchSupported
     {
-        get { return false; } // TODO?
+        get { return true; }
     }
 
     // Returns specific acceleration measurement which occurred during last frame. (Does not allocate temporary variables).
@@ -267,7 +283,7 @@ public class HFTInput : MonoBehaviour {
     // Returns object representing status of a specific touch. (Does not allocate temporary variables).
     public Touch GetTouch(int index)
     {
-        return (index < m_touches.Length) ? m_touches[index] : new Touch();
+        return (index < m_touches.Length) ? m_touches[index] : null;
     }
 
     // Determine whether a particular joystick model has been preconfigured by Unity. (Linux-only).
@@ -296,7 +312,8 @@ public class HFTInput : MonoBehaviour {
 
     void Update()
     {
-        for (int ii = 0; ii < m_gamepad.buttons.Length; ++ii) {
+        for (int ii = 0; ii < m_gamepad.buttons.Length; ++ii)
+        {
             m_lastButtonState[ii] = m_buttonState[ii];
             m_buttonState[ii] = m_gamepad.buttons[ii].pressed;
         }
@@ -308,7 +325,6 @@ public class HFTInput : MonoBehaviour {
 
         m_gyro.SetAttitude( alpha, beta, gamma, orient );
 
-//        m_enabled = ??
         m_gyro.userAcceleration.x = m_gamepad.axes[HFTGamepad.AXIS_ACCELERATION_X];
         m_gyro.userAcceleration.y = m_gamepad.axes[HFTGamepad.AXIS_ACCELERATION_Y];
         m_gyro.userAcceleration.z = m_gamepad.axes[HFTGamepad.AXIS_ACCELERATION_Z];
@@ -318,6 +334,45 @@ public class HFTInput : MonoBehaviour {
         m_gyro.rotationRateUnbiased.x = m_gamepad.axes[HFTGamepad.AXIS_ROTATION_RATE_ALPHA];
         m_gyro.rotationRateUnbiased.y = m_gamepad.axes[HFTGamepad.AXIS_ROTATION_RATE_BETA];
         m_gyro.rotationRateUnbiased.z = m_gamepad.axes[HFTGamepad.AXIS_ROTATION_RATE_GAMMA];
+
+        for (int ii = 0; ii < m_touches.Length; ++ii)
+        {
+            Touch touch = m_touches[ii];
+            int buttonNdx = HFTGamepad.BUTTON_TOUCH0 + ii;
+            int axesNdx = HFTGamepad.AXIS_TOUCH0_X + ii * 2;
+            TouchPhase phase = TouchPhase.Ended;
+            if (m_buttonState[buttonNdx])
+            {
+                if (!m_lastButtonState[buttonNdx])
+                {
+                    phase = TouchPhase.Began;
+                }
+                else
+                {
+                    phase = TouchPhase.Moved;
+                    if (m_lastPosition[axesNdx + 0] == m_gamepad.axes[axesNdx + 0] &&
+                        m_lastPosition[axesNdx + 1] == m_gamepad.axes[axesNdx + 1])
+                    {
+                        phase = TouchPhase.Stationary;
+                    }
+                }
+            }
+
+            touch.phase = phase;
+            float x = Mathf.Floor((m_gamepad.axes[axesNdx + 0] * 0.5f + 0.5f) * Screen.width);
+            float y = Mathf.Floor((m_gamepad.axes[axesNdx + 1] * 0.5f + 0.5f) * Screen.height);
+            touch.deltaPosition.x = x - touch.rawPosition.x;
+            touch.deltaPosition.y = y - touch.rawPosition.y;
+            touch.rawPosition.x = x;
+            touch.rawPosition.y = y;
+            touch.fingerId = ii;
+            touch.tapCount = phase == TouchPhase.Began ? 1 : 0;
+            touch.deltaTime = Time.deltaTime;
+        }
+
+        for (int ii = 0; ii < m_gamepad.axes.Length; ++ii) {
+            m_lastPosition[ii] = m_gamepad.axes[ii];
+        }
     }
 
     private HFTGamepad m_gamepad;
@@ -326,6 +381,7 @@ public class HFTInput : MonoBehaviour {
     private int m_accelerationEventCount = 0;
     private bool[] m_buttonState;
     private bool[] m_lastButtonState;
+    private float[] m_lastPosition;
     private bool m_anyKey = false;
     private bool m_anyKeyDown = false;
     private Compass m_compass = new Compass();
@@ -335,7 +391,7 @@ public class HFTInput : MonoBehaviour {
     private LocationService m_location = new LocationService();
     private Vector3 m_mousePosition = new Vector3();
     private Vector2 m_mouseScrollDelta = new Vector2();
-    private Touch[] m_touches = new Touch[1];
+    private Touch[] m_touches = new Touch[10];
     private string[] m_joystickNames = { "HFTGamepad" };
 };
 

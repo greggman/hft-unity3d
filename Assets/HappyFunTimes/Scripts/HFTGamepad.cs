@@ -19,6 +19,26 @@ public class HFTGamepad : MonoBehaviour {
   public const int AXIS_ROTATION_RATE_GAMMA = 12;
   public const int AXIS_TOUCH_X = 13;
   public const int AXIS_TOUCH_Y = 14;
+  public const int AXIS_TOUCH0_X = 13;
+  public const int AXIS_TOUCH0_Y = 14;
+  public const int AXIS_TOUCH1_X = 15;
+  public const int AXIS_TOUCH1_Y = 16;
+  public const int AXIS_TOUCH2_X = 17;
+  public const int AXIS_TOUCH2_Y = 18;
+  public const int AXIS_TOUCH3_X = 19;
+  public const int AXIS_TOUCH3_Y = 20;
+  public const int AXIS_TOUCH4_X = 21;
+  public const int AXIS_TOUCH4_Y = 22;
+  public const int AXIS_TOUCH5_X = 23;
+  public const int AXIS_TOUCH5_Y = 24;
+  public const int AXIS_TOUCH6_X = 25;
+  public const int AXIS_TOUCH6_Y = 26;
+  public const int AXIS_TOUCH7_X = 27;
+  public const int AXIS_TOUCH7_Y = 28;
+  public const int AXIS_TOUCH8_X = 29;
+  public const int AXIS_TOUCH8_Y = 30;
+  public const int AXIS_TOUCH9_X = 31;
+  public const int AXIS_TOUCH9_Y = 32;
 
   public const int BUTTON_DPAD0_LEFT = 14;
   public const int BUTTON_DPAD0_RIGHT = 15;
@@ -29,6 +49,16 @@ public class HFTGamepad : MonoBehaviour {
   public const int BUTTON_DPAD1_TOP = 16;
   public const int BUTTON_DPAD1_BOTTOM = 17;
   public const int BUTTON_TOUCH = 18;
+  public const int BUTTON_TOUCH0 = 18;
+  public const int BUTTON_TOUCH1 = 19;
+  public const int BUTTON_TOUCH2 = 20;
+  public const int BUTTON_TOUCH3 = 21;
+  public const int BUTTON_TOUCH4 = 22;
+  public const int BUTTON_TOUCH5 = 23;
+  public const int BUTTON_TOUCH6 = 24;
+  public const int BUTTON_TOUCH7 = 25;
+  public const int BUTTON_TOUCH8 = 26;
+  public const int BUTTON_TOUCH9 = 27;
 
   public class Button {
     public bool pressed = false;
@@ -79,6 +109,9 @@ public class HFTGamepad : MonoBehaviour {
   public ControllerOptions controllerOptions;
 
   HFTGamepad() {
+    axes = new float[33];
+    buttons = new Button[28];
+
     for (int ii = 0; ii < buttons.Length; ++ii) {
       buttons[ii] = new Button();
     }
@@ -108,10 +141,10 @@ public class HFTGamepad : MonoBehaviour {
 
   public event System.EventHandler<System.EventArgs> OnNameChange;
 
-  [HideInInspector]
-  public float[] axes = new float[15];
-  [HideInInspector]
-  public Button[] buttons = new Button[19];
+  [System.NonSerialized]
+  public float[] axes;
+  [System.NonSerialized]
+  public Button[] buttons;
 
   // Manages the connection between this object and the phone.
   private NetPlayer m_netPlayer;
@@ -146,6 +179,7 @@ public class HFTGamepad : MonoBehaviour {
   }
 
   private class MessageTouch : MessageCmdData {
+    public int id = 0;
     public int x = 0;
     public int y = 0;
   }
@@ -290,8 +324,9 @@ public class HFTGamepad : MonoBehaviour {
   }
 
   void HandleTouch(MessageTouch data) {
-    axes[AXIS_TOUCH_X] = (float)data.x / 500.0f - 1.0f;
-    axes[AXIS_TOUCH_Y] = (float)data.y / 500.0f - 1.0f;
+    int index = data.id * 2;
+    axes[AXIS_TOUCH_X + index] = (float)data.x / 500.0f - 1.0f;
+    axes[AXIS_TOUCH_Y + index] = (float)data.y / 500.0f - 1.0f;
   }
 
   void ChangeName(object sender, System.EventArgs e)
