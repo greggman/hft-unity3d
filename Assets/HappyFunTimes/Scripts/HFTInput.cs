@@ -107,7 +107,7 @@ public class HFTInput : MonoBehaviour
     }
 
     //Controls enabling and disabling of IME input composition.
-    [HideInInspector]
+    [System.NonSerialized]
     public IMECompositionMode imeCompositionMode = IMECompositionMode.Auto;
 
     //Does the user have an IME keyboard input source selected?

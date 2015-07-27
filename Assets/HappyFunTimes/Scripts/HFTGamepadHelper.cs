@@ -4,7 +4,7 @@ using HappyFunTimes;
 
 public class HFTGamepadHelper : MonoBehaviour {
 
-    [HideInInspector]
+    [System.NonSerialized]
     public PlayerSpawner playerSpawner;
 
     // This gives you a chance to send that player's phone
