@@ -34,6 +34,33 @@ or you can [download it directly here](http://docs.happyfuntimes.net/docs/unity/
 
 *   added ability to play sound through controller
 
+    Put sound files (`.mp3` or `.wav`) in `Assets/WebPlayerTemplates/HappyFunTimes/sounds`
+    They have to be in there because they must be served to the phone. Note that it's a
+    good idea to keep them as small as possible because each time a player connects to
+    the game his phone will have to download all the sounds. JSFX sounds comming soon.
+
+    To use the sounds, on some global gameobject (like LevelManager in all the samples)
+    add an `HFTGlobalSoundHelper` script component.
+
+    Then, on the prefab that gets spawned for your players, the same prefab you put
+    an `HFTInput` or `HFTGamepad` script component add the `HFTSoundPlayer` script
+    component.
+
+    In your `Awake` or `Start` look it up
+
+        private HFTSoundPlayer m_soundPlayer;
+
+        void Awake()
+        {
+             m_soundPlayer = GetComponent<HFTSoundPlayer>();
+        }
+
+    To play a sound call `m_soundPlayer.PlaySound` with the name of the sound (no extension).
+    In other words if you have `sounds/explosion.mp3` then you can trigger that sound on
+    the user's phone with
+
+        m_soundPlayer.PlaySound("explosion");
+
 *   added mulit-touch support to HFTInput via the standard `GetTouch` function
     as well as `axes` and `buttons`
 
