@@ -15,14 +15,16 @@ public class SoundTest : MonoBehaviour {
 
     IEnumerator Play()
     {
+        HFTSounds.Sounds sounds = HFTGlobalSoundHelper.GetSounds();
+        string[] soundNames = new string[sounds.Keys.Count];
+        sounds.Keys.CopyTo(soundNames, 0);
+
+        int index = 0;
         while (true)
         {
             yield return new WaitForSeconds(1.0f);
-            m_soundPlayer.PlaySound("explosion");
-            yield return new WaitForSeconds(1.0f);
-            m_soundPlayer.PlaySound("gameover");
-            yield return new WaitForSeconds(1.0f);
-            m_soundPlayer.PlaySound("launch");
+            m_soundPlayer.PlaySound(soundNames[index]);
+            index = (index + 1) % soundNames.Length;
         }
     }
 

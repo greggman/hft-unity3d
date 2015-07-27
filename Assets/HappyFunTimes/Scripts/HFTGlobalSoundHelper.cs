@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 public class HFTGlobalSoundHelper : MonoBehaviour {
 
@@ -13,7 +14,8 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
 
   void Awake()
   {
-      if (s_sounds == null) {
+      if (s_sounds == null)
+      {
         InitSounds();
       }
   }
@@ -23,9 +25,63 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
     s_sounds = new Sounds();
     string baseFolder = Path.Combine(Path.Combine(Application.dataPath, "WebPlayerTemplates"), "HappyFunTimes");
     string soundFolder = Path.Combine(baseFolder, "sounds");
-    if (Directory.Exists(soundFolder)) {
+    if (Directory.Exists(soundFolder))
+    {
       AddSoundFiles(baseFolder, Directory.GetFiles(soundFolder, "*.mp3"));
       AddSoundFiles(baseFolder, Directory.GetFiles(soundFolder, "*.wav"));
+      AddJSFXSounds(Directory.GetFiles(soundFolder, "*.jsfx.txt"));
+    }
+  }
+
+  void AddJSFXSounds(string[] filenames)
+  {
+    foreach(string filename in filenames)
+    {
+      string content = System.IO.File.ReadAllText(filename);
+      string[] lines = content.Split(s_lineDelims, System.StringSplitOptions.None);
+      int lineNo = 0;
+      foreach (string line in lines)
+      {
+        ++lineNo;
+        // TODO remove comments
+        Match m = s_jsfxRE.Match(line);
+        if (m.Success)
+        {
+          string name = m.Groups[1].Value;
+          string generator = m.Groups[2].Value;
+          string numbersString = m.Groups[3].Value;
+          string[] numberStrings = numbersString.Split(',');
+          if (numberStrings.Length != 27)
+          {
+            Debug.LogError(filename + " line:" + lineNo + " expected 27 values found " + numberStrings.Length);
+            continue;
+          }
+
+          float[] parameters = new float[27];
+          int i = 0;
+          bool error = false;
+          foreach (string numstr in numberStrings)
+          {
+            try
+            {
+              parameters[i] = float.Parse(numstr, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+            }
+            catch (System.Exception)
+            {
+              Debug.LogError(filename + " line:" + lineNo + " could not parse number " + numstr);
+              error = true;
+            }
+            ++i;
+          }
+
+          if (error)
+          {
+            continue;
+          }
+
+          s_sounds[name] = new SoundJSFX(generator, parameters);
+        }
+      }
     }
   }
 
@@ -39,5 +95,7 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
   }
 
   private static Sounds s_sounds = null;
+  private static Regex s_jsfxRE = new Regex(@"(\w+)\s*?\[""(\w+)""\s*?,(.*?)\]");
+  private static string[] s_lineDelims = new string[] { "\r\n", "\n" };
 };
 

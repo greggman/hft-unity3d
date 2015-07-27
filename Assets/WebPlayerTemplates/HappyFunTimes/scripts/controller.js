@@ -207,7 +207,14 @@ requirejs([
   }
 
   function handleLoadSounds(data) {
-    audioManager.loadSounds(data.sounds);
+    var sounds = data.sounds;
+    Object.keys(sounds).forEach(function(name) {
+      var sound = sounds[name];
+      if (sound.generator) {
+        sound.jsfx = [sound.generator].concat(sound.parameters);
+      }
+    });
+    audioManager.loadSounds(sounds);
   }
 
   var playingSounds = {};
