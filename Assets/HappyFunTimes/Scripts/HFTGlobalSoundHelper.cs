@@ -40,47 +40,55 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
       string content = System.IO.File.ReadAllText(filename);
       string[] lines = content.Split(s_lineDelims, System.StringSplitOptions.None);
       int lineNo = 0;
-      foreach (string line in lines)
+      foreach (string lineStr in lines)
       {
         ++lineNo;
+        string line = lineStr.Split('#')[0].Split('/')[0].Split(';')[0].Trim();
+        if (line.Length == 0)
+        {
+          continue;
+        }
+
         // TODO remove comments
         Match m = s_jsfxRE.Match(line);
-        if (m.Success)
+        if (!m.Success)
         {
-          string name = m.Groups[1].Value;
-          string generator = m.Groups[2].Value;
-          string numbersString = m.Groups[3].Value;
-          string[] numberStrings = numbersString.Split(',');
-          if (numberStrings.Length != 27)
-          {
-            Debug.LogError(filename + " line:" + lineNo + " expected 27 values found " + numberStrings.Length);
-            continue;
-          }
-
-          float[] parameters = new float[27];
-          int i = 0;
-          bool error = false;
-          foreach (string numstr in numberStrings)
-          {
-            try
-            {
-              parameters[i] = float.Parse(numstr, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-            }
-            catch (System.Exception)
-            {
-              Debug.LogError(filename + " line:" + lineNo + " could not parse number " + numstr);
-              error = true;
-            }
-            ++i;
-          }
-
-          if (error)
-          {
-            continue;
-          }
-
-          s_sounds[name] = new SoundJSFX(generator, parameters);
+          Debug.LogError(filename + " line: " + lineNo + " could not parse line");
+          continue;
         }
+        string name = m.Groups[1].Value;
+        string generator = m.Groups[2].Value;
+        string numbersString = m.Groups[3].Value;
+        string[] numberStrings = numbersString.Split(',');
+        if (numberStrings.Length != 27)
+        {
+          Debug.LogError(filename + " line:" + lineNo + " expected 27 values found " + numberStrings.Length);
+          continue;
+        }
+
+        float[] parameters = new float[27];
+        int i = 0;
+        bool error = false;
+        foreach (string numstr in numberStrings)
+        {
+          try
+          {
+            parameters[i] = float.Parse(numstr, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
+          }
+          catch (System.Exception)
+          {
+            Debug.LogError(filename + " line:" + lineNo + " could not parse number " + numstr);
+            error = true;
+          }
+          ++i;
+        }
+
+        if (error)
+        {
+          continue;
+        }
+
+        s_sounds[name] = new SoundJSFX(generator, parameters);
       }
     }
   }
