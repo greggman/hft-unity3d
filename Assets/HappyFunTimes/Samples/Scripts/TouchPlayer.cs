@@ -7,12 +7,17 @@ using CSSParse;
 
 namespace HappyFunTimesExample {
 
-class TouchPlayer : MonoBehaviour {
-
-    void Start() {
+class TouchPlayer : MonoBehaviour
+{
+    void Start()
+    {
         m_gamepad  = GetComponent<HFTGamepad>();
         m_renderer = GetComponent<Renderer>();
         m_position = transform.localPosition;
+
+        m_text = transform.FindChild("NameUI/Name").gameObject.GetComponent<UnityEngine.UI.Text>();
+        m_rawImage = transform.FindChild("NameUI/NameBackground").gameObject.GetComponent<UnityEngine.UI.RawImage>();
+        m_rawImage.material = (Material)Instantiate(m_rawImage.material);
 
         m_gamepad.OnNameChange += ChangeName;
 
@@ -20,7 +25,8 @@ class TouchPlayer : MonoBehaviour {
         SetColor(m_gamepad.Color);
     }
 
-    void Update() {
+    void Update()
+    {
         TouchGameSettings settings = TouchGameSettings.settings();
         float l = 1.0f; //Time.deltaTime * 5.0f;
         float nx = m_gamepad.axes[HFTGamepad.AXIS_TOUCH_X] * 0.5f;        // -0.5 <-> 0.5
@@ -31,59 +37,43 @@ class TouchPlayer : MonoBehaviour {
         gameObject.transform.localPosition = m_position;
     }
 
-    void OnGUI()
+    void SetName(string name)
     {
-        Vector2 size = m_guiStyle.CalcSize(m_guiName);
-        Vector3 coords = Camera.main.WorldToScreenPoint(transform.position);
-        m_nameRect.x = coords.x - size.x * 0.5f - 5.0f;
-        m_nameRect.y = Screen.height - coords.y - 30.0f;
-        GUI.Box(m_nameRect, m_name + (m_gamepad.buttons[HFTGamepad.BUTTON_TOUCH].pressed ? "*" : ""), m_guiStyle);
-    }
-
-    void SetName(string name) {
         m_name = name;
         gameObject.name = "Player-" + m_name;
-        m_guiName = new GUIContent(m_name);
-        m_guiStyle.normal.textColor = Color.black;
-        m_guiStyle.contentOffset = new Vector2(4.0f, 2.0f);
-        Vector2 size = m_guiStyle.CalcSize(m_guiName);
-        m_nameRect.width  = size.x + 12;
-        m_nameRect.height = size.y + 5;
+        m_text.text = name;
     }
 
     void SetColor(Color color)
     {
         m_color = color;
         m_renderer.material.color = m_color;
-        Color[] pix = new Color[1];
-        pix[0] = color;
-        Texture2D tex = new Texture2D(1, 1);
-        tex.SetPixels(pix);
-        tex.Apply();
-        m_guiStyle.normal.background = tex;
+        m_rawImage.material.color = m_color;
     }
 
-    public void OnTriggerEnter(Collider other) {
+    public void OnTriggerEnter(Collider other)
+    {
         // Because of physics layers we can only collide with the goal
     }
 
-    private void Remove(object sender, EventArgs e) {
+    private void Remove(object sender, EventArgs e)
+    {
         Destroy(gameObject);
     }
 
-    private void ChangeName(object sender, EventArgs e) {
+    private void ChangeName(object sender, EventArgs e)
+    {
         SetName(m_gamepad.Name);
     }
 
     private Renderer m_renderer;
     private HFTGamepad m_gamepad;
     private HFTInput m_hftInput;
+    private UnityEngine.UI.Text m_text;
+    private UnityEngine.UI.RawImage m_rawImage;
     private Vector3 m_position;
     private Color m_color;
     private string m_name;
-    private GUIStyle m_guiStyle = new GUIStyle();
-    private GUIContent m_guiName = new GUIContent("");
-    private Rect m_nameRect = new Rect(0,0,0,0);
 }
 
 }  // namespace HappyFunTimesExample
