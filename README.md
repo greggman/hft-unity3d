@@ -36,34 +36,34 @@ or you can [download it directly here](http://docs.happyfuntimes.net/docs/unity/
 
     There are currently 2 ways to make sounds for the controllers.
 
-    ### 1 JSFX
+    1.  JSFX
 
-    This is the recommended way is it's light weight.
+        This is the recommended way as it's light weight.
 
-    1.  Go to the [JSFX sound maker](http://egonelbre.com/project/jsfx/).
+        1.  Go to the [JSFX sound maker](http://egonelbre.com/project/jsfx/).
 
-    2.  Adjust the values until you get a sound you like.
+        2.  Adjust the values until you get a sound you like.
 
-    3.  Copy the sound values (near top of the page just below the buttons) to a text file with the extension ".jsfx.txt"
-        putting a name in front of each set of values
+        3.  Copy the sound values (near top of the page just below the buttons) to a text file with the extension ".jsfx.txt"
+            putting a name in front of each set of values. Save that file in Assets/WebPlayerTemplates/HappyFunTimes
 
-    For example here is the sample `sounds.jsfx.txt` file
+        For example here is the sample `sounds.jsfx.txt` file
 
-        coin      ["square",0.0000,0.4000,0.0000,0.0240,0.4080,0.3480,20.0000,909.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.2540,0.1090,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
-        jump      ["square",0.0000,0.4000,0.0000,0.0960,0.0000,0.1720,20.0000,245.0000,2400.0000,0.3500,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.5000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
-        coinland  ["square",0.0000,0.4000,0.0000,0.0520,0.3870,0.1160,20.0000,1050.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
-        bonkhead  ["sine",0.0000,0.4000,0.0000,0.0000,0.5070,0.1400,20.0000,1029.0000,2400.0000,-0.7340,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.3780,0.0960,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
-        land      ["sine",0.0000,0.4000,0.0000,0.1960,0.0000,0.1740,20.0000,1012.0000,2400.0000,-0.7340,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.3780,0.0960,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
-        kicked    ["noise",0.0000,1.0000,0.0000,0.0400,0.0000,0.2320,20.0000,822.0000,2400.0000,-0.6960,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0270,0.0000]
-        dropkick  ["sine",0.0000,1.0000,0.0000,0.0880,0.0000,0.3680,20.0000,653.0000,2400.0000,0.2360,0.0000,0.1390,47.1842,0.9623,-0.4280,0.0000,0.0000,0.4725,0.0000,0.0000,-0.0060,-0.0260,1.0000,0.0000,0.0000,0.0000,0.0000]
-        bounce    ["noise",0.0000,1.0000,0.0000,0.0220,0.0000,0.1480,20.0000,309.0000,2400.0000,-0.3300,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
+            coin      ["square",0.0000,0.4000,0.0000,0.0240,0.4080,0.3480,20.0000,909.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.2540,0.1090,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
+            jump      ["square",0.0000,0.4000,0.0000,0.0960,0.0000,0.1720,20.0000,245.0000,2400.0000,0.3500,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.5000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
+            coinland  ["square",0.0000,0.4000,0.0000,0.0520,0.3870,0.1160,20.0000,1050.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
+            bonkhead  ["sine",0.0000,0.4000,0.0000,0.0000,0.5070,0.1400,20.0000,1029.0000,2400.0000,-0.7340,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.3780,0.0960,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
+            land      ["sine",0.0000,0.4000,0.0000,0.1960,0.0000,0.1740,20.0000,1012.0000,2400.0000,-0.7340,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.3780,0.0960,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
+            kicked    ["noise",0.0000,1.0000,0.0000,0.0400,0.0000,0.2320,20.0000,822.0000,2400.0000,-0.6960,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0270,0.0000]
+            dropkick  ["sine",0.0000,1.0000,0.0000,0.0880,0.0000,0.3680,20.0000,653.0000,2400.0000,0.2360,0.0000,0.1390,47.1842,0.9623,-0.4280,0.0000,0.0000,0.4725,0.0000,0.0000,-0.0060,-0.0260,1.0000,0.0000,0.0000,0.0000,0.0000]
+            bounce    ["noise",0.0000,1.0000,0.0000,0.0220,0.0000,0.1480,20.0000,309.0000,2400.0000,-0.3300,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000]
 
-    ### 2 Use sounds files
+    2.  Use sounds files
 
-    Put sound files (`.mp3` or `.wav`) in `Assets/WebPlayerTemplates/HappyFunTimes/sounds`
-    They have to be in there because they must be served to the phone. Note that it's a
-    good idea to keep them as small as possible because each time a player connects to
-    the game his phone will have to download all the sounds. JSFX sounds comming soon.
+        Put sound files (`.mp3` or `.wav`) in `Assets/WebPlayerTemplates/HappyFunTimes/sounds`
+        They have to be in there because they must be served to the phone. Note that it's a
+        good idea to keep them as small as possible because each time a player connects to
+        the game his phone will have to download all the sounds. JSFX sounds comming soon.
 
     ## Playing Sounds
 
