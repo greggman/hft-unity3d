@@ -1,8 +1,10 @@
 {
-  "dependencies": {},
+  "dependencies": {
+
+  },
   "description": "A Multi-Controller Getting Started HappyFunTimes sample",
   "happyFunTimes": {
-    "apiVersion": "1.13.0",
+    "apiVersion": "1.14.0",
     "category": "example",
     "gameId": "hft-unity-gamepad",
     "gameType": "Unity3D",
