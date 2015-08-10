@@ -129,7 +129,7 @@ public class HFTGamepad : MonoBehaviour {
 
   public string Name {
     get {
-      return m_netPlayer.Name;
+      return m_netPlayer == null ? "localplayer" : m_netPlayer.Name;
     }
   }
 
@@ -224,12 +224,15 @@ public class HFTGamepad : MonoBehaviour {
     SendColor();
   }
 
-  void Awake() {
+  void Awake()
+  {
     SetDefaultColor();
   }
 
-  void SendColor() {
-    if (m_netPlayer != null) {
+  void SendColor()
+  {
+    if (m_netPlayer != null)
+    {
       m_netPlayer.SendCmd("color", new MessageColor(m_color));
     }
   }
@@ -257,20 +260,29 @@ public class HFTGamepad : MonoBehaviour {
       Destroy(gameObject);
   }
 
-  public void ReturnPlayer() {
-      HFTGamepadHelper.helper.playerSpawner.ReturnPlayer(m_netPlayer);
+  public void ReturnPlayer()
+  {
+      if (m_netPlayer != null) {
+        HFTGamepadHelper.helper.playerSpawner.ReturnPlayer(m_netPlayer);
+      }
   }
 
-  void Update() {
+  void Update()
+  {
     // Seems kind of dumb to do it this way but it's easier for users
-    if (!m_oldControllerOptions.SameValues(controllerOptions)) {
+    if (!m_oldControllerOptions.SameValues(controllerOptions))
+    {
       m_oldControllerOptions = new ControllerOptions(controllerOptions);
       SendControllerOptions();
     }
   }
 
-  void SendControllerOptions() {
-    m_netPlayer.SendCmd("options", new MessageOptions(controllerOptions));
+  void SendControllerOptions()
+  {
+    if (m_netPlayer != null)
+    {
+      m_netPlayer.SendCmd("options", new MessageOptions(controllerOptions));
+    }
   }
 
   void UpdateButton(int ndx, bool pressed) {
