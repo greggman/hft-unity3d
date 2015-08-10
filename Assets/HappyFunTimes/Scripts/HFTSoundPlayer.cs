@@ -5,17 +5,22 @@ using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent (typeof (HFTGamepad))]
-public class HFTSoundPlayer : MonoBehaviour {
+public class HFTSoundPlayer : MonoBehaviour
+{
 
-    private class MessageLoadSounds : MessageCmdData {
-        public MessageLoadSounds(Sounds _sounds) {
+    private class MessageLoadSounds : MessageCmdData
+    {
+        public MessageLoadSounds(Sounds _sounds)
+        {
             sounds = _sounds;
         }
         public Sounds sounds = null;
     }
 
-    private class MessagePlaySound : MessageCmdData {
-        public MessagePlaySound(string _name, bool _loop = false) {
+    private class MessagePlaySound : MessageCmdData
+    {
+        public MessagePlaySound(string _name, bool _loop = false)
+        {
             name = _name;
             loop = _loop;
         }
@@ -35,12 +40,20 @@ public class HFTSoundPlayer : MonoBehaviour {
 
     void Start()
     {
-        m_gamepad.NetPlayer.SendCmd("loadSounds", new MessageLoadSounds(HFTGlobalSoundHelper.GetSounds()));
+        NetPlayer netPlayer = m_gamepad.NetPlayer;
+        if (netPlayer != null)
+        {
+            netPlayer.SendCmd("loadSounds", new MessageLoadSounds(HFTGlobalSoundHelper.GetSounds()));
+        }
     }
 
     public void PlaySound(string name, bool loop = false)
     {
-        m_gamepad.NetPlayer.SendCmd("playSound", new MessagePlaySound(name, loop));
+        NetPlayer netPlayer = m_gamepad.NetPlayer;
+        if (netPlayer != null)
+        {
+            m_gamepad.NetPlayer.SendCmd("playSound", new MessagePlaySound(name, loop));
+        }
     }
 
     private HFTGamepad m_gamepad;
