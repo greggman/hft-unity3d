@@ -31,64 +31,45 @@
 
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using HappyFunTimes;
 
-namespace HappyFunTimesEditor
+namespace HappyFunTimes
 {
-    public class HFTWindow : EditorWindow
+    // Also see HFTPacakge: HFTPackage represends an entire package.json
+    // HFTPackageJson represents the parts we want to be editable in Unity
+
+    [Serializable]
+    public class HFTPackageJson
     {
-        [SerializeField]
-        private HFTPackageEditorHelper m_packageEditorHelper;
+        public enum GameType {
+            Unity3D,
+        }
 
-        HFTWindow()
+        public string name = "unnamed";
+
+        [TextArea(10,10)]
+        public string description = "enter a description";
+
+        public string gameId = "change-this";
+
+        public GameType gameType = GameType.Unity3D;
+
+        public string version = "0.0.0";
+
+        public string apiVersion = "1.14.0";
+
+        public string category = "game";
+
+        public void Set(HFTPackage package)
         {
-        }
-
-        static void Init() {
-            Debug.Log("init");
-        }
-
-        static public void ShowWindow () {
-            // Get existing open window or if none, make a new one:
-            GetWindow<HFTWindow>();
-        }
-
-        private void OnEnable()
-        {
-            m_packageEditorHelper = HFTPackageEditorHelper.Instance;
-
-            EditorApplication.playmodeStateChanged += OnPlaymodeStateChange;
-        }
-
-        private void OnDestroy()
-        {
-            EditorApplication.playmodeStateChanged -= OnPlaymodeStateChange;
-
-            Persist();
-        }
-
-        void Persist()
-        {
-            if (m_packageEditorHelper != null) {
-                m_packageEditorHelper.Persist();
-            }
-        }
-
-        void OnPlaymodeStateChange()
-        {
-            if (!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
-            {
-                Persist();
-            }
-        }
-
-        void OnGUI()
-        {
-            m_packageEditorHelper.DoGUI();
+            name = package.GetString("name");
+            description = package.GetString("description");
+            version = package.GetString("version");
+            category = package.GetString("category");
+            gameId = package.GetString("gameId");
+            apiVersion = package.GetString("apiVersion");
         }
     }
-}  // namespace
 
+}  // namespace HappyFunTimes
 

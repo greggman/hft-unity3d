@@ -10,7 +10,7 @@
     <RootNamespace>HappyFunTimesEditor</RootNamespace>
     <AssemblyName>HappyFunTimesEditor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.1</ReleaseVersion>
+    <ReleaseVersion>1.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -47,6 +47,12 @@
     <Compile Include="HFTWindow.cs" />
     <Compile Include="HFTMenuItems.cs" />
     <Compile Include="HFTSetup.cs" />
+    <Compile Include="HFTCmdRunner.cs" />
+    <Compile Include="HFTExport.cs" />
+    <Compile Include="HFTExportWindow.cs" />
+    <Compile Include="HFTPackageEditHelper.cs" />
+    <Compile Include="HFTGUIStyle.cs" />
+    <Compile Include="HFTExe.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

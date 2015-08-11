@@ -29,66 +29,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-using System;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-using HappyFunTimes;
-
-namespace HappyFunTimesEditor
+namespace HappyFunTimes
 {
-    public class HFTWindow : EditorWindow
+
+    public class HFTConstants
     {
-        [SerializeField]
-        private HFTPackageEditorHelper m_packageEditorHelper;
+        public const string kExeKey = "HappyFunTimesExecutable";
+    };
 
-        HFTWindow()
-        {
-        }
-
-        static void Init() {
-            Debug.Log("init");
-        }
-
-        static public void ShowWindow () {
-            // Get existing open window or if none, make a new one:
-            GetWindow<HFTWindow>();
-        }
-
-        private void OnEnable()
-        {
-            m_packageEditorHelper = HFTPackageEditorHelper.Instance;
-
-            EditorApplication.playmodeStateChanged += OnPlaymodeStateChange;
-        }
-
-        private void OnDestroy()
-        {
-            EditorApplication.playmodeStateChanged -= OnPlaymodeStateChange;
-
-            Persist();
-        }
-
-        void Persist()
-        {
-            if (m_packageEditorHelper != null) {
-                m_packageEditorHelper.Persist();
-            }
-        }
-
-        void OnPlaymodeStateChange()
-        {
-            if (!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
-            {
-                Persist();
-            }
-        }
-
-        void OnGUI()
-        {
-            m_packageEditorHelper.DoGUI();
-        }
-    }
-}  // namespace
-
-
+}  // namespace HappyFunTimes

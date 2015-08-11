@@ -10,7 +10,7 @@
     <RootNamespace>HappyFunTimes</RootNamespace>
     <AssemblyName>HappyFunTimes</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ReleaseVersion>1.1</ReleaseVersion>
+    <ReleaseVersion>1.2</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -59,6 +59,8 @@
     <Compile Include="Package.cs" />
     <Compile Include="PlayerConnector.cs" />
     <Compile Include="PlayerManager.cs" />
+    <Compile Include="HFTPackageJson.cs" />
+    <Compile Include="HFTConstants.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

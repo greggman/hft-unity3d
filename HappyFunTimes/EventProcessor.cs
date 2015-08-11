@@ -37,6 +37,7 @@ using System.Collections.Generic;
 namespace HappyFunTimes {
 
 // This is needed to send the events to on the correct thread.
+[AddComponentMenu("")]
 public class EventProcessor : MonoBehaviour {
 
     public void QueueEvent(Action action) {
@@ -62,7 +63,14 @@ public class EventProcessor : MonoBehaviour {
             while (m_executingEvents.Count > 0) {
                 Action e = m_executingEvents[0];
                 m_executingEvents.RemoveAt(0);
-                e();
+                try
+                {
+                    e();
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError(ex);
+                }
             }
         }
     }

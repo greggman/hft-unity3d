@@ -30,65 +30,45 @@
  */
 
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using HappyFunTimes;
 
 namespace HappyFunTimesEditor
 {
-    public class HFTWindow : EditorWindow
+    public static class HFTGUIStyles
     {
-        [SerializeField]
-        private HFTPackageEditorHelper m_packageEditorHelper;
-
-        HFTWindow()
+        static HFTGUIStyles()
         {
+            m_line = new GUIStyle("box");
+            m_line.border.top = m_line.border.bottom = 1;
+            m_line.margin.top = m_line.margin.bottom = 1;
+            m_line.padding.top = m_line.padding.bottom = 1;
+
+            m_center = new GUIStyle("label");
+            m_center.alignment = TextAnchor.MiddleCenter;
         }
 
-        static void Init() {
-            Debug.Log("init");
-        }
-
-        static public void ShowWindow () {
-            // Get existing open window or if none, make a new one:
-            GetWindow<HFTWindow>();
-        }
-
-        private void OnEnable()
+        public static GUIStyle EditorLine
         {
-            m_packageEditorHelper = HFTPackageEditorHelper.Instance;
-
-            EditorApplication.playmodeStateChanged += OnPlaymodeStateChange;
-        }
-
-        private void OnDestroy()
-        {
-            EditorApplication.playmodeStateChanged -= OnPlaymodeStateChange;
-
-            Persist();
-        }
-
-        void Persist()
-        {
-            if (m_packageEditorHelper != null) {
-                m_packageEditorHelper.Persist();
-            }
-        }
-
-        void OnPlaymodeStateChange()
-        {
-            if (!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
+            get
             {
-                Persist();
+                return m_line;
             }
         }
 
-        void OnGUI()
+        public static GUIStyle Center
         {
-            m_packageEditorHelper.DoGUI();
+            get
+            {
+                return m_center;
+            }
         }
+
+        private static GUIStyle m_line = null;
+        private static GUIStyle m_center = null;
     }
-}  // namespace
+
+}  // namespace HappyFunTimesEditor
 
 
