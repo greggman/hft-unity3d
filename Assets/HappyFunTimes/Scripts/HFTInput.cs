@@ -24,7 +24,7 @@ public class HFTInput : MonoBehaviour
         SpecifyAxisNameToAxisIndex("Horizontal", 0);
         SpecifyAxisNameToAxisIndex("Vertical", 1);
         SpecifyAxisNameToAxisIndex("Horizontal2", 2);
-        SpecifyAxisNameToAxisIndex("Vertical3", 3);
+        SpecifyAxisNameToAxisIndex("Vertical2", 3);
 
         SpecifyButtonNameToButtonIndex("Fire1", 0);
         SpecifyButtonNameToButtonIndex("Fire2", 1);
@@ -181,8 +181,7 @@ public class HFTInput : MonoBehaviour
     {
         int axisIndex = -1;
         float value = 0;
-        m_axisMap.TryGetValue(axisName, out axisIndex);
-        if (axisIndex >= 0 && axisIndex < m_gamepad.axes.Length) {
+        if (m_axisMap.TryGetValue(axisName, out axisIndex) && axisIndex >= 0 && axisIndex < m_gamepad.axes.Length) {
             value = m_gamepad.axes[axisIndex];
         } else {
             Debug.LogError("Unknown axis:" + axisName);
@@ -201,8 +200,7 @@ public class HFTInput : MonoBehaviour
     {
         int buttonIndex = -1;
         bool value = false;
-        m_buttonMap.TryGetValue(buttonName, out buttonIndex);
-        if (buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
+        if (m_buttonMap.TryGetValue(buttonName, out buttonIndex) && buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
             value = m_buttonState[buttonIndex];
         } else {
             Debug.LogError("Unknown button:" + buttonName);
@@ -215,8 +213,7 @@ public class HFTInput : MonoBehaviour
     {
         int buttonIndex = -1;
         bool value = false;
-        m_buttonMap.TryGetValue(buttonName, out buttonIndex);
-        if (buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
+        if (m_buttonMap.TryGetValue(buttonName, out buttonIndex) && buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
             value = m_buttonState[buttonIndex] && !m_lastButtonState[buttonIndex];
         } else {
             Debug.LogError("Unknown button:" + buttonName);
@@ -229,8 +226,7 @@ public class HFTInput : MonoBehaviour
     {
         int buttonIndex = -1;
         bool value = false;
-        m_buttonMap.TryGetValue(buttonName, out buttonIndex);
-        if (buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
+        if (m_buttonMap.TryGetValue(buttonName, out buttonIndex) && buttonIndex >= 0 && buttonIndex < m_buttonState.Length) {
             value = !m_buttonState[buttonIndex] && m_lastButtonState[buttonIndex];
         } else {
             Debug.LogError("Unknown button:" + buttonName);
