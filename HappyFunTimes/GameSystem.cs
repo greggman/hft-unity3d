@@ -31,31 +31,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HappyFunTimes {
+namespace HappyFunTimes
+{
+    public class GameSystem
+    {
+        [CmdName("exit")]
+        private class MessageExit : MessageCmdData
+        {
+        };
 
-public class GameSystem {
+        private NetPlayer m_netPlayer;
 
-    [CmdName("exit")]
-    private class MessageExit : MessageCmdData {
-    };
+        public NetPlayer NetPlayer
+        {
+            get
+            {
+                return m_netPlayer;
+            }
+        }
 
-    private NetPlayer m_netPlayer;
+        public GameSystem(GameServer server)
+        {
+            m_netPlayer = new RealNetPlayer(server, "-1", "_hft_sys_");
 
-    public GameSystem(GameServer server) {
-        m_netPlayer = new RealNetPlayer(server, "-1", "_hft_sys_");
+            m_netPlayer.RegisterCmdHandler<MessageExit>(OnExit);
+        }
 
-        m_netPlayer.RegisterCmdHandler<MessageExit>(OnExit);
+        private void OnExit(MessageExit data)
+        {
+            Debug.Log("quit!");
+            Application.Quit();
+        }
+
+        public void HandleUnparsedCommand(Dictionary<string, object> cmd)
+        {
+            m_netPlayer.SendUnparsedEvent(cmd);
+        }
+
     }
-
-    private void OnExit(MessageExit data) {
-        Debug.Log("quit!");
-        Application.Quit();
-    }
-
-    public void HandleUnparsedCommand(Dictionary<string, object> cmd) {
-        m_netPlayer.SendUnparsedEvent(cmd);
-    }
-
-}
 
 }  // namespace HappyFunTimes
