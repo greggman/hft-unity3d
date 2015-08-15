@@ -36,6 +36,12 @@ using UnityEngine;
 
 namespace HappyFunTimes
 {
+    public enum HFTInstructionsPosition
+    {
+        top,
+        bottom,
+    }
+
     [Serializable]
     public class HFTString
     {
@@ -95,19 +101,29 @@ namespace HappyFunTimes
                 remaining = loc.Substring(period + 1);
             }
 
-            return GetSection(remaining, (Dictionary<string, object>)section[first]);
+            object child = null;
+            if (section.TryGetValue(first, out child)) {
+                return GetSection(remaining, (Dictionary<string, object>)child);
+            }
+            return null;
         }
 
         private object GetObject(string loc, string id, Dictionary<string, object> package)
         {
             Dictionary<string, object> section = GetSection(loc, package);
-            return section[id];
+            if (section != null) {
+                object o = null;
+                if (section.TryGetValue(id, out o)) {
+                    return o;
+                }
+            }
+            return null;
         }
 
-        private void AddString(string loc, string id, Dictionary<string, object> package)
+        private void AddString(string loc, string id, Dictionary<string, object> package, string defaultValue = "")
         {
             object o = GetObject(loc, id, package);
-            m_strings.Add(new HFTString(id, Convert.ToString(o)));
+            m_strings.Add(new HFTString(id, o != null ? Convert.ToString(o) : defaultValue));
         }
 
         private void SetString(string loc, string id, Dictionary<string, object> package)
@@ -218,7 +234,8 @@ namespace HappyFunTimes
                       ""category"": ""game"",
                       ""apiVersion"": ""1.14.0"",
                       ""gameType"": ""Unity3D"",
-                      ""minPlayers"": 1
+                      ""minPlayers"": 1,
+                      ""instructionsPosition"", ""top""
                     }
                 }";
                 json = json.Replace("???id???", RandomString(32));
@@ -243,6 +260,7 @@ namespace HappyFunTimes
             SetString("happyFunTimes", "category", package);
             SetString("happyFunTimes", "apiVersion", package);
             SetString("happyFunTimes", "gameType", package);
+            SetString("happyFunTimes", "instructionsPosition", package);
             SetInt("happyFunTimes", "minPlayers", package);
 
             string json = Serializer.Serialize(package, false, true);
@@ -274,6 +292,7 @@ namespace HappyFunTimes
             AddString("happyFunTimes", "category", package);
             AddString("happyFunTimes", "apiVersion", package);
             AddString("happyFunTimes", "gameType", package);
+            AddString("happyFunTimes", "instructionsPosition", package);
             AddInt("happyFunTimes", "minPlayers", package);
         }
 
