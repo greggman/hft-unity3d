@@ -42,7 +42,6 @@ using HappyFunTimes;
 
 namespace HappyFunTimesEditor
 {
-
     [Serializable]
     public class HFTPackageEditorHelper : ScriptableObject
     {
@@ -152,6 +151,32 @@ namespace HappyFunTimesEditor
             }
         }
 
+        //private void EditEnum<T>(string id, T defaultValue)
+        //{
+        //    T e = ToEnum<T>(m_package.GetString(id), defaultValue);
+        //    object o = e;
+        //    System.Enum e2 = (System.Enum)o;
+        //    o = EditorGUILayout.EnumPopup(id, e2);
+        //    T n = (T)o;
+        //    if (GUI.changed && !EqualityComparer<T>.Default.Equals(n, e))
+        //    {
+        //        Undo.RecordObject(this, "set HappyFunTimes " + id);
+        //        m_package.SetString(id, n.ToString());
+        //        m_dirty = true;
+        //    }
+        //}
+
+        private void EditInstructionsPosition(string id)
+        {
+            HFTInstructionsPosition e = ToEnum<HFTInstructionsPosition>(m_package.GetString(id), HFTInstructionsPosition.top);
+            HFTInstructionsPosition n = (HFTInstructionsPosition)EditorGUILayout.EnumPopup(id, e);
+            if (GUI.changed && n != e)
+            {
+                Undo.RecordObject(this, "set HappyFunTimes " + id);
+                m_package.SetString(id, n.ToString());
+                m_dirty = true;
+            }
+        }
 
         public void DoGUI() {
             m_showPackageJson = EditorGUILayout.Foldout(m_showPackageJson, "Package.json Settings");
@@ -163,12 +188,30 @@ namespace HappyFunTimesEditor
                 EditString("apiVersion", validSemverRE, 14, semverFilterRE);
                 EditString("gameType");
                 EditInt("minPlayers", 1, 1000);
+                //EditEnum<HFTInstructionsPosition>("instructionsPosition", HFTInstructionsPosition.top);
+                EditInstructionsPosition("instructionsPosition");
                 EditText(10, "description");
             }
 
             if (m_dirty) {
                 EditorUtility.SetDirty(this);
                 m_dirty = false;
+            }
+        }
+
+        private static T ToEnum<T>(string value, T defaultValue)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                return defaultValue;
+            }
+            try
+            {
+                return (T)Enum.Parse(typeof(HFTInstructionsPosition), value);
+            }
+            catch (System.Exception)
+            {
+                return defaultValue;
             }
         }
 
