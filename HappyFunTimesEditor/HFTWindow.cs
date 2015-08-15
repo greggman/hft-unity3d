@@ -39,8 +39,10 @@ namespace HappyFunTimesEditor
 {
     public class HFTWindow : EditorWindow
     {
-        [SerializeField]
+//        [SerializeField]
         private HFTPackageEditorHelper m_packageEditorHelper;
+
+        private Vector2 m_scrollPos = new Vector2(0, 0);
 
         HFTWindow()
         {
@@ -86,7 +88,11 @@ namespace HappyFunTimesEditor
 
         void OnGUI()
         {
+            EditorGUILayout.BeginVertical();
+            m_scrollPos = EditorGUILayout.BeginScrollView(m_scrollPos, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height (position.height));
             m_packageEditorHelper.DoGUI();
+            EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
         }
     }
 }  // namespace
