@@ -47,10 +47,6 @@ namespace HappyFunTimesEditor
         private SerializedObject m_platformsSerializedObject;
         private SerializedObject m_publishInfoSerializedObject;
         private Vector2 m_scrollPos = new Vector2(0, 0);
-        private Texture2D m_icon;
-        private Texture2D m_screenshot;
-        private GUILayoutOption[] m_iconGUILayoutOptions;
-        private GUILayoutOption[] m_screenshotGUILayoutOptions;
         public string buttonLabel = "";
         public string runLabel = "";
         private bool m_busy = false;
@@ -79,23 +75,9 @@ namespace HappyFunTimesEditor
                 m_platformsSerializedObject = new UnityEditor.SerializedObject(exportOptions.platforms);
                 m_publishInfoSerializedObject = new UnityEditor.SerializedObject(exportOptions.publishInfo);
 
-                m_iconGUILayoutOptions = new GUILayoutOption[]
-                {
-                    GUILayout.Width(64),
-                    GUILayout.Height(64),
-                };
-
-                m_screenshotGUILayoutOptions = new GUILayoutOption[]
-                {
-                    GUILayout.Width(320),
-                    GUILayout.Height(240),
-                };
-
                 ExpandProperties(m_platformsSerializedObject);
                 ExpandProperties(m_publishInfoSerializedObject);
             }
-
-            UpdateImages();
         }
 
         void ExpandProperties(SerializedObject so)
@@ -112,28 +94,6 @@ namespace HappyFunTimesEditor
                 }
                 more = sp.Next(true);
             }
-        }
-
-        void UpdateImages()
-        {
-            if (m_icon == null)
-            {
-                m_icon = LoadImage("WebPlayerTemplates/HappyFunTimes/icon.png");
-                m_screenshot = LoadImage("WebPlayerTemplates/HappyFunTimes/screenshot.png");
-            }
-        }
-
-        void ClearImages() {
-            m_icon = null;
-            m_screenshot = null;
-        }
-
-        Texture2D LoadImage(string path) {
-            string fullPath = System.IO.Path.Combine(Application.dataPath, path);
-            byte[] bytes = System.IO.File.ReadAllBytes(fullPath);
-            Texture2D tex = new Texture2D(1, 1);
-            tex.LoadImage(bytes);
-            return tex;
         }
 
         void OnGUI()
@@ -195,14 +155,6 @@ namespace HappyFunTimesEditor
                     break;
             }
 
-            GUILayout.Box(GUIContent.none, HFTGUIStyles.EditorLine, GUILayout.ExpandWidth(true), GUILayout.Height(1f));
-            EditorGUILayout.LabelField("WebPlayerTemplates/HappyFunTimes/icon.png");
-            EditorGUI.DrawPreviewTexture(EditorGUILayout.GetControlRect(m_iconGUILayoutOptions), m_icon);
-            EditorGUILayout.LabelField("WebPlayerTemplates/HappyFunTimes/screenshot.png");
-            EditorGUI.DrawPreviewTexture(EditorGUILayout.GetControlRect(m_screenshotGUILayoutOptions), m_screenshot);
-            EditorGUILayout.Separator();
-            GUILayout.Box(GUIContent.none, HFTGUIStyles.EditorLine, GUILayout.ExpandWidth(true), GUILayout.Height(1f));
-
             bool close = false;
             bool disabled = !exportOptions.platforms.HaveAtLeastOne() || EditorApplication.isPlaying;
             EditorGUI.BeginDisabledGroup(disabled);
@@ -214,7 +166,7 @@ namespace HappyFunTimesEditor
 
             if (execute)
             {
-                ClearImages();
+                Cleanup();
                 m_busy = true;
                 try
                 {
@@ -363,6 +315,14 @@ namespace HappyFunTimesEditor
             return true;
         }
 
+        void Cleanup()
+        {
+            if (m_packageEditorHelper != null)
+            {
+                m_packageEditorHelper.Cleanup();
+            }
+        }
+
         void Persist()
         {
             if (m_packageEditorHelper != null) {
@@ -375,9 +335,14 @@ namespace HappyFunTimesEditor
             if (!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 Persist();
+                Cleanup();
             }
         }
 
+        void OnDestroy()
+        {
+            Cleanup();
+        }
 
         [MenuItem ("Window/HappyFunTimes/Export for HappyFunTimes")]
         static void Export()

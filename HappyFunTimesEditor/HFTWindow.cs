@@ -69,6 +69,15 @@ namespace HappyFunTimesEditor
             EditorApplication.playmodeStateChanged -= OnPlaymodeStateChange;
 
             Persist();
+            Cleanup();
+        }
+
+        void Cleanup()
+        {
+            if (m_packageEditorHelper != null)
+            {
+                m_packageEditorHelper.Cleanup();
+            }
         }
 
         void Persist()
@@ -83,6 +92,7 @@ namespace HappyFunTimesEditor
             if (!EditorApplication.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 Persist();
+                Cleanup();
             }
         }
 

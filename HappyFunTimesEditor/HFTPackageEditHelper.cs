@@ -52,6 +52,10 @@ namespace HappyFunTimesEditor
         private bool m_showPackageJson = true;
 
         private bool m_dirty = false;
+        private Texture2D m_icon;
+        private Texture2D m_screenshot;
+        private GUILayoutOption[] m_iconGUILayoutOptions;
+        private GUILayoutOption[] m_screenshotGUILayoutOptions;
 
         private static HFTPackageEditorHelper s_instance = null;
         private static Regex validSemverRE = new Regex(@"^\d+\.\d+\.\d+$");
@@ -85,6 +89,11 @@ namespace HappyFunTimesEditor
             if (m_package == null) {
                 m_package = new HFTPackage();
             }
+        }
+
+        void Prepare()
+        {
+            UpdateImages();
         }
 
         public void Init()
@@ -178,9 +187,51 @@ namespace HappyFunTimesEditor
             }
         }
 
+        private void UpdateImages()
+        {
+            if (m_icon == null)
+            {
+                m_icon = LoadImage("WebPlayerTemplates/HappyFunTimes/icon.png");
+                m_screenshot = LoadImage("WebPlayerTemplates/HappyFunTimes/screenshot.png");
+
+                m_iconGUILayoutOptions = new GUILayoutOption[]
+                {
+                    GUILayout.Width(64),
+                    GUILayout.Height(64),
+                };
+
+                m_screenshotGUILayoutOptions = new GUILayoutOption[]
+                {
+                    GUILayout.Width(320),
+                    GUILayout.Height(240),
+                };
+            }
+        }
+
+        private void ClearImages()
+        {
+            m_icon = null;
+            m_screenshot = null;
+        }
+
+        private Texture2D LoadImage(string path)
+        {
+            string fullPath = System.IO.Path.Combine(Application.dataPath, path);
+            byte[] bytes = System.IO.File.ReadAllBytes(fullPath);
+            Texture2D tex = new Texture2D(1, 1);
+            tex.LoadImage(bytes);
+            return tex;
+        }
+
+        public void Cleanup()
+        {
+            ClearImages();
+        }
+
         public void DoGUI() {
             m_showPackageJson = EditorGUILayout.Foldout(m_showPackageJson, "Package.json Settings");
             if (m_package != null && m_showPackageJson) {
+                Prepare();
                 EditString("name");
                 EditString("version", validSemverRE, 14, semverFilterRE);
                 EditString("gameId", validGameIdRE, 60, gameIdFilterRE);
@@ -191,6 +242,15 @@ namespace HappyFunTimesEditor
                 //EditEnum<HFTInstructionsPosition>("instructionsPosition", HFTInstructionsPosition.top);
                 EditInstructionsPosition("instructionsPosition");
                 EditText(10, "description");
+
+                GUILayout.Box(GUIContent.none, HFTGUIStyles.EditorLine, GUILayout.ExpandWidth(true), GUILayout.Height(1f));
+                EditorGUILayout.LabelField("WebPlayerTemplates/HappyFunTimes/icon.png");
+                EditorGUI.DrawPreviewTexture(EditorGUILayout.GetControlRect(m_iconGUILayoutOptions), m_icon);
+                EditorGUILayout.LabelField("WebPlayerTemplates/HappyFunTimes/screenshot.png");
+                EditorGUI.DrawPreviewTexture(EditorGUILayout.GetControlRect(m_screenshotGUILayoutOptions), m_screenshot);
+                EditorGUILayout.Separator();
+                GUILayout.Box(GUIContent.none, HFTGUIStyles.EditorLine, GUILayout.ExpandWidth(true), GUILayout.Height(1f));
+
             }
 
             if (m_dirty) {
