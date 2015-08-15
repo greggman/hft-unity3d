@@ -209,8 +209,8 @@ namespace HappyFunTimesEditor
             bool execute = GUILayout.Button(buttonLabel);
             EditorGUI.EndDisabledGroup();
 
-            EditorGUILayout.EndVertical();
             EditorGUILayout.EndScrollView();
+            EditorGUILayout.EndVertical();
 
             if (execute)
             {
