@@ -49,6 +49,7 @@ public class PlayerSpawner : MonoBehaviour
     public string gameId = "";
     public bool showMessages = false;
     public bool allowMultipleGames;
+    public bool uploadControllerFiles = false;
 
     [Header("0 = unlimited")]
     public int maxPlayers = 0;
@@ -86,6 +87,7 @@ public class PlayerSpawner : MonoBehaviour
         options.gameId = gameId;
         options.allowMultipleGames = allowMultipleGames;
         options.showMessages = showMessages;
+        options.uploadControllerFiles = uploadControllerFiles;
 
         m_server = new GameServer(options, gameObject);
 

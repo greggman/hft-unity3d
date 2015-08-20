@@ -62,6 +62,7 @@
     <Compile Include="HFTPackageJson.cs" />
     <Compile Include="HFTConstants.cs" />
     <Compile Include="HFTInstructions.cs" />
+    <Compile Include="HFTUploader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

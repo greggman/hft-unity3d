@@ -159,6 +159,13 @@ namespace HappyFunTimes
             ///</summary>
             public bool showMessages;
 
+            /// <summary>
+            /// Uploads the controller files from Unity to HappyFunTimes.
+            /// Normally the controller files are served from disk read
+            /// directly by HappyFunTimes
+            /// </summary>
+            public bool uploadControllerFiles = false;
+
             ///<summary>
             /// don't set this. it will be set automatically
             ///</summary>
@@ -485,6 +492,7 @@ namespace HappyFunTimes
         private class MessageGameStart
         {
             public string id = "";
+            public string gameId = "";
             public bool needNewHFT = false;
             public string instructions = "";
             public bool instructionsBottom = false;
@@ -696,6 +704,14 @@ namespace HappyFunTimes
             {
                 QueueEvent(delegate()
                 {
+                    if (m_options.uploadControllerFiles)
+                    {
+                        HFTUploader uploader = new HFTUploader(false);
+                        string baseFolder = System.IO.Path.Combine(System.IO.Path.Combine(Application.dataPath, "WebPlayerTemplates"), "HappyFunTimes");
+                        string url = GetBaseHttpUrl() + "api/v0/uploadFile/";
+                        uploader.UploadTree(url, data.gameId, baseFolder);
+
+                    }
                     if (OnConnect != null)
                     {
                         OnConnect.Emit(this, new EventArgs());

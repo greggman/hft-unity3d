@@ -42,7 +42,8 @@ public class PlayerConnector : MonoBehaviour
     public GameObject[] players;
     public string gameId = "";
     public bool showMessages = false;
-    public bool allowMultipleGames;
+    public bool allowMultipleGames = false;
+    public bool uploadControllerFiles = false;
     public int timeoutForDisconnectedPlayersToReconnect = 0;
 
     public GameServer server
@@ -74,6 +75,7 @@ public class PlayerConnector : MonoBehaviour
         options.gameId = gameId;
         options.allowMultipleGames = allowMultipleGames;
         options.showMessages = showMessages;
+        options.uploadControllerFiles = uploadControllerFiles;
 
         m_server = new GameServer(options, gameObject);
 
