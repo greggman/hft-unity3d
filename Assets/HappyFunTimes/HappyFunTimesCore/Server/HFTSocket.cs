@@ -54,7 +54,7 @@ namespace HappyFunTimes
 
         protected override void OnMessage(MessageEventArgs e)
         {
-Debug.Log("rcv:" + e.Data);
+//Debug.Log("rcv:" + e.Data);
             EventHandler<MessageEventArgs> handler = OnMessageEvent;
             if (handler != null)
             {
@@ -79,7 +79,7 @@ Debug.Log("rcv:" + e.Data);
             if (!closed_)
             {
                 string str = Serializer.Serialize(msg);
-Debug.Log("snd:" + str);
+//Debug.Log("snd:" + str);
                 base.Send(str);
             }
         }

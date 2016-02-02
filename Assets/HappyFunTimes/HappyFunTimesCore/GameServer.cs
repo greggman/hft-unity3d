@@ -144,32 +144,32 @@ namespace HappyFunTimes
 //            SendMessageToRunner("HFTInitializeRunner");
         }
 
-        private void SendMessageToRunner(string msg)
-        {
-            string[] names = new string[]
-            {
-                "HappyFunTimes.HFTRunner",
-                "HappyFunTimes.HFTRunner, Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",            "HFTRunner",
-                "HFTRunner",
-            };
-            foreach (string name in names)
-            {
-                System.Type t = System.Type.GetType(name);
-                if (t != null)
-                {
-                    object o = m_gameObject.GetComponent(t);
-                    if (o == null)
-                    {
-                        o = m_gameObject.AddComponent(t);
-                    }
-                    if (o != null)
-                    {
-                        m_gameObject.SendMessage(msg, this);
-                    }
-                    break;
-                }
-            }
-        }
+//        private void SendMessageToRunner(string msg)
+//        {
+//            string[] names = new string[]
+//            {
+//                "HappyFunTimes.HFTRunner",
+//                "HappyFunTimes.HFTRunner, Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",            "HFTRunner",
+//                "HFTRunner",
+//            };
+//            foreach (string name in names)
+//            {
+//                System.Type t = System.Type.GetType(name);
+//                if (t != null)
+//                {
+//                    object o = m_gameObject.GetComponent(t);
+//                    if (o == null)
+//                    {
+//                        o = m_gameObject.AddComponent(t);
+//                    }
+//                    if (o != null)
+//                    {
+//                        m_gameObject.SendMessage(msg, this);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
 
         /// <summary>
         /// Starts the connection to HappyFunTimes.
@@ -592,7 +592,7 @@ namespace HappyFunTimes
                 QueueEvent(delegate()
                 {
                     Debug.LogError("This game needs a newer version of HappyFunTimes");
-                    SendMessageToRunner("HFTNeedNewHFT");
+                    //SendMessageToRunner("HFTNeedNewHFT");
                     Application.Quit();
                 });
             }

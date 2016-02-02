@@ -76,8 +76,8 @@ namespace HappyFunTimes
 
         string prefix_;
         bool debug_;
-//FIX
-        static bool s_debug = true;
+
+        static bool s_debug = false;
     }
 
 }  // namespace HappyFunTimes

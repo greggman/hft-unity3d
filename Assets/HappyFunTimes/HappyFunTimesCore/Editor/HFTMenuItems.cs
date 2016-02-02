@@ -109,29 +109,19 @@ public class HFTMenuItems {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unity-character-select");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Multi Machine Example/UnityPackage", false, 9)]
+    [MenuItem("Window/HappyFunTimes/Examples/Multi Machine Example/UnityPackage", false, 10)]
     static void ExampleMultiMachine() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?owner=greggman&repo=hft-unity-multi-character-select");
     }
 
-    [MenuItem("Window/HappyFunTimes/Examples/Mutli Machine Example/Docs", false, 10)]
+    [MenuItem("Window/HappyFunTimes/Examples/Multi Machine Example/Docs", false, 10)]
     static void ExampleMultiMachineDocs() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/samples.html?type=docs&owner=greggman&repo=hft-unity-multi-game-example");
-    }
-
-    [MenuItem("Window/HappyFunTimes/HappyFunTimes Installer", false, 11)]
-    static void HappyFunTimesInstaller() {
-        Application.OpenURL("http://docs.happyfuntimes.net/docs/unity/install.html");
     }
 
     [MenuItem("Window/HappyFunTimes/SuperHappyFunTimes", false, 12)]
     static void SuperHappyFunTimes() {
         Application.OpenURL("http://superhappyfuntimes.net");
-    }
-
-    [MenuItem("Window/HappyFunTimes/Package Editor", false, 13)]
-    static void PackageEditor() {
-        HFTWindow.ShowWindow();
     }
 
     //[MenuItem("Window/HappyFunTimes/Export", false, 13)]
