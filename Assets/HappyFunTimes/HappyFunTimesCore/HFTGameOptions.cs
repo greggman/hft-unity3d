@@ -58,6 +58,12 @@ namespace HappyFunTimes
         /// </summary>
         public bool askUserForName = true;
 
+
+        /// <summary>
+        /// Show game menu(allow user to set name)
+        /// </summary>
+        public bool showMenu = true;
+
         ///<summary>
         ///Deprecated and not used.
         ///</summary>

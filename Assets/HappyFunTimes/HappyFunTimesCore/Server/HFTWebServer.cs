@@ -35,8 +35,10 @@ namespace HappyFunTimes
             m_ping = System.Text.Encoding.UTF8.GetBytes(ping);
             m_log.Info("Ping: " + ping);
 
-            string liveStr = "define([], function() { return " + Serializer.Serialize(new LiveSettings()) + "; })\n";
-            m_liveSettings = System.Text.Encoding.UTF8.GetBytes(liveStr);
+            m_liveSettingsStr = "define([], function() { return " + Serializer.Serialize(new LiveSettings()) + "; })\n";
+            m_liveSettings = System.Text.Encoding.UTF8.GetBytes(m_liveSettingsStr);
+
+            m_hftSettingsStr = "window.hftSettings = " + Serializer.Serialize(new HFTSettings(options.showMenu));
         }
 
         public void Start()
@@ -117,33 +119,73 @@ namespace HappyFunTimes
                     SendJsonBytes(res, m_liveSettings);
                 }
 
-                byte[] content = null;
-                bool found = HFTWebFileDB.GetInstance().GetFile(path, out content);
-                if (!found)
+                if (path.EndsWith("/controller.html"))
                 {
-                    if (path.StartsWith(m_gamePath))
+                    byte[] templateData = null;
+                    string templatePath = "/hft/0.x.x/templates/controller.index.html";
+                    if (!GetGameFile(templatePath, out templateData))
                     {
-                        path = path.Substring(m_gamePath.Length - 1);
-                        found = HFTWebFileDB.GetInstance().GetFile(path, out content);
-                    }
-                    if (!found)
-                    {
+                        m_log.Error("missing template file: " + templatePath);
                         res.StatusCode = (int)HttpStatusCode.NotFound;
                         return;
                     }
+                    string template = System.Text.Encoding.UTF8.GetString(templateData);
+                    byte[] controllerData;
+                    if (!GetGameFile(path, out controllerData))
+                    {
+                        m_log.Error("missing file: " + path);
+                        res.StatusCode = (int)HttpStatusCode.NotFound;
+                        return;
+                    }
+                    string contents = System.Text.Encoding.UTF8.GetString(controllerData);
+                    // info.name
+                    // hftSettings
+                    // pages.controller.beforeScripts
+                    // pages.controller.afterScripts
+                    // contents
+                    Dictionary<string, string> subs = new Dictionary<string, string>();
+
+                    subs["filename"] = Path.GetFileNameWithoutExtension(path);
+                    subs["urls.favicon"] = "icon.png";
+                    subs["info.name"] = "???";
+                    subs["pages.controller.beforeScripts"] = "<script  src=\"/hft/0.x.x/extra/apphelper.js\"></script>";
+                    subs["pages.controller.afterScripts"] = @"
+<script src=""3rdparty/require.js"" data-main=""scripts/controller.js"" type=""hft-late""></script>
+<script type=""hft-late"">
+requirejs.config({
+  paths: {
+    hft: '/hft/0.x.x/scripts',
+  },
+  shim: {
+        '/3rdparty/handjs/hand-1.3.7': {
+            //These script dependencies should be loaded before loading
+            //hand.js
+            deps: [],
+            //Once loaded, use the global 'HANDJS' as the
+            //module value.
+            exports: 'HANDJ',
+        },
+    },
+});
+</script>
+";
+                    subs["content"] = contents;
+                    subs["hftSettings"] = m_hftSettingsStr;
+
+                    string s = HFTUtil.ReplaceParamsFlat(template, subs);
+
+                    SendContent(res, path, s);
                 }
 
-                string mimeType = HFTMimeType.GetMimeType(path);
-                res.ContentType = mimeType;
-                if (mimeType.StartsWith("text/") ||
-                    mimeType == "application/javascript")
+
+                byte[] content = null;
+                if (!GetGameFile(path, out content))
                 {
-                    res.ContentEncoding = Encoding.UTF8;
+                    res.StatusCode = (int)HttpStatusCode.NotFound;
+                    return;
                 }
-                res.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-                res.AddHeader("Pragma",        "no-cache");                            // HTTP 1.0.
-                res.AddHeader("Expires",       "0");                                   // Proxies.
-                res.WriteContent(content);
+
+                SendContent(res, path, content);
             };
 
             m_httpsv.OnOptions += (sender, e) =>
@@ -227,6 +269,20 @@ namespace HappyFunTimes
             }
         }
 
+        bool GetGameFile(string path, out byte[] content)
+        {
+            bool found = HFTWebFileDB.GetInstance().GetFile(path, out content);
+            if (!found)
+            {
+                if (path.StartsWith(m_gamePath))
+                {
+                    path = path.Substring(m_gamePath.Length - 1);
+                    found = HFTWebFileDB.GetInstance().GetFile(path, out content);
+                }
+            }
+            return found;
+        }
+
         void SendJsonBytes(HttpListenerResponse res, byte[] data)
         {
             res.StatusCode = (int)HttpStatusCode.OK;
@@ -234,6 +290,26 @@ namespace HappyFunTimes
             res.ContentEncoding = Encoding.UTF8;
             res.AddHeader("Access-Control-Allow-Origin", "*");
             res.WriteContent(data);
+        }
+
+        void SendContent(HttpListenerResponse res, string path, string content)
+        {
+            SendContent(res, path, System.Text.Encoding.UTF8.GetBytes(content));
+        }
+
+        void SendContent(HttpListenerResponse res, string path, byte[] content)
+        {
+            string mimeType = HFTMimeType.GetMimeType(path);
+            res.ContentType = mimeType;
+            if (mimeType.StartsWith("text/") ||
+                mimeType == "application/javascript")
+            {
+                res.ContentEncoding = Encoding.UTF8;
+            }
+            res.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            res.AddHeader("Pragma",        "no-cache");                            // HTTP 1.0.
+            res.AddHeader("Expires",       "0");                                   // Proxies.
+            res.WriteContent(content);
         }
 
         public void Stop()
@@ -267,13 +343,25 @@ namespace HappyFunTimes
             public SystemSettings system = new SystemSettings();
         }
 
+        class HFTSettings
+        {
+            public HFTSettings(bool showMenu)
+            {
+                menu = showMenu;
+            }
+            public bool menu = true;
+            public string apiVersion = "1.14.0";
+        }
+
         Deserializer deserializer_ = new Deserializer();
         HFTGameOptions m_options;
         HttpServer m_httpsv;
         HFTLog m_log;
         string m_gamePath;
         byte[] m_ping;
+        string m_liveSettingsStr;
         byte[] m_liveSettings;
+        string m_hftSettingsStr;
     }
 
 }  // namespace HappyFunTimes

@@ -31,7 +31,8 @@
 
 using System;
 using System.Collections.Generic;
-using DeJson;
+using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace HappyFunTimes
 {
@@ -44,6 +45,57 @@ namespace HappyFunTimes
             {
                 dst = value;
             }
+        }
+
+        static readonly Regex re = new Regex(@"%\(([^\)]+)\)s");
+        public static string ReplaceParams(string s, Dictionary<string, object> subs)
+        {
+            string output = re.Replace(s, match =>
+            {
+                Dictionary<string, object>dict = subs;
+                object obj = dict;
+                string fullKey = match.Groups[1].Value;
+                string[] keys = fullKey.Split('.');
+                foreach (string key in keys)
+                {
+                    object v = null;
+                    if (dict == null || !dict.TryGetValue(key, out v))
+                    {
+                        Debug.Log("unknown key: " + fullKey);
+                        return "%(" + fullKey + ")s";
+                    }
+                    else
+                    {
+                        obj = v;
+                        if (obj.GetType() == typeof(Dictionary<string, object>))
+                        {
+                            dict = (Dictionary<string, object>)obj;
+                        }
+                        else
+                        {
+                            dict = null;
+                        }
+                    }
+                }
+                return obj.ToString();
+            });
+            return output;
+        }
+
+        public static string ReplaceParamsFlat(string s, Dictionary<string, string> subs)
+        {
+            string output = re.Replace(s, match =>
+            {
+                string fullKey = match.Groups[1].Value;
+                string v = null;
+                if (!subs.TryGetValue(fullKey, out v))
+                {
+                    Debug.Log("unknown key: " + fullKey);
+                    return "%(" + fullKey + ")s";
+                }
+                return v;
+            });
+            return output;
         }
     }
 

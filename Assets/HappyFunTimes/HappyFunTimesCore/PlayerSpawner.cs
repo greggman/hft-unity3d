@@ -47,6 +47,7 @@ public class PlayerSpawner : MonoBehaviour
 {
     public GameObject prefabToSpawnForPlayer;
     public string gameId = "";
+    public bool showMenu = true;
     public bool askUserForName = true;
     public bool showMessages = false;
     public bool allowMultipleGames = false;
@@ -94,6 +95,7 @@ public class PlayerSpawner : MonoBehaviour
         options.startServer = startServer;
         options.serverPort = serverPort;
         options.askUserForName = askUserForName;
+        options.showMenu = showMenu;
 
         m_hftManager = new HFTManager(options, gameObject);
         m_server = new GameServer(options, gameObject);
