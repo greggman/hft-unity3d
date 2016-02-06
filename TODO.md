@@ -10,7 +10,9 @@
 *   consider getting rid of __hft__ and/or make reconnect logic different
 *   upload controller files if other server?
 *   check multi-game
-
+*   make GameServer stop Server?
+*   Check lots of clients
+*   Check if port busy
 
 DONE
 ====

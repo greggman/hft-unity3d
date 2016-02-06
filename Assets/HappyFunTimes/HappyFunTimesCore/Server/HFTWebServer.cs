@@ -31,7 +31,7 @@ namespace HappyFunTimes
                 sysName = sysName.Substring(0, sysName.Length - 6);
             }
             string gameName = String.IsNullOrEmpty(m_options.name) ? gameId : m_options.name;
-            string ping = Serializer.Serialize(new HFTPing(sysName + ": " + gameName));
+            string ping = Serializer.Serialize(new HFTPing(sysName + ": " + gameName, "HappyFunTimes"));
             m_ping = System.Text.Encoding.UTF8.GetBytes(ping);
             m_log.Info("Ping: " + ping);
 
@@ -56,6 +56,8 @@ namespace HappyFunTimes
             //m_httpsv = new HttpServer ("https://localhost:5963");
             //m_httpsv = new HttpServer(System.Net.IPAddress.Parse("127.0.0.1"), 18679);
             m_httpsv = new HttpServer(System.Net.IPAddress.Parse("0.0.0.0"), port);
+            m_httpsv.Log.Level = LogLevel.Trace;
+            m_httpsv.Log.File = "/Users/gregg/temp/foo.txt";
             #if FALSE
             // To change the logging level.
             m_httpsv.Log.Level = LogLevel.Trace;
@@ -117,6 +119,7 @@ namespace HappyFunTimes
                 if (path.Equals("/hft/0.x.x/scripts/runtime/live-settings.js"))
                 {
                     SendJsonBytes(res, m_liveSettings);
+                    return;
                 }
 
                 if (path.EndsWith("/controller.html"))
@@ -175,6 +178,7 @@ requirejs.config({
                     string s = HFTUtil.ReplaceParamsFlat(template, subs);
 
                     SendContent(res, path, s);
+                    return;
                 }
 
 
@@ -213,11 +217,11 @@ requirejs.config({
                 dataStream.Close();
 
                 PostCmd cmd = deserializer_.Deserialize<PostCmd>(result);
-                // TODO: use router
                 if (cmd.cmd == "happyFunTimesPing")
                 {
                     SendJsonBytes(res, m_ping);
                 }
+                // TODO: use router
             };
 
             // Not to remove the inactive WebSocket sessions periodically.
@@ -315,22 +319,6 @@ requirejs.config({
         public void Stop()
         {
             m_httpsv.Stop();
-        }
-
-        class PostCmd
-        {
-            public string cmd = null;
-        }
-
-        class HFTPing
-        {
-            public HFTPing(string _serverName)
-            {
-                serverName = _serverName;
-            }
-            public string version = "0.0.0";
-            public string id = "HappyFunTimes";
-            public string serverName;
         }
 
         class SystemSettings

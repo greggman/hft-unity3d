@@ -77,18 +77,30 @@ public class PlayerConnector : MonoBehaviour
 
     void StartConnection()
     {
-        GameServer.Options options = new GameServer.Options();
-        options.gameId = gameId;
-        options.allowMultipleGames = allowMultipleGames;
-        options.showMessages = showMessages;
-        options.rendezvousUrl = rendezvousUrl;
-        options.startServer = startServer;
-        options.serverPort = serverPort;
-        options.askUserForName = askUserForName;
-        options.showMenu = showMenu;
+        m_options = new GameServer.Options();
+        m_options.gameId = gameId;
+        m_options.allowMultipleGames = allowMultipleGames;
+        m_options.showMessages = showMessages;
+        m_options.rendezvousUrl = rendezvousUrl;
+        m_options.startServer = startServer;
+        m_options.serverPort = serverPort;
+        m_options.askUserForName = askUserForName;
+        m_options.showMenu = showMenu;
 
-        m_hftManager = new HFTManager(options, gameObject);
-        m_server = new GameServer(options, gameObject);
+        m_hftManager = new HFTManager();
+        m_hftManager.OnReady += StartGameServer;
+        m_hftManager.OnFail  += FailedToStart;
+        m_hftManager.Start(m_options, gameObject);
+    }
+
+    void FailedToStart(object sender, System.EventArgs e)
+    {
+        Debug.LogError("could not connect to server:");
+    }
+
+    void StartGameServer(object sender, System.EventArgs e)
+    {
+        m_server = new GameServer(m_options, gameObject);
 
         m_server.OnConnect += Connected;
         m_server.OnDisconnect += Disconnected;
@@ -137,6 +149,7 @@ public class PlayerConnector : MonoBehaviour
         Cleanup();
     }
 
+    GameServer.Options m_options;
     private PlayerManager m_playerManager;
     private GameServer m_server;
     private HFTManager m_hftManager;

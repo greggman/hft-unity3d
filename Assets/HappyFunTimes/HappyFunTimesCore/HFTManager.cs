@@ -37,7 +37,14 @@ namespace HappyFunTimes
 {
     public class HFTManager {
 
-        public HFTManager(HFTGameOptions options, GameObject gameObject)
+        public event EventHandler<EventArgs> OnReady;
+        public event EventHandler<EventArgs> OnFail;
+
+        public HFTManager()
+        {
+        }
+
+        public void Start(HFTGameOptions options, GameObject gameObject)
         {
             m_options = options;
             m_gameObject = gameObject;
@@ -45,6 +52,30 @@ namespace HappyFunTimes
             if (options.startServer)
             {
                 StartServer();
+            }
+
+            HFTCheck check = gameObject.AddComponent<HFTCheck>();
+            check.Init(m_options.url, Ready, Failed);
+        }
+
+        void Ready()
+        {
+            if (m_options.startServer)
+            {
+                m_sysGame = new HFTSystemGame(m_options);
+            }
+
+            EventHandler<EventArgs> handler = OnReady;
+            if (handler != null) {
+                handler(this, new EventArgs());
+            }
+        }
+
+        void Failed()
+        {
+            EventHandler<EventArgs> handler = OnFail;
+            if (handler != null) {
+                handler(this, new EventArgs());
             }
         }
 
@@ -59,8 +90,6 @@ namespace HappyFunTimes
 
             m_webServer = new HFTWebServer(m_options);
             m_webServer.Start();
-
-            m_sysGame = new HFTSystemGame(m_options);
         }
 
         public void StopServer()

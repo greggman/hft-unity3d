@@ -14,12 +14,21 @@ namespace HappyFunTimes
 
         public HFTSocket()
         {
+            base.IgnoreExtensions = true;
             log_ = new HFTLog("hftsocket");
         }
 
         protected override void OnOpen()
         {
-            HFTGameManager.GetInstance().AddPlayer(this);
+            log_.Info("open");
+            try
+            {
+                HFTGameManager.GetInstance().AddPlayer(this);
+            }
+            catch (System.Exception ex)
+            {
+                log_.Error(ex.StackTrace);
+            }
         }
 
         protected override void OnClose(CloseEventArgs e)
@@ -34,9 +43,17 @@ namespace HappyFunTimes
 
         protected override void OnError(ErrorEventArgs e)
         {
+            log_.Error("error: " + e.ToString() + ": " + e.Message);
+            try
+            {
+                throw new System.InvalidOperationException();
+            }
+            catch (System.Exception ex)
+            {
+                log_.Error(ex.StackTrace);
+            }
             if (!closed_)
             {
-                log_.Error("error: " + e.ToString() + ": " + e.Message);
                 try
                 {
                     Close();
@@ -65,6 +82,7 @@ namespace HappyFunTimes
                 catch (System.Exception ex)
                 {
                     log_.Error(ex.ToString());
+                    log_.Error(ex.StackTrace);
                 }
             }
         }

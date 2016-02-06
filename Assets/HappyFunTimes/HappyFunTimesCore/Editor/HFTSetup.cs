@@ -43,9 +43,6 @@ class Startup
     static Startup ()
     {
         PlayerSettings.runInBackground = true;
-        PlayerSettings.defaultIsFullScreen = true;
-        PlayerSettings.macFullscreenMode = MacFullscreenMode.FullscreenWindow;
-        PlayerSettings.displayResolutionDialog = ResolutionDialogSetting.Disabled;
     }
 }
 

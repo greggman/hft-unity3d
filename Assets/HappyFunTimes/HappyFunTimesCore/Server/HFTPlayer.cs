@@ -185,6 +185,7 @@ namespace HappyFunTimes
         {
             client_.OnMessageEvent -= HandleMessage;
             client_.OnCloseEvent -= HandleDisconnect;
+            log_.Info("Disconnect");
             client_.Close();
         }
 
