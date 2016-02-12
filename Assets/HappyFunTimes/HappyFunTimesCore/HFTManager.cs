@@ -54,12 +54,32 @@ namespace HappyFunTimes
                 StartServer();
             }
 
-            HFTCheck check = gameObject.AddComponent<HFTCheck>();
-            check.Init(m_options.url, Ready, Failed);
+            StartCheck();
+        }
+
+        void StartCheck()
+        {
+            m_check = m_gameObject.AddComponent<HFTCheck>();
+            m_check.Init(m_options.url, Ready, Failed);
+        }
+
+        void CleanupCheck()
+        {
+            if (m_check != null)
+            {
+                Component.Destroy(m_check);
+                m_check = null;
+            }
+        }
+
+        public void Stop()
+        {
+            StopServer();
         }
 
         void Ready()
         {
+            CleanupCheck();
             if (m_options.startServer)
             {
                 m_sysGame = new HFTSystemGame(m_options);
@@ -73,6 +93,7 @@ namespace HappyFunTimes
 
         void Failed()
         {
+            CleanupCheck();
             EventHandler<EventArgs> handler = OnFail;
             if (handler != null) {
                 handler(this, new EventArgs());
@@ -94,19 +115,26 @@ namespace HappyFunTimes
 
         public void StopServer()
         {
-            Debug.LogError("//FIX!! Not implemented");
+            CleanupCheck();
             if (m_hftSite != null)
             {
                 m_sysGame.Stop();
                 m_hftSite.Stop();
                 Component.Destroy(m_hftSite);
                 m_hftSite = null;
+                m_sysGame = null;
+            }
+            if (m_webServer != null)
+            {
+                m_webServer.Stop();
+                m_webServer = null;
             }
         }
 
         HFTGameOptions m_options;
         GameObject m_gameObject;
         HFTSite m_hftSite;
+        HFTCheck m_check;
         HFTWebServer m_webServer;
         HFTSystemGame m_sysGame;
     }

@@ -48,7 +48,7 @@ public class LocalNetPlayer : NetPlayer {
 
     public LocalNetPlayer(GameServer server, Options options = null) : base(server, options != null ? options.name : "LocalPlayer") {
         m_gameHandlers = new Dictionary<string, GameCmdEventHandler>();
-        m_sessionId = options == null ? options.sessionId : "";
+        m_sessionId = options != null ? options.sessionId : "";
     }
 
     public delegate void UntypedGameCmdEventHandler(Dictionary<string, object> data);

@@ -34,176 +34,199 @@ using System.Collections;
 using System.Collections.Generic;
 using HappyFunTimes;
 
-namespace HappyFunTimes {
-
-public class SpawnInfo {
-    public NetPlayer netPlayer;
-    public string name;
-    public object data;
-};
-
-[AddComponentMenu("HappyFunTimes/PlayerSpawner")]
-public class PlayerSpawner : MonoBehaviour
+namespace HappyFunTimes
 {
-    public GameObject prefabToSpawnForPlayer;
-    public string gameId = "";
-    public bool showMenu = true;
-    public bool askUserForName = true;
-    public bool showMessages = false;
-    public bool allowMultipleGames = false;
-    public string rendezvousUrl = "";
-    public bool startServer = true;
-    public string serverPort = "";
 
-    [Header("0 = unlimited")]
-    public int maxPlayers = 0;
-
-    public GameServer server
+    public class SpawnInfo
     {
-        get
+        public NetPlayer netPlayer;
+        public string name;
+        public object data;
+    };
+
+    [AddComponentMenu("HappyFunTimes/PlayerSpawner")]
+    public class PlayerSpawner : MonoBehaviour
+    {
+        public GameObject prefabToSpawnForPlayer;
+        public string gameId = "";
+        public bool showMenu = true;
+        public bool askUserForName = true;
+        public bool showMessages = false;
+        public bool allowMultipleGames = false;
+        public string rendezvousUrl = "";
+        public bool startServer = true;
+        public string serverPort = "";
+
+        [Header("0 = unlimited")]
+        public int maxPlayers = 0;
+
+        public GameServer server
         {
-            return m_server;
+            get
+            {
+                return m_server;
+            }
         }
-    }
 
-    /// <summary>
-    /// Call this to rotate an active player out and start the next waiting player.
-    /// </summary>
-    /// <param name="netPlayer">The NetPlayer of the player to return</param>
-    public void ReturnPlayer(NetPlayer netPlayer) {
-        if (m_playerManager != null) {
-            m_playerManager.ReturnPlayer(netPlayer);
+        /// <summary>
+        /// Call this to rotate an active player out and start the next waiting player.
+        /// </summary>
+        /// <param name="netPlayer">The NetPlayer of the player to return</param>
+        public void ReturnPlayer(NetPlayer netPlayer)
+        {
+            if (m_playerManager != null)
+            {
+                m_playerManager.ReturnPlayer(netPlayer);
+            }
         }
-    }
 
-    /// <summary>
-    /// Returns all the current players to the waiting list
-    /// and gets new ones if any are waiting
-    /// </summary>
-    public void FlushCurrentPlayers() {
-        if (m_playerManager != null) {
-            m_playerManager.FlushCurrentPlayers();
+        /// <summary>
+        /// Returns all the current players to the waiting list
+        /// and gets new ones if any are waiting
+        /// </summary>
+        public void FlushCurrentPlayers()
+        {
+            if (m_playerManager != null)
+            {
+                m_playerManager.FlushCurrentPlayers();
+            }
         }
-    }
 
-    void StartConnection() {
-        m_options = new GameServer.Options();
-        m_options.gameId = gameId;
-        m_options.allowMultipleGames = allowMultipleGames;
-        m_options.showMessages = showMessages;
-        m_options.rendezvousUrl = rendezvousUrl;
-        m_options.startServer = startServer;
-        m_options.serverPort = serverPort;
-        m_options.askUserForName = askUserForName;
-        m_options.showMenu = showMenu;
+        void StartConnection()
+        {
+            m_options = new GameServer.Options();
+            m_options.gameId = gameId;
+            m_options.allowMultipleGames = allowMultipleGames;
+            m_options.showMessages = showMessages;
+            m_options.rendezvousUrl = rendezvousUrl;
+            m_options.startServer = startServer;
+            m_options.serverPort = serverPort;
+            m_options.askUserForName = askUserForName;
+            m_options.showMenu = showMenu;
 
-        m_hftManager = new HFTManager();
-        m_hftManager.OnReady += StartGameServer;
-        m_hftManager.OnFail  += FailedToStart;
-        m_hftManager.Start(m_options, gameObject);
-    }
-
-    void FailedToStart(object sender, System.EventArgs e)
-    {
-        Debug.LogError("could not connect to server:");
-    }
-
-    void StartGameServer(object sender, System.EventArgs e)
-    {
-        m_server = new GameServer(m_options, gameObject);
-
-        m_server.OnConnect += Connected;
-        m_server.OnDisconnect += Disconnected;
-
-        m_server.Init();
-
-        if (maxPlayers > 0) {
-            int timeoutForDisconnectedPlayerToReconnect = 0;
-            m_playerManager = new PlayerManager(m_server, gameObject, maxPlayers, timeoutForDisconnectedPlayerToReconnect, GetPrefab);
-        } else {
-            m_server.OnPlayerConnect += StartNewPlayer;
+            m_hftManager = new HFTManager();
+            m_hftManager.OnReady += StartGameServer;
+            m_hftManager.OnFail += FailedToStart;
+            m_hftManager.Start(m_options, gameObject);
         }
-    }
 
-    void StartPlayer(NetPlayer netPlayer, object data)
-    {
-        GameObject gameObject = (GameObject)Instantiate(prefabToSpawnForPlayer);
-
-        SpawnInfo spawnInfo = new SpawnInfo();
-        spawnInfo.netPlayer = netPlayer;
-        spawnInfo.name = netPlayer.Name;
-        spawnInfo.data = data;
-        gameObject.SendMessage("InitializeNetPlayer", spawnInfo);
-    }
-
-    GameObject GetPrefab(int ndx) {
-        return (GameObject)Instantiate(prefabToSpawnForPlayer);
-    }
-
-    void StartNewPlayer(object sender, PlayerConnectMessageArgs e)
-    {
-        StartPlayer(e.netPlayer, e.data);
-    }
-
-    public void StartLocalPlayer(NetPlayer netPlayer, string name = "", object data = null)
-    {
-        if (m_playerManager != null) {
-            m_playerManager.StartLocalPlayer(netPlayer, name, data);
-        } else {
-            StartPlayer(netPlayer, data);
+        void FailedToStart(object sender, System.EventArgs e)
+        {
+            Debug.LogError("could not connect to server:");
         }
-    }
 
-    void Start ()
-    {
-        StartConnection();
-    }
+        void StartGameServer(object sender, System.EventArgs e)
+        {
+            m_server = new GameServer(m_options, gameObject);
 
-    void Update() {
-        if (m_playerManager != null) {
-            m_playerManager.Update();
+            m_server.OnConnect += Connected;
+            m_server.OnDisconnect += Disconnected;
+
+            m_server.Init();
+
+            if (maxPlayers > 0)
+            {
+                int timeoutForDisconnectedPlayerToReconnect = 0;
+                m_playerManager = new PlayerManager(m_server, gameObject, maxPlayers, timeoutForDisconnectedPlayerToReconnect, GetPrefab);
+            }
+            else
+            {
+                m_server.OnPlayerConnect += StartNewPlayer;
+            }
         }
-    }
 
-    void Connected(object sender, EventArgs e)
-    {
-    }
+        void StartPlayer(NetPlayer netPlayer, object data)
+        {
+            GameObject gameObject = (GameObject)Instantiate(prefabToSpawnForPlayer);
 
-    void Disconnected(object sender, EventArgs e)
-    {
-        Debug.Log("Quitting");
-        Application.Quit();
-    }
-
-    void Cleanup()
-    {
-        if (m_server != null) {
-            m_server.Close();
+            SpawnInfo spawnInfo = new SpawnInfo();
+            spawnInfo.netPlayer = netPlayer;
+            spawnInfo.name = netPlayer.Name;
+            spawnInfo.data = data;
+            gameObject.SendMessage("InitializeNetPlayer", spawnInfo);
         }
-    }
 
-    void OnDestroy()
-    {
-        Cleanup();
-    }
-
-    void OnApplicationExit()
-    {
-        Cleanup();
-    }
-
-    public GameServer GameServer {
-        get {
-            return m_server;
+        GameObject GetPrefab(int ndx)
+        {
+            return (GameObject)Instantiate(prefabToSpawnForPlayer);
         }
-        private set {
-        }
-    }
 
-    private GameServer.Options m_options;
-    private GameServer m_server;
-    private PlayerManager m_playerManager;
-    private HFTManager m_hftManager;
-};
+        void StartNewPlayer(object sender, PlayerConnectMessageArgs e)
+        {
+            StartPlayer(e.netPlayer, e.data);
+        }
+
+        public void StartLocalPlayer(NetPlayer netPlayer, string name = "", object data = null)
+        {
+            if (m_playerManager != null)
+            {
+                m_playerManager.StartLocalPlayer(netPlayer, name, data);
+            }
+            else
+            {
+                StartPlayer(netPlayer, data);
+            }
+        }
+
+        void Start()
+        {
+            StartConnection();
+        }
+
+        void Update()
+        {
+            if (m_playerManager != null)
+            {
+                m_playerManager.Update();
+            }
+        }
+
+        void Connected(object sender, EventArgs e)
+        {
+        }
+
+        void Disconnected(object sender, EventArgs e)
+        {
+            Debug.Log("Quitting");
+            Application.Quit();
+        }
+
+        void Cleanup()
+        {
+            if (m_server != null)
+            {
+                m_server.Close();
+            }
+            if (m_hftManager != null)
+            {
+                m_hftManager.Stop();
+            }
+        }
+
+        void OnDestroy()
+        {
+            Cleanup();
+        }
+
+        void OnApplicationExit()
+        {
+            Cleanup();
+        }
+
+        public GameServer GameServer
+        {
+            get
+            {
+                return m_server;
+            }
+            private set
+            { }
+        }
+
+        private GameServer.Options m_options;
+        private GameServer m_server;
+        private PlayerManager m_playerManager;
+        private HFTManager m_hftManager;
+    };
 
 }   // namespace HappyFunTimes

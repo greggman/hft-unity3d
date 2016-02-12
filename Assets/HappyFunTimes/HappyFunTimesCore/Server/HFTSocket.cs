@@ -44,14 +44,6 @@ namespace HappyFunTimes
         protected override void OnError(ErrorEventArgs e)
         {
             log_.Error("error: " + e.ToString() + ": " + e.Message);
-            try
-            {
-                throw new System.InvalidOperationException();
-            }
-            catch (System.Exception ex)
-            {
-                log_.Error(ex.StackTrace);
-            }
             if (!closed_)
             {
                 try

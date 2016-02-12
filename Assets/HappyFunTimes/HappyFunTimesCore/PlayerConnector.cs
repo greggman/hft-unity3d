@@ -137,6 +137,9 @@ public class PlayerConnector : MonoBehaviour
         if (m_server != null) {
             m_server.Close();
         }
+        if (m_hftManager != null) {
+            m_hftManager.Stop();
+        }
     }
 
     void OnDestroy()
