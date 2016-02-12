@@ -157,16 +157,16 @@ namespace HappyFunTimes
 <script type=""hft-late"">
 requirejs.config({
   paths: {
-    hft: '/hft/0.x.x/scripts',
+    hft: '../../../../hft/0.x.x/scripts',
   },
   shim: {
-        '/3rdparty/handjs/hand-1.3.7': {
+        '3rdparty/pep.min': {
             //These script dependencies should be loaded before loading
-            //hand.js
+            //pep.js
             deps: [],
-            //Once loaded, use the global 'HANDJS' as the
+            //Once loaded, use the global 'PEPNOREALLY' as the
             //module value.
-            exports: 'HANDJ',
+            exports: 'PEPNOTREALLY',
         },
     },
 });
