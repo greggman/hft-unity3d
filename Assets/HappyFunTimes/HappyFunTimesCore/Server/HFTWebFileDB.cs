@@ -28,6 +28,7 @@ namespace HappyFunTimes
 
         public bool GetFile(string path, out byte[] content)
         {
+            path = path.Replace('\\', '/');
             if (path.StartsWith("/"))
             {
                 path = path.Substring(1);
@@ -49,11 +50,13 @@ namespace HappyFunTimes
 
         public void AddFile(string path, byte[] content)
         {
+            path = path.Replace('\\', '/');
             files_[path] = content;
         }
 
         public string[] GetFiles(string path, string glob)
         {
+            path = path.Replace('\\', '/');
             if (path.StartsWith("/"))
             {
                 path = path.Substring(1);
