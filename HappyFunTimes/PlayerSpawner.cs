@@ -48,7 +48,7 @@ public class PlayerSpawner : MonoBehaviour
     public GameObject prefabToSpawnForPlayer;
     public string gameId = "";
     public bool showMessages = false;
-    public bool allowMultipleGames;
+    public bool allowMultipleGames = false;
     public bool uploadControllerFiles = false;
 
     [Header("0 = unlimited")]

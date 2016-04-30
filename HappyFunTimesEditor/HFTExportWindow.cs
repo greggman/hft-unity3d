@@ -308,6 +308,8 @@ namespace HappyFunTimesEditor
                                 files += exportInfo.filename + "\n";
                             }
                             EditorUtility.DisplayDialog("Exported " + gameId, files, "Ok");
+                            HFTCmdRunner openFolder = new HFTCmdRunner();
+                            openFolder.Open(new string[] { System.IO.Path.GetDirectoryName(exporter.exportInfos[0].filename), });
                         }
                         break;
                 }
