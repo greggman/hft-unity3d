@@ -78,17 +78,25 @@ namespace HappyFunTimes
                 }
                 // If it's a directory (.app) launch it with open.
                 // If it's start.js launch it with node
-                if (exePath.EndsWith("start.js")) {
-                    System.Diagnostics.Process.Start("osascript", @"-e '
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo psi = p.StartInfo;
+                if (exePath.EndsWith("start.js"))
+                {
+                    psi.FileName = "osascript";
+                    psi.Arguments = @"-e '
 tell application ""Terminal""
   tell window 1
     do script ""hft start""
   end tell
 end tell
-'");
-                } else {
-                    System.Diagnostics.Process.Start("open", "-a \"" + exePath + "\"");
+'";
                 }
+                else
+                {
+                    psi.FileName = "open";
+                    psi.Arguments = "-a \"" + exePath + "\"";
+                }
+                p.Start();
             #elif UNITY_EDITOR_WIN
                 // See if we can find HappyFunTimes
                 // Use registry!!!
