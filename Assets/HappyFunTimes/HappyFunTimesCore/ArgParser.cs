@@ -75,7 +75,11 @@ public class ArgParser {
     /// </summary>
     public ArgParser()
     {
-        Init(System.Environment.GetCommandLineArgs());
+        #if (!UNITY_IOS)
+            Init(System.Environment.GetCommandLineArgs());
+        #else
+            Init(new string[0]);
+        #endif
     }
 
     /// <summary>
