@@ -100,6 +100,78 @@ public class HFTCmdRunner
         }
     }
 
+    public void RunNoWait(string cmdPath, string[] arguments = null, string workingDirectory = null)
+    {
+        if (m_proc != null)
+        {
+            throw new System.InvalidOperationException("command already running");
+        }
+
+        m_proc = new Process();
+        ProcessStartInfo psi = m_proc.StartInfo;
+
+        psi.FileName = cmdPath;
+        if (arguments != null && arguments.Length > 0)
+        {
+            psi.Arguments = EscapeArguments(arguments);
+
+        }
+
+        if (debug)
+        {
+            UnityEngine.Debug.Log(cmdPath);
+            UnityEngine.Debug.Log(psi.Arguments);
+        }
+
+        if (System.String.IsNullOrEmpty(workingDirectory))
+        {
+            workingDirectory = System.IO.Directory.GetCurrentDirectory();
+        }
+
+        psi.RedirectStandardOutput = false;
+        psi.RedirectStandardError = false;
+        m_proc.EnableRaisingEvents = false;
+        psi.CreateNoWindow = true;
+        psi.WorkingDirectory = workingDirectory;
+        psi.UseShellExecute = true;
+
+        m_proc.Start();
+    }
+
+    // "Open" on OSX, "Start" on Windows
+    public void Open(string[] arguments, string workingDirectory = null)
+    {
+        string exePath = "";
+        List<string> preArgs = new List<string>();
+
+        switch (Application.platform)
+        {
+            case RuntimePlatform.WindowsEditor:
+            case RuntimePlatform.WindowsPlayer:
+                exePath = arguments[0];
+                for (int ii = 1; ii < arguments.Length; ++ii)
+                {
+                    preArgs.Add(arguments[ii]);
+                }
+                arguments = new string[0];
+                break;
+            case RuntimePlatform.OSXEditor:
+            case RuntimePlatform.OSXPlayer:
+                exePath = "/usr/bin/open";
+                break;
+            default:
+                UnityEngine.Debug.LogError("Open not supported on this platform");
+                return;
+        }
+        string[] newArgs = new string[arguments.Length + preArgs.Count];
+        for (int ii = 0; ii < preArgs.Count; ++ii)
+        {
+            newArgs[ii] = preArgs[ii];
+        }
+        arguments.CopyTo(newArgs, preArgs.Count);
+        RunNoWait(exePath, newArgs, workingDirectory);
+    }
+
     public void HFTRun(string[] arguments = null, string workingDirectory = null)
     {
         HFTExe hftExe = HFTExe.Instance;
@@ -112,7 +184,7 @@ public class HFTCmdRunner
         string[] newArgs = new string[(arguments == null ? 0 : arguments.Length) + 1];
         newArgs[0] = hftExe.hftPath;
         arguments.CopyTo(newArgs, 1);
-        Run(hftExe.nodePath, newArgs);
+        Run(hftExe.nodePath, newArgs, workingDirectory);
     }
 
     private string EscapeArguments(string[] arguments)
