@@ -100,9 +100,9 @@ namespace HappyFunTimesEditor {
                     }
                     if (exePath.EndsWith(".app"))
                     {
-                        nodePath = Path.Combine(exePath, "MacOS/bin/node");
-                        hftPath = Path.Combine(exePath, "MacOS/hft/cli/hft.js");
-                        startPath = Path.Combine(exePath, "MacOS/hft/start.js");
+                        nodePath = Path.Combine(exePath, "Contents/MacOS/bin/node");
+                        hftPath = Path.Combine(exePath, "Contents/hft/cli/hft.js");
+                        startPath = Path.Combine(exePath, "Contents/hft/start.js");
                     }
                     else
                     {
