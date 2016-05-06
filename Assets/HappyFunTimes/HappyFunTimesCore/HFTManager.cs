@@ -49,7 +49,8 @@ namespace HappyFunTimes
             m_options = options;
             m_gameObject = gameObject;
 
-            if (options.startServer)
+            string hftUrl = System.Environment.GetEnvironmentVariable("HFT_URL");
+            if (hftUrl == null && options.startServer)
             {
                 StartServer();
             }
