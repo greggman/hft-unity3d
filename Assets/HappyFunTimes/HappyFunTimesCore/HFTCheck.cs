@@ -101,6 +101,11 @@ namespace HappyFunTimes
                     m_found = true;
                 }
             }
+
+            if (!m_found)
+            {
+                Debug.Log("error: " + err + ", result:" + result);
+            }
         }
 
         public void HFTNeedNewHFT(GameServer gs)
