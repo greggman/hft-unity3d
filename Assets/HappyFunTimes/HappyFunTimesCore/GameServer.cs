@@ -85,6 +85,7 @@ namespace HappyFunTimes
         /// <summary>
         /// Options for the GameServer
         /// </summary>
+        [Serializable]
         public class Options : HFTGameOptions
         {
             public Options()
