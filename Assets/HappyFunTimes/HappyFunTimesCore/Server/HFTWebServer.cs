@@ -56,8 +56,8 @@ namespace HappyFunTimes
             //m_httpsv = new HttpServer ("https://localhost:5963");
             //m_httpsv = new HttpServer(System.Net.IPAddress.Parse("127.0.0.1"), 18679);
             m_httpsv = new HttpServer(System.Net.IPAddress.Parse("0.0.0.0"), port);
-            m_httpsv.Log.Level = LogLevel.Trace;
-            m_httpsv.Log.File = "/Users/gregg/temp/foo.txt";
+            //m_httpsv.Log.Level = LogLevel.Trace;
+            //m_httpsv.Log.File = "/Users/gregg/temp/foo.txt";
             #if FALSE
             // To change the logging level.
             m_httpsv.Log.Level = LogLevel.Trace;
