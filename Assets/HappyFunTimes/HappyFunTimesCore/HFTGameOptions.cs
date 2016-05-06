@@ -75,6 +75,7 @@ namespace HappyFunTimes
         ///not disconnect and this game is taking over. Setting this to true doesn't
         ///disconnect the old game. This is needed for multi-machine games.
         ///</summary>
+        [Tooltip("true for games using multiple computers")]
         public bool allowMultipleGames = false;   // allow multiple games
 
         ///<summary>
@@ -105,6 +106,7 @@ namespace HappyFunTimes
         ///<summary>
         ///Prints all the messages in and out to the console.
         ///</summary>
+        [Tooltip("debugging")]
         public bool showMessages;
 
         /// <summary>
@@ -154,6 +156,7 @@ namespace HappyFunTimes
         /// http://happyfuntimes.net/api/inform2. If you're running your
         /// own server you'd change this.
         /// </summary>
+        [Tooltip("default: happyfuntimes.net")]
         public string rendezvousUrl;
 
         /// <summary>
