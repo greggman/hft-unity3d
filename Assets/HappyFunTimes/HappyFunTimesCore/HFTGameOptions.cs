@@ -32,42 +32,40 @@
 using System;
 using System.Collections.Generic;
 using DeJson;
+using UnityEngine;
 
 namespace HappyFunTimes
 {
 
+    [Serializable]
     public class HFTGameOptions
     {
         ///<summary>
         /// there's generally no need to set this.
         ///</summary>
-        public string gameId;
+        public string gameId = "";
 
         /// <summary>
         /// Name of game (shown if more than one game running on WiFi)
         /// </summary>
-        public string name;
+        public string name = "";
 
         ///<summary>
         /// id used for multi-player games. Can be set from command line with --hft=id=someid
         ///</summary>
-        public string id;
+        public string id = "";
 
         /// <summary>
         /// As the user for a name when they start
         /// </summary>
+        [Tooltip("ask users for name when they join")]
         public bool askUserForName = true;
-
 
         /// <summary>
         /// Show game menu(allow user to set name)
         /// </summary>
+        [Tooltip("show gear menu on controller")]
         public bool showMenu = true;
-
-        ///<summary>
-        ///Deprecated and not used.
-        ///</summary>
-        public string controllerUrl;
 
         ///<summary>
         ///true allows multiple games to run as the same id. Default: false
@@ -77,7 +75,7 @@ namespace HappyFunTimes
         ///not disconnect and this game is taking over. Setting this to true doesn't
         ///disconnect the old game. This is needed for multi-machine games.
         ///</summary>
-        public bool allowMultipleGames;   // allow multiple games
+        public bool allowMultipleGames = false;   // allow multiple games
 
         ///<summary>
         ///For a multiple machine game designates this game as the game where players start.
