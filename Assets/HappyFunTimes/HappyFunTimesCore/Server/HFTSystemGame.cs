@@ -68,7 +68,7 @@ namespace HappyFunTimes
             {
                 // the controller sends this to the server to tell it "hey! send me messages about the running games
                 RunningGame[] games = new RunningGame[1];
-                RunningGame game = new RunningGame(m_options.getGameId(), m_options.controllerUrl);
+                RunningGame game = new RunningGame(m_options.getGameId(), "");
                 games[0] = game;
                 m_netPlayer.SendCmd("runningGames", games);
             }
