@@ -72,7 +72,7 @@ namespace HappyFunTimes
                 {
                     string remain = filename.Substring(path.Length + 1);
                     // No directory
-                    if (String.IsNullOrEmpty(Path.GetDirectoryName(path)))
+                    if (String.IsNullOrEmpty(path) || String.IsNullOrEmpty(Path.GetDirectoryName(path)))
                     {
                         if (globRE.IsMatch(remain))
                         {
