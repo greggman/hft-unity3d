@@ -76,7 +76,7 @@ namespace HappyFunTimes
         ///Default: false
         ///Can be set from command line with --hft-master
         ///</summary>
-        [Tooltip("for multi-computer games. Set from command line --hft-master")]
+        [HideInInspector]
         public bool master;
 
         ///<summary>
@@ -91,7 +91,6 @@ namespace HappyFunTimes
         [Tooltip("for mulit-computer games. Set from command line --hft-url=<someurl>")]
         public string url;
 
-        ///<summary>
         ///Normally if a game disconnets all players are also disconnected. This means
         ///they'll auto join the next game running.
         ///Default: true
@@ -117,6 +116,18 @@ namespace HappyFunTimes
         public bool startServer = true;
 
         /// <summary>
+        /// Whether or not to run DNS server
+        /// </summary>
+        [Tooltip("for debugging. Set automatically with --hft-installation-mode")]
+        public bool dns = false;
+
+        /// <summary>
+        /// Whether or not to run captive portal
+        /// </summary>
+        [Tooltip("for debugging. Set automatically with --hft-installation-mode")]
+        public bool captivePortal = false;
+
+        /// <summary>
         /// URL of rendezvous server. Defaults to
         /// http://happyfuntimes.net/api/inform2. If you're running your
         /// own server you'd change this.
@@ -128,6 +139,19 @@ namespace HappyFunTimes
         /// Port to run server on
         /// </summary>
         public string serverPort = "";
+
+        [System.NonSerialized]
+        public bool installationMode = false;
+
+        public HFTGameOptions()
+        {
+            // Prefix all HFT arguments with "hft-" so user can filter them out
+            ArgParser p = new ArgParser();
+            p.TryGet<string>("hft-id", ref id);
+            p.TryGet<string>("hft-url", ref url);
+            installationMode = p.Contains("hft-installation-mode");
+            master = p.Contains("hft-master");
+        }
     }
 
 }  // namespace HappyFunTimes
