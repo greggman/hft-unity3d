@@ -113,8 +113,12 @@ namespace HappyFunTimes
 
             m_webServer = new HFTWebServer(m_options, addresses);
             m_webServer.Start();
-            m_dnsRunner = new HFTDnsRunner();
-            m_dnsRunner.Start();
+
+            if (m_options.dns || m_options.installationMode)
+            {
+                m_dnsRunner = new HFTDnsRunner();
+                m_dnsRunner.Start();
+            }
         }
 
         public void StopServer()
