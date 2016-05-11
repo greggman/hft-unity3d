@@ -51,9 +51,9 @@ namespace HappyFunTimes {
 
         private const float SCROLL_SPEED = 1.0f;
 
-        public void Init(GameSystem gameSystem)
+        public void Init(/*GameSystem gameSystem*/)
         {
-            gameSystem.NetPlayer.RegisterCmdHandler<MessageInstructions>(HandleInstructions);
+//            gameSystem.NetPlayer.RegisterCmdHandler<MessageInstructions>(HandleInstructions);
 
             string msg = System.Environment.GetEnvironmentVariable("HFT_INSTRUCTIONS");
             if (msg != null)

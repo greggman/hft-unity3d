@@ -96,9 +96,8 @@ namespace HappyFunTimes
             m_deserializer = new Deserializer();
             m_handlers = new Dictionary<string, CmdEventHandler>();
 
-            m_gameSystem = new GameSystem(this);
             HFTInstructions instructions = m_gameObject.AddComponent<HFTInstructions>();
-            instructions.Init(m_gameSystem);
+            instructions.Init(/*m_gameSystem*/);
 
             m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
 
@@ -333,7 +332,6 @@ namespace HappyFunTimes
         private Deserializer m_deserializer;
         private GameObject m_gameObject;
         private EventProcessor m_eventProcessor;
-        private GameSystem m_gameSystem;
         private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
         private string m_id = null;
         private string m_url;
@@ -510,7 +508,7 @@ namespace HappyFunTimes
 
         private void DoSysCommand(MessageToClient msg)
         {
-            m_gameSystem.HandleUnparsedCommand(msg.data);
+            // FIX (remove DoSysCommand)            m_gameSystem.HandleUnparsedCommand(msg.data);
         }
 
         private void UpdatePlayer(MessageToClient msg)
