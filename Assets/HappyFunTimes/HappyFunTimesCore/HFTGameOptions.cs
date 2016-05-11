@@ -48,6 +48,7 @@ namespace HappyFunTimes
         /// <summary>
         /// Name of game (shown if more than one game running on WiFi)
         /// </summary>
+        [System.NonSerialized]
         public string name = "";
 
         ///<summary>
@@ -66,17 +67,6 @@ namespace HappyFunTimes
         /// </summary>
         [Tooltip("show gear menu on controller")]
         public bool showMenu = true;
-
-        ///<summary>
-        ///true allows multiple games to run as the same id. Default: false
-        ///
-        ///normally when a second game connects the first game will be disconnected
-        ///as it's assumed the first game probably crashed or for whatever reason did
-        ///not disconnect and this game is taking over. Setting this to true doesn't
-        ///disconnect the old game. This is needed for multi-machine games.
-        ///</summary>
-        [Tooltip("true for games using multiple computers")]
-        public bool allowMultipleGames = false;   // allow multiple games
 
         ///<summary>
         ///For a multiple machine game designates this game as the game where players start.

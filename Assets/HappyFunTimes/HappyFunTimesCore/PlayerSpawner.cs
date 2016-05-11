@@ -52,7 +52,6 @@ namespace HappyFunTimes
         public bool showMenu = true;
         public bool askUserForName = true;
         public bool showMessages = false;
-        public bool allowMultipleGames = false;
         public string rendezvousUrl = "";
         public bool startServer = true;
         public string serverPort = "";
@@ -96,7 +95,6 @@ namespace HappyFunTimes
         {
             m_options = new GameServer.Options();
             m_options.gameId = gameId;
-            m_options.allowMultipleGames = allowMultipleGames;
             m_options.showMessages = showMessages;
             m_options.rendezvousUrl = rendezvousUrl;
             m_options.startServer = startServer;

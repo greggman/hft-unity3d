@@ -131,15 +131,8 @@ namespace HappyFunTimes
                 masterGame_ = game;
             }
             HFTGame oldGame = null;
-            if (!data.allowMultipleGames)
-            {
-                oldGame = GetAnyGame();
-            }
-            else
-            {
-                games_.TryGetValue(newGameId, out oldGame);
-            }
-
+            // See if there's an old game with the same id then replace it
+            games_.TryGetValue(newGameId, out oldGame);
             games_[newGameId] = game;
 
             if (oldGame != null)
