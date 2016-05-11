@@ -15,12 +15,13 @@ namespace HappyFunTimes
 {
     public class HFTWebServer
     {
-        public HFTWebServer(HFTGameOptions options)
+        public HFTWebServer(HFTGameOptions options, string[] addresses)
         {
             m_log = new HFTLog("WebServer");
             m_options = options;
             string gameId = m_options.getGameId();
             m_gamePath = "/games/" + gameId + "/";
+            m_webServerUtils = new HFTWebServerUtils(m_gamePath);
 
             HFTWebFileDB.GetInstance();
 
@@ -39,42 +40,67 @@ namespace HappyFunTimes
             m_liveSettings = System.Text.Encoding.UTF8.GetBytes(m_liveSettingsStr);
 
             m_hftSettingsStr = "window.hftSettings = " + Serializer.Serialize(new HFTSettings(options.showMenu));
+
+            m_getRouter.Add(HandleRoot);
+            m_getRouter.Add(HandleLiveSettings);
+            m_getRouter.Add(HandleController);
+            m_getRouter.Add(HandleFile);
+
+            m_addresses = addresses;
         }
 
         public void Start()
         {
-            int port = 18679;
-            if (!String.IsNullOrEmpty(m_options.serverPort) && !Int32.TryParse(m_options.serverPort.Trim(), out port))
+            foreach (string address in m_addresses)
             {
-                throw new System.ArgumentException("Bad server port, NaN: " + m_options.serverPort);
+                HttpServer server = StartServer(address);
+                if (server != null)
+                {
+                    m_servers.Add(server);
+                }
+            }
+        }
+
+        HttpServer StartServer(string addressAndOptionalPort)
+        {
+            // FIX: deal with ip6
+            int port = 18679;
+            string[] ap = addressAndOptionalPort.Split(':');
+            string address = ap[0];
+            if (ap.Length > 1)
+            {
+                if (!String.IsNullOrEmpty(ap[1]) && !Int32.TryParse(ap[1].Trim(), out port))
+                {
+                    throw new System.ArgumentException("Bad server port, NaN: " + ap[1]);
+                }
             }
 
-            //m_httpsv = new HttpServer (5963, true);
-            //m_httpsv = new HttpServer (System.Net.IPAddress.Parse ("127.0.0.1"), 4649);
-            //m_httpsv = new HttpServer (System.Net.IPAddress.Parse ("127.0.0.1"), 5963, true);
-            //m_httpsv = new HttpServer ("http://localhost:4649");
-            //m_httpsv = new HttpServer ("https://localhost:5963");
-            //m_httpsv = new HttpServer(System.Net.IPAddress.Parse("127.0.0.1"), 18679);
-            m_httpsv = new HttpServer(System.Net.IPAddress.Parse("0.0.0.0"), port);
-            //m_httpsv.Log.Level = LogLevel.Trace;
-            //m_httpsv.Log.File = "/Users/gregg/temp/foo.txt";
+            //server = new HttpServer (5963, true);
+            //server = new HttpServer (System.Net.IPAddress.Parse ("127.0.0.1"), 4649);
+            //server = new HttpServer (System.Net.IPAddress.Parse ("127.0.0.1"), 5963, true);
+            //server = new HttpServer ("http://localhost:4649");
+            //server = new HttpServer ("https://localhost:5963");
+            //server = new HttpServer(System.Net.IPAddress.Parse("127.0.0.1"), 18679);
+            HttpServer server = new HttpServer(System.Net.IPAddress.Parse(address), port);
+            //server.Log.Level = LogLevel.Trace;
+            //server.Log.File = "/Users/gregg/temp/foo.txt";
             #if FALSE
             // To change the logging level.
-            m_httpsv.Log.Level = LogLevel.Trace;
+            server.Log.Level = LogLevel.Trace;
 
             // To change the wait time for the response to the WebSocket Ping or Close.
-            m_httpsv.WaitTime = TimeSpan.FromSeconds (2);
+            server.WaitTime = TimeSpan.FromSeconds (2);
             #endif
             /* To provide the secure connection.
             var cert = ConfigurationManager.AppSettings["ServerCertFile"];
             var passwd = ConfigurationManager.AppSettings["CertFilePassword"];
-            m_httpsv.SslConfiguration.ServerCertificate = new X509Certificate2 (cert, passwd);
+            server.SslConfiguration.ServerCertificate = new X509Certificate2 (cert, passwd);
              */
 
             /* To provide the HTTP Authentication (Basic/Digest).
-            m_httpsv.AuthenticationSchemes = AuthenticationSchemes.Basic;
-            m_httpsv.Realm = "WebSocket Test";
-            m_httpsv.UserCredentialsFinder = id => {
+            server.AuthenticationSchemes = AuthenticationSchemes.Basic;
+            server.Realm = "WebSocket Test";
+            server.UserCredentialsFinder = id => {
               var name = id.Name;
               // Return user name, password, and roles.
               return name == "nobita"
@@ -84,10 +110,10 @@ namespace HappyFunTimes
              */
 
             // Set the document root path.
-            //    m_httpsv.RootPath = ConfigurationManager.AppSettings["RootPath"];
+            //    server.RootPath = ConfigurationManager.AppSettings["RootPath"];
 
             // Set the HTTP GET request event.
-            m_httpsv.OnGet += (sender, e) =>
+            server.OnGet += (sender, e) =>
             {
                 var req = e.Request;
                 var res = e.Response;
@@ -103,96 +129,11 @@ namespace HappyFunTimes
                     path += "index.html";
                 }
 
-                // TODO: Create a router
-                if (path.Equals("/index.html") ||
-                    (path.Equals("/enter-name.html") && !m_options.askUserForName))
-                {
-                    string url = uri.GetLeftPart(UriPartial.Authority) + m_gamePath + "controller.html" + uri.Query + uri.Fragment;
-                    res.StatusCode = (int)HttpStatusCode.Redirect;
-                    res.AddHeader("Location", url);
-                    res.ContentType = "text/html";
-                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("<script>window.location.href = decodeURIComponent(\"" + Uri.EscapeDataString(url) + "\");</script>"));
-                    m_log.Info("redirect: " + url);
-                    return;
-                }
-
-                if (path.Equals("/hft/0.x.x/scripts/runtime/live-settings.js"))
-                {
-                    SendJsonBytes(res, m_liveSettings);
-                    return;
-                }
-
-                if (path.EndsWith("/controller.html"))
-                {
-                    byte[] templateData = null;
-                    string templatePath = "/hft/0.x.x/templates/controller.index.html";
-                    if (!GetGameFile(templatePath, out templateData))
-                    {
-                        m_log.Error("missing template file: " + templatePath);
-                        res.StatusCode = (int)HttpStatusCode.NotFound;
-                        return;
-                    }
-                    string template = System.Text.Encoding.UTF8.GetString(templateData);
-                    byte[] controllerData;
-                    if (!GetGameFile(path, out controllerData))
-                    {
-                        m_log.Error("missing file: " + path);
-                        res.StatusCode = (int)HttpStatusCode.NotFound;
-                        return;
-                    }
-                    string contents = System.Text.Encoding.UTF8.GetString(controllerData);
-                    // info.name
-                    // hftSettings
-                    // pages.controller.beforeScripts
-                    // pages.controller.afterScripts
-                    // contents
-                    Dictionary<string, string> subs = new Dictionary<string, string>();
-
-                    subs["filename"] = Path.GetFileNameWithoutExtension(path);
-                    subs["urls.favicon"] = "icon.png";
-                    subs["info.name"] = "???";
-                    subs["pages.controller.beforeScripts"] = "<script  src=\"/hft/0.x.x/extra/apphelper.js\"></script>";
-                    subs["pages.controller.afterScripts"] = @"
-<script src=""3rdparty/require.js"" data-main=""scripts/controller.js"" type=""hft-late""></script>
-<script type=""hft-late"">
-requirejs.config({
-  paths: {
-    hft: '../../../../hft/0.x.x/scripts',
-  },
-  shim: {
-        '3rdparty/pep.min': {
-            //These script dependencies should be loaded before loading
-            //pep.js
-            deps: [],
-            //Once loaded, use the global 'PEPNOREALLY' as the
-            //module value.
-            exports: 'PEPNOTREALLY',
-        },
-    },
-});
-</script>
-";
-                    subs["content"] = contents;
-                    subs["hftSettings"] = m_hftSettingsStr;
-
-                    string s = HFTUtil.ReplaceParamsFlat(template, subs);
-
-                    SendContent(res, path, s);
-                    return;
-                }
-
-
-                byte[] content = null;
-                if (!GetGameFile(path, out content))
-                {
-                    res.StatusCode = (int)HttpStatusCode.NotFound;
-                    return;
-                }
-
-                SendContent(res, path, content);
+                m_log.Info(path);
+                m_getRouter.Route(path, req, res);
             };
 
-            m_httpsv.OnOptions += (sender, e) =>
+            server.OnOptions += (sender, e) =>
             {
                 var res = e.Response;
 
@@ -205,7 +146,7 @@ requirejs.config({
                 res.WriteContent(new byte[0]);
             };
 
-            m_httpsv.OnPost += (sender, e) =>
+            server.OnPost += (sender, e) =>
             {
                 var req = e.Request;
                 var res = e.Response;
@@ -219,24 +160,24 @@ requirejs.config({
                 PostCmd cmd = deserializer_.Deserialize<PostCmd>(result);
                 if (cmd.cmd == "happyFunTimesPing")
                 {
-                    SendJsonBytes(res, m_ping);
+                    m_webServerUtils.SendJsonBytes(res, m_ping);
                 }
                 // TODO: use router
             };
 
             // Not to remove the inactive WebSocket sessions periodically.
-            //m_httpsv.KeepClean = false;
+            //server.KeepClean = false;
 
             // To resolve to wait for socket in TIME_WAIT state.
-            //m_httpsv.ReuseAddress = true;
+            //server.ReuseAddress = true;
 
             // Add the WebSocket services.
-            //    m_httpsv.AddWebSocketService<Echo> ("/Echo");
-            //    m_httpsv.AddWebSocketService<Chat> ("/Chat");
-            m_httpsv.AddWebSocketService<HFTSocket>("/");
+            //    server.AddWebSocketService<Echo> ("/Echo");
+            //    server.AddWebSocketService<Chat> ("/Chat");
+            server.AddWebSocketService<HFTSocket>("/");
 
             /* Add the WebSocket service with initializing.
-            m_httpsv.AddWebSocketService<Chat> (
+            server.AddWebSocketService<Chat> (
               "/Chat",
               () => new Chat ("Anon#") {
                 // To send the Sec-WebSocket-Protocol header that has a subprotocol name.
@@ -265,60 +206,120 @@ requirejs.config({
                 }
               });
              */
-            m_httpsv.Start();
-            if (m_httpsv.IsListening)
+            server.Start();
+            if (server.IsListening)
             {
-                m_log.Info(String.Format("Listening on port {0}, and providing WebSocket services:", m_httpsv.Port));
-                //foreach (var path in m_httpsv.WebSocketServices.Paths) Debug.Log(String.Format("- {0}", path));
+                m_log.Info(String.Format("Listening on {0} port {1}, and providing WebSocket services:", server.Address, server.Port));
+                //foreach (var path in server.WebSocketServices.Paths) Debug.Log(String.Format("- {0}", path));
             }
-        }
-
-        bool GetGameFile(string path, out byte[] content)
-        {
-            bool found = HFTWebFileDB.GetInstance().GetFile(path, out content);
-            if (!found)
-            {
-                if (path.StartsWith(m_gamePath))
-                {
-                    path = path.Substring(m_gamePath.Length - 1);
-                    found = HFTWebFileDB.GetInstance().GetFile(path, out content);
-                }
-            }
-            return found;
-        }
-
-        void SendJsonBytes(HttpListenerResponse res, byte[] data)
-        {
-            res.StatusCode = (int)HttpStatusCode.OK;
-            res.ContentType = "application/json";
-            res.ContentEncoding = Encoding.UTF8;
-            res.AddHeader("Access-Control-Allow-Origin", "*");
-            res.WriteContent(data);
-        }
-
-        void SendContent(HttpListenerResponse res, string path, string content)
-        {
-            SendContent(res, path, System.Text.Encoding.UTF8.GetBytes(content));
-        }
-
-        void SendContent(HttpListenerResponse res, string path, byte[] content)
-        {
-            string mimeType = HFTMimeType.GetMimeType(path);
-            res.ContentType = mimeType;
-            if (mimeType.StartsWith("text/") ||
-                mimeType == "application/javascript")
-            {
-                res.ContentEncoding = Encoding.UTF8;
-            }
-            res.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-            res.AddHeader("Pragma",        "no-cache");                            // HTTP 1.0.
-            res.AddHeader("Expires",       "0");                                   // Proxies.
-            res.WriteContent(content);
+            return server;
         }
 
         public void Stop()
         {
-            m_httpsv.Stop();
+            while (m_servers.Count > 0)
+            {
+                HttpServer server = m_servers[0];
+                m_servers.RemoveAt(0);
+                server.Stop();
+            }
+        }
+
+        bool HandleFile(string path, HttpListenerRequest req, HttpListenerResponse res)
+        {
+            m_webServerUtils.SendFile(path, req, res);
+            return true;
+        }
+
+        bool HandleRoot(string path, HttpListenerRequest req, HttpListenerResponse res)
+        {
+            if (path.Equals("/index.html") ||
+                (path.Equals("/enter-name.html") && !m_options.askUserForName))
+            {
+                var uri = req.Url;
+                string url = uri.GetLeftPart(UriPartial.Authority) + m_gamePath + "controller.html" + uri.Query + uri.Fragment;
+                res.StatusCode = (int)HttpStatusCode.Redirect;
+                res.AddHeader("Location", url);
+                res.ContentType = "text/html";
+                res.WriteContent(System.Text.Encoding.UTF8.GetBytes("<script>window.location.href = decodeURIComponent(\"" + Uri.EscapeDataString(url) + "\");</script>"));
+                m_log.Info("redirect: " + url);
+                return true;
+            }
+            return false;
+        }
+
+        bool HandleLiveSettings(string path, HttpListenerRequest req, HttpListenerResponse res)
+        {
+            if (!path.Equals("/hft/0.x.x/scripts/runtime/live-settings.js"))
+            {
+                return false;
+            }
+
+            m_webServerUtils.SendJsonBytes(res, m_liveSettings);
+            return true;
+        }
+
+        bool HandleController(string path, HttpListenerRequest req, HttpListenerResponse res)
+        {
+            if (!path.EndsWith("/controller.html"))
+            {
+                return false;
+            }
+            byte[] templateData = null;
+            string templatePath = "/hft/0.x.x/templates/controller.index.html";
+            if (!m_webServerUtils.GetGameFile(templatePath, out templateData))
+            {
+                m_log.Error("missing template file: " + templatePath);
+                res.StatusCode = (int)HttpStatusCode.NotFound;
+                return true;
+            }
+            string template = System.Text.Encoding.UTF8.GetString(templateData);
+            byte[] controllerData;
+            if (!m_webServerUtils.GetGameFile(path, out controllerData))
+            {
+                m_log.Error("missing file: " + path);
+                res.StatusCode = (int)HttpStatusCode.NotFound;
+                return true;
+            }
+            string contents = System.Text.Encoding.UTF8.GetString(controllerData);
+            // info.name
+            // hftSettings
+            // pages.controller.beforeScripts
+            // pages.controller.afterScripts
+            // contents
+            Dictionary<string, string> subs = new Dictionary<string, string>();
+
+            subs["filename"] = Path.GetFileNameWithoutExtension(path);
+            subs["urls.favicon"] = "icon.png";
+            subs["info.name"] = "???";
+            subs["pages.controller.beforeScripts"] = "<script  src=\"/hft/0.x.x/extra/apphelper.js\"></script>";
+            subs["pages.controller.afterScripts"] = @"
+<script src=""3rdparty/require.js"" data-main=""scripts/controller.js"" type=""hft-late""></script>
+<script type=""hft-late"">
+requirejs.config({
+  paths: {
+    hft: '../../../../hft/0.x.x/scripts',
+    },
+    shim: {
+      '3rdparty/pep.min': {
+          //These script dependencies should be loaded before loading
+          //pep.js
+          deps: [],
+          //Once loaded, use the global 'PEPNOREALLY' as the
+          //module value.
+          exports: 'PEPNOTREALLY',
+      },
+  },
+});
+</script>
+";
+            subs["content"] = contents;
+            subs["hftSettings"] = m_hftSettingsStr;
+
+            string s = HFTUtil.ReplaceParamsFlat(template, subs);
+
+            m_webServerUtils.SendContent(res, path, s);
+            return true;
         }
 
         class SystemSettings
@@ -343,7 +344,10 @@ requirejs.config({
 
         Deserializer deserializer_ = new Deserializer();
         HFTGameOptions m_options;
-        HttpServer m_httpsv;
+        string[] m_addresses;  // Addresses to listen in ip:port format?
+        List<HttpServer> m_servers = new List<HttpServer>();
+        HFTWebServerUtils m_webServerUtils;
+        HFTRouter m_getRouter = new HFTRouter();
         HFTLog m_log;
         string m_gamePath;
         byte[] m_ping;
