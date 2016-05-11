@@ -99,7 +99,7 @@ namespace HappyFunTimes
             if (!closed_)
             {
                 closed_ = true;
-                base.Context.WebSocket.Close();
+                Sessions.CloseSession(ID);
             }
         }
 
