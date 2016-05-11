@@ -1,9 +1,6 @@
 ﻿TODO
 ====
 
-*   make instructions work (do I need this?) Maybe this should move to game out of HFT
-    *   have default instructions
-    *   settable from cmdline/envar
 *   make starup emit status messages
     *   make object that displays status
         *   checking for server
@@ -18,6 +15,7 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
+    *   send URL not raw IP because IP6
     *   remove gameId, not needed as only one server
     *   remove allowMultipleGames, not needed as only one server
     *   move name stuff to game
@@ -31,6 +29,9 @@
     *   remove cwd
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
+    *   make instructions work (do I need this?) Maybe this should move to game out of HFT
+        *   have default instructions
+        *   settable from cmdline/envar
 *   Log to console
 *   make hft.net keep trying
 *   test switching games
