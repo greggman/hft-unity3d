@@ -48,12 +48,14 @@ namespace HappyFunTimes
         /// <summary>
         /// Name of game (shown if more than one game running on WiFi)
         /// </summary>
-        [System.NonSerialized]
+        [Tooltip("Used when > 1 games on same wifi. Blank = app name")]
         public string name = "";
 
         ///<summary>
-        /// id used for multi-player games. Can be set from command line with --hft=id=someid
+        /// id used for multigames games. Can be set from command line
+        /// with --hft-id=someid
         ///</summary>
+        [Tooltip("For multi-computer games. Set from command line --hft-id=<id>")]
         public string id = "";
 
         /// <summary>
@@ -73,6 +75,7 @@ namespace HappyFunTimes
         ///Default: false
         ///Can be set from command line with --hft-master
         ///</summary>
+        [Tooltip("for multi-computer games. Set from command line --hft-master")]
         public bool master;
 
         ///<summary>
@@ -84,6 +87,7 @@ namespace HappyFunTimes
         ///
         ///Can be set from the command line with --hft-url=someurl
         ///</summary>
+        [Tooltip("for mulit-computer games. Set from command line --hft-url=<someurl>")]
         public string url;
 
         ///<summary>
@@ -99,33 +103,11 @@ namespace HappyFunTimes
         [Tooltip("debugging")]
         public bool showMessages;
 
-        /// <summary>
-        /// Uploads the controller files from Unity to HappyFunTimes.
-        /// Normally the controller files are served from disk read
-        /// directly by HappyFunTimes
-        /// </summary>
-//        public bool uploadControllerFiles = false;
-
         ///<summary>
         /// don't set this. it will be set automatically
         ///</summary>
+        [HideInInspector]
         public string cwd;
-
-        /// <summary>
-        /// Files for the Controller.
-        /// The key is the path to the file relative to
-        /// `Assets/WebPlayerTemplates/HappyFunTimes` so
-        /// for example
-        ///
-        ///     options.files["controller.html"] = controllerHTMLContent;
-        ///     options.files["scripts/controller.js"] = controllerJSContent;
-        ///     options.files["css/controller.css"] = controllerCSSContent;
-        ///
-        /// This allows the game to provide all the files HappyFunTimes
-        /// to server to the controller so that no external files are
-        /// needed.
-        /// </summary>
-        public Dictionary<string, string> files = new Dictionary<string, string>();
 
         /// <summary>
         /// whether or not to show in list of games
@@ -137,8 +119,6 @@ namespace HappyFunTimes
         ///
         /// By default it's true unless HFT_URL is set then it's false;
         /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
         public bool startServer = true;
 
         /// <summary>
