@@ -151,6 +151,7 @@ namespace DNS.Server {
         private AutoResetEvent m_autoEvent = new AutoResetEvent(false);
         private List<Emit> m_queuedEvents = new List<Emit>();
         private List<Emit> m_executingEvents = new List<Emit>();
+        private bool m_run = true;
 
         public void Schedule(Emit emit) {
             lock(m_queueLock) {
@@ -162,15 +163,19 @@ namespace DNS.Server {
         public void Run() {
             (new Thread(() => {
                 try {
-                    while (true) {
+                    while (m_run) {
                         m_autoEvent.WaitOne();
-                        ProcessEvents();
+                        if (m_run) {
+                            ProcessEvents();
+                        }
                     }
                 } catch (OperationCanceledException) { }
             })).Start();
         }
 
         public void Stop() {
+            m_run = false;
+            m_autoEvent.Set();
         }
 
         private void ProcessEvents() {
