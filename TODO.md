@@ -17,19 +17,26 @@
 *   Add Start/Stop for server
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
+*   refactor for standalone
+    *   remove gameId, not needed as only one server
+    *   remove allowMultipleGames, not needed as only one server
+    *   move name stuff to game
+    *   getting rid of __hft__ and/or make reconnect logic different
+    *   Check if port busy
+        *   inc port
+    *   remove Application.Quit
+    *   remove GameSystem
+    *   move HFTDialog out of HFTDnsRunner
+    *   Make PlayerSpawner and PlayerConnector use GameServer.Options directly
 *   Log to console
 *   make hft.net keep trying
 *   test switching games
 *   ../
-*   consider getting rid of __hft__ and/or make reconnect logic different
-*   upload controller files if other server?
 *   check multi-game
 *   make GameServer stop Server?
 *   Check lots of clients
-*   Check if port busy
-    *   inc port
-*   Make PlayerSpawner and PlayerConnector use GameServer.Options directly
 *   Add DNS server
+    *   Make it return 1 where it's currently returning 0
 *   Add captive portal support
 *   Make DNS server not on mobile?
 *   Remove file uploader
@@ -45,6 +52,7 @@
 DONE
 ====
 
+*   upload controller files if other server? (WontFix)
 *   make sure server has started before starting game
 *   fix gear icon
 *   sound

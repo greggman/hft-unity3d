@@ -41,32 +41,20 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
   <meta name="format-detection" content="telephone=no" />
-  <title>HappyFunTimes Name Entry</title>
-  <!-- this page is assumed to be on mobile -->
-  <link rel="stylesheet" href="css/mobile.css">
+  <title>HappyFunTimes Portal</title>
+  <link rel="stylesheet" href="/css/menu.css">
 </head>
+<html>
 <body>
-<div class="hft-fullcenter">
-  <div id="checking">
-      <div>checking...</div>
-  </div>
-  <div id="namecontainer">
-    <div>Enter a Name:</div>
-    <form id="hft-nameform">
-      <input type="text" id="hft-name" maxlength="16" autocorrect="off" spellcheck="false" />
-    </form>
-    <div class="center"><div class="button-like" id="okay">Okay</div></div>
+<h1>HappyFunTimes</h1>
+<div id="hft-settings">
+  <div class="hft-fullcenter">
+    <div>This page should redirect.</div>
+    <div class="hft-menubutton"><div><a href="http://hft.org/game-login.html?sessionId=%(sessionId)s">Click to Continue</a></div></div>
   </div>
 </div>
-</body>
-<script data-main="%(enterNameScript)s" src="3rdparty/require.js"></script>
 <script>
-requirejs.config({
-  paths: {
-    hft: '/hft/0.x.x/scripts',
-  },
-});
+window.location.href = "http://hft.org/game-login.html?sessionId=%(sessionId)s";
 </script>
+</body>
 </html>
-
-

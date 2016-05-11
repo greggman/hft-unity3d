@@ -43,7 +43,7 @@
   <meta name="format-detection" content="telephone=no" />
   <title>HappyFunTimes Name Entry</title>
   <!-- this page is assumed to be on mobile -->
-  <link rel="stylesheet" href="hft/assets/css/mobile.css">
+  <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
 <div class="hft-fullcenter">
@@ -59,7 +59,7 @@
   </div>
 </div>
 </body>
-<script data-main="/hft/0.x.x/scripts/enter-name.js" src="3rdparty/require.js"></script>
+<script data-main="%(enterNameScript)s" src="3rdparty/require.js"></script>
 <script>
 requirejs.config({
   paths: {
