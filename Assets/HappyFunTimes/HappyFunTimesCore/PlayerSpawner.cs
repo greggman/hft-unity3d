@@ -48,7 +48,6 @@ namespace HappyFunTimes
     public class PlayerSpawner : MonoBehaviour
     {
         public GameObject prefabToSpawnForPlayer;
-        public string gameId = "";
         public bool showMenu = true;
         public bool askUserForName = true;
         public bool showMessages = false;
@@ -94,7 +93,6 @@ namespace HappyFunTimes
         void StartConnection()
         {
             m_options = new GameServer.Options();
-            m_options.gameId = gameId;
             m_options.showMessages = showMessages;
             m_options.rendezvousUrl = rendezvousUrl;
             m_options.startServer = startServer;

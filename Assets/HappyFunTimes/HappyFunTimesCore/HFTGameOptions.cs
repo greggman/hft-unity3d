@@ -43,7 +43,8 @@ namespace HappyFunTimes
         ///<summary>
         /// there's generally no need to set this.
         ///</summary>
-        public string gameId = "";
+        [HideInInspector]
+        public string gameId = "HFTUnity";  // this is kind of left over from when one server supported mutiple games
 
         /// <summary>
         /// Name of game (shown if more than one game running on WiFi)
@@ -133,11 +134,6 @@ namespace HappyFunTimes
         /// Port to run server on
         /// </summary>
         public string serverPort = "";
-
-        public string getGameId()
-        {
-            return String.IsNullOrEmpty(gameId) ? "HFTUnity" : gameId;
-        }
     }
 
 }  // namespace HappyFunTimes

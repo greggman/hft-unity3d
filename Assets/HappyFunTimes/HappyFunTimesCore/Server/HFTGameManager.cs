@@ -74,7 +74,7 @@ namespace HappyFunTimes
 
         public void AssignAsClientForGame(HFTGameOptions data, HFTSocket client)
         {
-            string gameId = data.getGameId();
+            string gameId = String.IsNullOrEmpty(data.gameId) ? "HFTUnity" : data.gameId;
             HFTGameGroup gameGroup = GetGameGroup(gameId, true);
             HFTGame game = gameGroup.AssignClient(client, data);
             //FIX!

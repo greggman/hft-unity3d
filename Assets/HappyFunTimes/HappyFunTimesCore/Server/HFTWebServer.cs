@@ -19,8 +19,8 @@ namespace HappyFunTimes
         {
             m_log = new HFTLog("WebServer");
             m_options = options;
-            string gameId = m_options.getGameId();
-            m_gamePath = "/games/" + gameId + "/";
+            string gameId = m_options.gameId;
+            m_gamePath = "/games/" + gameId + "/";  // FIX: don't need this path? Just use root?
             m_webServerUtils = new HFTWebServerUtils(m_gamePath);
 
             HFTWebFileDB.GetInstance();
