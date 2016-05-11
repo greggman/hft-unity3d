@@ -110,8 +110,15 @@ namespace HappyFunTimes
             m_hftSite = m_gameObject.AddComponent<HFTSite>();
             m_hftSite.Init(hftOptions);
 
-            m_webServer = new HFTWebServer(m_options);
+            string[] addresses = {
+                "0.0.0.0:18679",
+//                "0.0.0.0:80",
+            };
+
+            m_webServer = new HFTWebServer(m_options, addresses);
             m_webServer.Start();
+            m_dnsRunner = new HFTDnsRunner();
+            m_dnsRunner.Start();
         }
 
         public void StopServer()
@@ -130,6 +137,11 @@ namespace HappyFunTimes
                 m_webServer.Stop();
                 m_webServer = null;
             }
+            if (m_dnsRunner != null)
+            {
+                m_dnsRunner.Stop();
+                m_dnsRunner = null;
+            }
         }
 
         HFTGameOptions m_options;
@@ -137,6 +149,7 @@ namespace HappyFunTimes
         HFTSite m_hftSite;
         HFTCheck m_check;
         HFTWebServer m_webServer;
+        HFTDnsRunner m_dnsRunner;
         HFTSystemGame m_sysGame;
     }
 }  // namaspace HappyFunTimes
