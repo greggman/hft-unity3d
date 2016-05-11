@@ -60,7 +60,7 @@ namespace HappyFunTimes
         public string id = "";
 
         /// <summary>
-        /// As the user for a name when they start
+        /// Ask the user for a name when they start
         /// </summary>
         [Tooltip("ask users for name when they join")]
         public bool askUserForName = true;
@@ -103,12 +103,6 @@ namespace HappyFunTimes
         ///</summary>
         [Tooltip("debugging")]
         public bool showMessages;
-
-        ///<summary>
-        /// don't set this. it will be set automatically
-        ///</summary>
-        [HideInInspector]
-        public string cwd;
 
         /// <summary>
         /// whether or not to show in list of games
