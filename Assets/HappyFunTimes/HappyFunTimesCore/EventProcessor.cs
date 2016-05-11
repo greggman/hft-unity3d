@@ -40,6 +40,11 @@ namespace HappyFunTimes {
 [AddComponentMenu("")]
 public class EventProcessor : MonoBehaviour {
 
+    public EventProcessor()
+    {
+        m_log = new HFTLog("EventProcessor");
+    }
+
     public void QueueEvent(Action action) {
         lock(m_queueLock) {
             m_queuedEvents.Add(action);
@@ -69,7 +74,7 @@ public class EventProcessor : MonoBehaviour {
                 }
                 catch (System.Exception ex)
                 {
-                    Debug.LogError(ex);
+                    m_log.Error(ex);
                 }
             }
         }
@@ -95,6 +100,7 @@ public class EventProcessor : MonoBehaviour {
     private List<Action> m_queuedEvents;
     private List<Action> m_executingEvents;
     private GameServer m_server;
+    private HFTLog m_log;
 }
 
 
