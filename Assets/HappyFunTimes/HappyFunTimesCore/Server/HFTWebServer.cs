@@ -41,12 +41,11 @@ namespace HappyFunTimes
 
             m_hftSettingsStr = "window.hftSettings = " + Serializer.Serialize(new HFTSettings(options.showMenu));
 
-            if (true) // FIX! Options.captivePortal
+            if (options.captivePortal || options.installationMode)
             {
                 m_captivePortalHandler = new HFTCaptivePortalHandler(m_webServerUtils);
                 m_getRouter.Add(m_captivePortalHandler.HandleRequest);
             }
-
 
             m_getRouter.Add(HandleRoot);
             m_getRouter.Add(HandleLiveSettings);
