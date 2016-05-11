@@ -81,10 +81,6 @@ namespace HappyFunTimes
         void Ready()
         {
             CleanupCheck();
-            if (m_options.startServer)
-            {
-                m_sysGame = new HFTSystemGame(m_options);
-            }
 
             EventHandler<EventArgs> handler = OnReady;
             if (handler != null) {
@@ -126,11 +122,9 @@ namespace HappyFunTimes
             CleanupCheck();
             if (m_hftSite != null)
             {
-                m_sysGame.Stop();
                 m_hftSite.Stop();
                 Component.Destroy(m_hftSite);
                 m_hftSite = null;
-                m_sysGame = null;
             }
             if (m_webServer != null)
             {
@@ -150,6 +144,5 @@ namespace HappyFunTimes
         HFTCheck m_check;
         HFTWebServer m_webServer;
         HFTDnsRunner m_dnsRunner;
-        HFTSystemGame m_sysGame;
     }
 }  // namaspace HappyFunTimes
