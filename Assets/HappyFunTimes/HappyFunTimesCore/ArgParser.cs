@@ -40,12 +40,19 @@ namespace HappyFunTimes {
 /// first "=" sign. If found it will set remember the value
 /// for that option. If no equals is found it uses the value
 /// "true"
+///
+/// Any argument can also be set by enviroment variable
+/// where the - is replaced by _ and the name is uppercased
+/// eg. --foo-bar checks for FOO_BAR environment variable
+/// Command line arguments take precedence.
+///
 /// </summary>
 /// <example>
 /// Example: Assume your command line is
 /// <code>
 /// myprogram --name=gregg --count=123 --debug
 /// </code>
+///
 /// You can then read those options with
 /// <code>
 /// <![CDATA[
@@ -107,24 +114,38 @@ public class ArgParser {
     /// <param name="id">id of switch</param>
     /// <param name="value">variable to receive the value</param>
     /// <returns>true if the value exists. False if it does not. If false value has not been affected.</returns>
-    public bool TryGet<T>(string id, ref T value) {
-        string v;
-        bool found = m_switches.TryGetValue(id, out v);
-        if (found) {
+    public bool TryGet<T>(string id, ref T value)
+    {
+        string v = null;
+        m_switches.TryGetValue(id, out v);
+
+        if (v == null)
+        {
+            string envName = id.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Replace("-", "_");
+            v = System.Environment.GetEnvironmentVariable(envName);
+        }
+
+        if (v != null)
+        {
             value = (T)System.Convert.ChangeType(v, typeof(T));
         }
-        return found;
+        return v != null;
     }
 
     private void Init(string[] arguments)
     {
         m_switches = new Dictionary<string, string>();
-        foreach (string arg in arguments) {
-            if (arg.StartsWith("--")) {
+        foreach (string arg in arguments)
+        {
+            if (arg.StartsWith("--"))
+            {
                 int equalsNdx = arg.IndexOf('=');
-                if (equalsNdx >= 0) {
+                if (equalsNdx >= 0)
+                {
                     m_switches[arg.Substring(2, equalsNdx - 2)] = arg.Substring(equalsNdx + 1);
-                } else {
+                }
+                else
+                {
                     m_switches[arg.Substring(2)] = "true";
                 }
             }

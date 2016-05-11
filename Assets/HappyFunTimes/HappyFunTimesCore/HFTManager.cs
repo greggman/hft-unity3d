@@ -44,7 +44,7 @@ namespace HappyFunTimes
         {
         }
 
-        public void Start(HFTGameOptions options, GameObject gameObject)
+        public void Start(HFTRuntimeOptions options, GameObject gameObject)
         {
             m_options = options;
             m_gameObject = gameObject;
@@ -142,7 +142,7 @@ namespace HappyFunTimes
             }
         }
 
-        HFTGameOptions m_options;
+        HFTRuntimeOptions m_options;
         GameObject m_gameObject;
         HFTSite m_hftSite;
         HFTCheck m_check;

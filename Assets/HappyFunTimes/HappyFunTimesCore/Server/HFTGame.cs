@@ -77,7 +77,7 @@ namespace HappyFunTimes
             messageHandlers_[name] = converter.Callback;
         }
 
-        public HFTGame(string id, HFTGameGroup group, HFTGameOptions options)
+        public HFTGame(string id, HFTGameGroup group, HFTRuntimeOptions options)
         {
             id_ = id;
             gameGroup_ = group;
@@ -165,7 +165,7 @@ namespace HappyFunTimes
             }
         }
 
-        public void AssignClient(HFTSocket client, HFTGameOptions data)
+        public void AssignClient(HFTSocket client, HFTRuntimeOptions data)
         {
             if (client_ != null)
             {
@@ -348,7 +348,7 @@ namespace HappyFunTimes
         HFTSocket client_;
         Dictionary<string, CmdEventHandler> messageHandlers_ = new Dictionary<string, CmdEventHandler>();
         Dictionary<string, HFTPlayer> players_ = new Dictionary<string, HFTPlayer>();
-        HFTGameOptions options_;
+        HFTRuntimeOptions options_;
         List<KeyValuePair<HFTPlayer, HFTRelayToGameMessage>> sendQueue_ = new List<KeyValuePair<HFTPlayer, HFTRelayToGameMessage>>();
         HFTLog log_;
 

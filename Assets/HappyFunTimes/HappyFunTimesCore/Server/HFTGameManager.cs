@@ -72,7 +72,7 @@ namespace HappyFunTimes
             return gameGroup.AddPlayer(player, data);
         }
 
-        public void AssignAsClientForGame(HFTGameOptions data, HFTSocket client)
+        public void AssignAsClientForGame(HFTRuntimeOptions data, HFTSocket client)
         {
             string gameId = String.IsNullOrEmpty(data.gameId) ? "HFTUnity" : data.gameId;
             HFTGameGroup gameGroup = GetGameGroup(gameId, true);

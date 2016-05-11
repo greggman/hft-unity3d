@@ -40,13 +40,11 @@ namespace HappyFunTimes {
 public class PlayerConnector : MonoBehaviour
 {
     public GameObject[] players;
-    public bool showMenu = true;
-    public bool askUserForName = true;
-    public bool showMessages = false;
-    public string rendezvousUrl = "";
-    public bool startServer = true;
-    public string serverPort = "";
     public int timeoutForDisconnectedPlayersToReconnect = 0;
+
+    [Space(10)]
+    [Header("advanced")]
+    public HFTUserOptions happyfuntimesOptions = new HFTUserOptions();
 
     public GameServer server
     {
@@ -80,14 +78,6 @@ public class PlayerConnector : MonoBehaviour
 
     void StartConnection()
     {
-        m_options = new GameServer.Options();
-        m_options.showMessages = showMessages;
-        m_options.rendezvousUrl = rendezvousUrl;
-        m_options.startServer = startServer;
-        m_options.serverPort = serverPort;
-        m_options.askUserForName = askUserForName;
-        m_options.showMenu = showMenu;
-
         m_hftManager = new HFTManager();
         m_hftManager.OnReady += StartGameServer;
         m_hftManager.OnFail  += FailedToStart;
@@ -111,6 +101,7 @@ public class PlayerConnector : MonoBehaviour
 
     void Start ()
     {
+        m_options = new HFTRuntimeOptions(happyfuntimesOptions);
         StartConnection();
         m_playerManager = new PlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
     }
@@ -153,11 +144,11 @@ public class PlayerConnector : MonoBehaviour
         Cleanup();
     }
 
-    GameServer.Options m_options;
     private PlayerManager m_playerManager;
     private GameServer m_server;
     private HFTManager m_hftManager;
     private HFTLog m_log;
+    private HFTRuntimeOptions m_options;
 };
 
 }   // namespace HappyFunTimes

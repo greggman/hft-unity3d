@@ -38,14 +38,8 @@ namespace HappyFunTimes
 {
 
     [Serializable]
-    public class HFTGameOptions
+    public class HFTUserOptions
     {
-        ///<summary>
-        /// there's generally no need to set this.
-        ///</summary>
-        [HideInInspector]
-        public string gameId = "HFTUnity";  // this is kind of left over from when one server supported mutiple games
-
         /// <summary>
         /// Name of game (shown if more than one game running on WiFi)
         /// </summary>
@@ -76,7 +70,7 @@ namespace HappyFunTimes
         ///Default: false
         ///Can be set from command line with --hft-master
         ///</summary>
-        [HideInInspector]
+        [Tooltip("For multi-computer games. Players start on master. Set from command line with --hft-master")]
         public bool master;
 
         ///<summary>
@@ -102,11 +96,6 @@ namespace HappyFunTimes
         ///</summary>
         [Tooltip("debugging")]
         public bool showMessages;
-
-        /// <summary>
-        /// whether or not to show in list of games
-        /// </summary>
-        public bool showInList = true;
 
         /// <summary>
         /// Whether or not to start the server
@@ -140,18 +129,64 @@ namespace HappyFunTimes
         /// </summary>
         public string serverPort = "";
 
-        [System.NonSerialized]
-        public bool installationMode = false;
-
-        public HFTGameOptions()
+        public HFTUserOptions()
         {
+        }
+    }
+
+    public class HFTRuntimeOptions {
+        public HFTRuntimeOptions()
+        {
+        }
+
+        public HFTRuntimeOptions(HFTUserOptions userOptions)
+        {
+            name = userOptions.name;
+            id = userOptions.id;
+            serverPort = userOptions.serverPort;
+            rendezvousUrl = userOptions.rendezvousUrl;
+            master = userOptions.master;
+            url = userOptions.url;
+            startServer = userOptions.startServer;
+            dns = userOptions.dns;
+            captivePortal = userOptions.captivePortal;
+            showMessages = userOptions.showMessages;
+
+            if (String.IsNullOrEmpty(url))
+            {
+                url = "ws://localhost:18679";
+                startServer = true;
+            }
+
             // Prefix all HFT arguments with "hft-" so user can filter them out
             ArgParser p = new ArgParser();
-            p.TryGet<string>("hft-id", ref id);
-            p.TryGet<string>("hft-url", ref url);
+
             installationMode = p.Contains("hft-installation-mode");
-            master = p.Contains("hft-master");
+            if (!master)
+            {
+                master = p.Contains("hft-master");
+            }
+
+            p.TryGet<string>("hft-url", ref url);
+            p.TryGet<string>("hft-id", ref id);
+            p.TryGet<string>("hft-rendezvous-url", ref rendezvousUrl);
+            p.TryGet<string>("hft-server-port", ref serverPort);
         }
+
+        public string url = "";
+        public string id = "";
+        public string name = "";
+        public string gameId = "HFTUnity";  // this is kind of left over from when one server supported mutiple games
+        public bool disconnectPlayersIfGameDisconnects = true;
+        public bool installationMode = false;
+        public bool master = false;
+        public bool showInList = true;
+        public bool showMessages;
+        public bool startServer;
+        public bool dns;
+        public bool captivePortal;
+        public string serverPort = "";
+        public string rendezvousUrl;
     }
 
 }  // namespace HappyFunTimes

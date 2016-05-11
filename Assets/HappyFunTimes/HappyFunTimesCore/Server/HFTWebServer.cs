@@ -15,7 +15,7 @@ namespace HappyFunTimes
 {
     public class HFTWebServer
     {
-        public HFTWebServer(HFTGameOptions options, string[] addresses)
+        public HFTWebServer(HFTRuntimeOptions options, string[] addresses)
         {
             m_log = new HFTLog("WebServer");
             m_options = options;
@@ -39,7 +39,7 @@ namespace HappyFunTimes
             m_liveSettingsStr = "define([], function() { return " + Serializer.Serialize(new LiveSettings()) + "; })\n";
             m_liveSettings = System.Text.Encoding.UTF8.GetBytes(m_liveSettingsStr);
 
-            m_hftSettingsStr = "window.hftSettings = " + Serializer.Serialize(new HFTSettings(options.showMenu));
+            m_hftSettingsStr = "window.hftSettings = " + Serializer.Serialize(new HFTSettings(true /* FIX options.showMenu */));
 
             if (options.captivePortal || options.installationMode)
             {
@@ -240,7 +240,7 @@ namespace HappyFunTimes
         bool HandleRoot(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
             if (path.Equals("/index.html") ||
-                (path.Equals("/enter-name.html") && !m_options.askUserForName))
+                (path.Equals("/enter-name.html") && !(true /* FIX:m_options.askUserForName*/)))
             {
                 var uri = req.Url;
                 string url = uri.GetLeftPart(UriPartial.Authority) + m_gamePath + "controller.html" + uri.Query + uri.Fragment;
@@ -349,7 +349,7 @@ requirejs.config({
         }
 
         Deserializer deserializer_ = new Deserializer();
-        HFTGameOptions m_options;
+        HFTRuntimeOptions m_options;
         string[] m_addresses;  // Addresses to listen in ip:port format?
         List<HttpServer> m_servers = new List<HttpServer>();
         HFTWebServerUtils m_webServerUtils;

@@ -117,7 +117,7 @@ namespace HappyFunTimes
          * @param {Game~GameOptions} data Data sent from the game which
          *        includes
          */
-        public HFTGame AssignClient(HFTSocket client, HFTGameOptions data)
+        public HFTGame AssignClient(HFTSocket client, HFTRuntimeOptions data)
         {
             // If there are no games make one
             // If multiple games are allowed make one

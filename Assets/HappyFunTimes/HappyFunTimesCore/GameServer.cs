@@ -83,35 +83,11 @@ namespace HappyFunTimes
         }
 
         /// <summary>
-        /// Options for the GameServer
-        /// </summary>
-        [Serializable]
-        public class Options : HFTGameOptions
-        {
-            public Options()
-            {
-                url = System.Environment.GetEnvironmentVariable("HFT_URL");
-                if (url == null)
-                {
-                    url = "ws://localhost:18679";
-                    startServer = true;
-                }
-
-                // Prefix all HFT arguments with "hft-" so user can filter them out
-                ArgParser p = new ArgParser();
-                p.TryGet<string>("hft-id", ref id);
-                p.TryGet<string>("hft-url", ref url);
-                master = p.Contains("hft-master");
-            }
-
-        };
-
-        /// <summary>
         /// Constructor for GameServer
         /// </summary>
         /// <param name="options">The objects</param>
         /// <param name="gameObject">gameObject that will process messages from HappyFunTimes</param>
-        public GameServer(Options options, GameObject gameObject)
+        public GameServer(HFTRuntimeOptions options, GameObject gameObject)
         {
             m_options = options;
             m_gameObject = gameObject;
@@ -344,7 +320,7 @@ namespace HappyFunTimes
             return "http://" + uri.Host + ":" + uri.Port + "/";
         }
 
-        private Options m_options;
+        private HFTRuntimeOptions m_options;
         private bool m_connected = false;
         private int m_totalPlayerCount = 0;
         private int m_recvCount = 0;

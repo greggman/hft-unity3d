@@ -48,15 +48,13 @@ namespace HappyFunTimes
     public class PlayerSpawner : MonoBehaviour
     {
         public GameObject prefabToSpawnForPlayer;
-        public bool showMenu = true;
-        public bool askUserForName = true;
-        public bool showMessages = false;
-        public string rendezvousUrl = "";
-        public bool startServer = true;
-        public string serverPort = "";
 
         [Header("0 = unlimited")]
         public int maxPlayers = 0;
+
+        [Space(10)]
+        [Header("advanced")]
+        public HFTUserOptions happyfuntimesOptions = new HFTUserOptions();
 
         public GameServer server
         {
@@ -92,14 +90,6 @@ namespace HappyFunTimes
 
         void StartConnection()
         {
-            m_options = new GameServer.Options();
-            m_options.showMessages = showMessages;
-            m_options.rendezvousUrl = rendezvousUrl;
-            m_options.startServer = startServer;
-            m_options.serverPort = serverPort;
-            m_options.askUserForName = askUserForName;
-            m_options.showMenu = showMenu;
-
             m_hftManager = new HFTManager();
             m_hftManager.OnReady += StartGameServer;
             m_hftManager.OnFail += FailedToStart;
@@ -166,6 +156,7 @@ namespace HappyFunTimes
 
         void Start()
         {
+            m_options = new HFTRuntimeOptions(happyfuntimesOptions);
             StartConnection();
         }
 
@@ -216,14 +207,15 @@ namespace HappyFunTimes
                 return m_server;
             }
             private set
-            { }
+            {
+            }
         }
 
-        private GameServer.Options m_options;
         private GameServer m_server;
         private PlayerManager m_playerManager;
         private HFTManager m_hftManager;
         private HFTLog m_log = new HFTLog("PlayerSpawner");
+        private HFTRuntimeOptions m_options;
     };
 
 }   // namespace HappyFunTimes

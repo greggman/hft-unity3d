@@ -78,7 +78,7 @@ namespace HappyFunTimes
             client.OnCloseEvent   += HandleDisconnect;
 
             RegisterCmdHandler<AddPlayerToGameMessage>("join", AddPlayerToGame);
-            RegisterCmdHandler<HFTGameOptions>("server", AssignAsServerForGame);
+            RegisterCmdHandler<HFTRuntimeOptions>("server", AssignAsServerForGame);
             RegisterCmdHandler<object>("update", PassMessageFromPlayerToGame);
 
         }
@@ -103,7 +103,7 @@ namespace HappyFunTimes
             game_ = game;
         }
 
-        void AssignAsServerForGame(HFTGameOptions data)  // ???????????????????
+        void AssignAsServerForGame(HFTRuntimeOptions data)  // ???????????????????
         {
             client_.OnMessageEvent -= HandleMessage;
             client_.OnCloseEvent   -= HandleDisconnect;
