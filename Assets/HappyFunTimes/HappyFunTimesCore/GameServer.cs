@@ -122,17 +122,11 @@ namespace HappyFunTimes
             m_deserializer = new Deserializer();
             m_handlers = new Dictionary<string, CmdEventHandler>();
 
-//            if (String.IsNullOrEmpty(m_options.gameId))
-//            {
-//                m_options.gameId = "HFTUnity";
-//            }
-
             m_gameSystem = new GameSystem(this);
             HFTInstructions instructions = m_gameObject.AddComponent<HFTInstructions>();
             instructions.Init(m_gameSystem);
 
             m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
-            m_eventProcessor.Init(this);
 
             m_msgHandlers.Add("update", UpdatePlayer);
             m_msgHandlers.Add("upgame", UpdateGame);
@@ -141,36 +135,7 @@ namespace HappyFunTimes
             m_msgHandlers.Add("remove", RemovePlayer);
             m_msgHandlers.Add("system", DoSysCommand);
             m_msgHandlers.Add("log", LogMessage);
-
-//            SendMessageToRunner("HFTInitializeRunner");
         }
-
-//        private void SendMessageToRunner(string msg)
-//        {
-//            string[] names = new string[]
-//            {
-//                "HappyFunTimes.HFTRunner",
-//                "HappyFunTimes.HFTRunner, Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",            "HFTRunner",
-//                "HFTRunner",
-//            };
-//            foreach (string name in names)
-//            {
-//                System.Type t = System.Type.GetType(name);
-//                if (t != null)
-//                {
-//                    object o = m_gameObject.GetComponent(t);
-//                    if (o == null)
-//                    {
-//                        o = m_gameObject.AddComponent(t);
-//                    }
-//                    if (o != null)
-//                    {
-//                        m_gameObject.SendMessage(msg, this);
-//                    }
-//                    break;
-//                }
-//            }
-//        }
 
         /// <summary>
         /// Starts the connection to HappyFunTimes.
@@ -362,7 +327,7 @@ namespace HappyFunTimes
             {
                 if (m_id == null)
                 {
-                    Debug.LogError("you can NOT read id before the game has connected");
+                    m_log.Error("you can NOT read id before the game has connected");
                 }
                 return m_id;
             }
@@ -418,7 +383,7 @@ namespace HappyFunTimes
         private void SocketOpened(object sender, System.EventArgs e)
         {
             //invoke when socket opened
-            Debug.Log("Connnected to HappyFunTimes");
+            m_log.Tell("Connnected to HappyFunTimes");
             m_connected = true;
 
             List<String>.Enumerator i = m_sendQueue.GetEnumerator();
@@ -435,7 +400,7 @@ namespace HappyFunTimes
             }
             catch (Exception ex)
             {
-                Debug.LogException(ex);
+                m_log.Error(ex);
             }
         }
 
@@ -444,7 +409,7 @@ namespace HappyFunTimes
             //invoke when socket closed
             if (m_connected)
             {
-                Debug.Log("Disconnected from HappyFunTimes");
+                m_log.Tell("Disconnected from HappyFunTimes");
             }
             Cleanup();
         }
@@ -465,7 +430,7 @@ namespace HappyFunTimes
                     }
                     if (m_options.showMessages)
                     {
-                        Debug.Log("r[" + (m_recvCount++) + "] " + e.Data);
+                        m_log.Tell("r[" + (m_recvCount++) + "] " + e.Data);
                     }
                     MessageToClient m = m_deserializer.Deserialize<MessageToClient>(e.Data);
                     MessageHandler handler = null;
@@ -475,12 +440,12 @@ namespace HappyFunTimes
                     }
                     else
                     {
-                        Debug.LogError("unknown client message: " + m.cmd);
+                        m_log.Error("unknown client message: " + m.cmd);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogException(ex);  // TODO: Add object if possible
+                    m_log.Error(ex);  // TODO: Add object if possible
                     return;
                 }
             }
@@ -490,7 +455,7 @@ namespace HappyFunTimes
         {
             if (!m_gotMessages)
             {
-                Debug.Log("Could not connect to HappyFunTimes. Is it running?");
+                m_log.Tell("Could not connect to HappyFunTimes. Is it running?");
                 Close();
                 QueueEvent(delegate()
                 {
@@ -503,7 +468,7 @@ namespace HappyFunTimes
             else
             {
                 //invoke when socket error
-                Debug.Log("socket error: " + e.Message);
+                m_log.Error("socket error: " + e.Message);
                 Cleanup();
             }
         }
@@ -592,7 +557,7 @@ namespace HappyFunTimes
             {
                 QueueEvent(delegate()
                 {
-                    Debug.LogError("This game needs a newer version of HappyFunTimes");
+                    m_log.Error("This game needs a newer version of HappyFunTimes");
                     //SendMessageToRunner("HFTNeedNewHFT");
                     Application.Quit();
                 });
@@ -601,14 +566,14 @@ namespace HappyFunTimes
             {
                 QueueEvent(delegate()
                 {
-                    if (m_options.uploadControllerFiles)
-                    {
-                        HFTUploader uploader = new HFTUploader(false);
-                        string baseFolder = System.IO.Path.Combine(System.IO.Path.Combine(Application.dataPath, "WebPlayerTemplates"), "HappyFunTimes");
-                        string url = GetBaseHttpUrl() + "api/v0/uploadFile/";
-                        uploader.UploadTree(url, data.gameId, baseFolder);
-
-                    }
+                    //if (m_options.uploadControllerFiles)
+                    //{
+                    //    HFTUploader uploader = new HFTUploader(false);
+                    //    string baseFolder = System.IO.Path.Combine(System.IO.Path.Combine(Application.dataPath, "WebPlayerTemplates"), "HappyFunTimes");
+                    //    string url = GetBaseHttpUrl() + "api/v0/uploadFile/";
+                    //    uploader.UploadTree(url, data.gameId, baseFolder);
+                    //
+                    //}
                     if (OnConnect != null)
                     {
                         OnConnect.Emit(this, new EventArgs());
@@ -622,11 +587,11 @@ namespace HappyFunTimes
             MessageLogMessage data = m_deserializer.Deserialize<MessageLogMessage>(msg.data);
             if (data.type == "error")
             {
-                Debug.LogError(data.msg);
+                m_log.Error(data.msg);
             }
             else
             {
-                Debug.Log(data.msg);
+                m_log.Tell(data.msg);
             }
         }
 
@@ -638,14 +603,14 @@ namespace HappyFunTimes
                 CmdEventHandler handler;
                 if (!m_handlers.TryGetValue(cmd.cmd, out handler))
                 {
-                    Debug.LogError("unhandled GameServer cmd: " + cmd.cmd);
+                    m_log.Error("unhandled GameServer cmd: " + cmd.cmd);
                     return;
                 }
                 handler(m_deserializer, this, cmd.data, msg.id);
             }
             catch (Exception ex)
             {
-                Debug.LogException(ex);
+                m_log.Error(ex);
             }
         }
 
@@ -674,7 +639,7 @@ namespace HappyFunTimes
             {
                 if (m_options.showMessages)
                 {
-                    Debug.Log("q[" + (m_queueCount++) + "] " + msg);
+                    m_log.Tell("q[" + (m_queueCount++) + "] " + msg);
                 }
                 m_socket.Send(msg);
             }
@@ -682,7 +647,7 @@ namespace HappyFunTimes
             {
                 if (m_options.showMessages)
                 {
-                    Debug.Log("s[" + (m_sendCount++) + "] " + msg);
+                    m_log.Tell("s[" + (m_sendCount++) + "] " + msg);
                 }
                 m_sendQueue.Add(msg);
             }
@@ -746,6 +711,7 @@ namespace HappyFunTimes
             public string __hft_name__ = "";
         }
 
+        HFTLog m_log = new HFTLog("GameServer");
     };
 
 }  // namaspace HappyFunTimes
