@@ -51,10 +51,6 @@ public class EventProcessor : MonoBehaviour {
         }
     }
 
-//    public void Init(GameServer server) {
-//        m_server = server;
-//    }
-
     void Update() {
         ProcessEvents();
     }
