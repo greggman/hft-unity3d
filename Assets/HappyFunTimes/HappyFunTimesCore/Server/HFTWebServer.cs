@@ -41,6 +41,13 @@ namespace HappyFunTimes
 
             m_hftSettingsStr = "window.hftSettings = " + Serializer.Serialize(new HFTSettings(options.showMenu));
 
+            if (true) // FIX! Options.captivePortal
+            {
+                m_captivePortalHandler = new HFTCaptivePortalHandler(m_webServerUtils);
+                m_getRouter.Add(m_captivePortalHandler.HandleRequest);
+            }
+
+
             m_getRouter.Add(HandleRoot);
             m_getRouter.Add(HandleLiveSettings);
             m_getRouter.Add(HandleController);
@@ -348,6 +355,7 @@ requirejs.config({
         List<HttpServer> m_servers = new List<HttpServer>();
         HFTWebServerUtils m_webServerUtils;
         HFTRouter m_getRouter = new HFTRouter();
+        HFTCaptivePortalHandler m_captivePortalHandler;
         HFTLog m_log;
         string m_gamePath;
         byte[] m_ping;
