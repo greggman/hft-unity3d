@@ -17,17 +17,12 @@
 *   refactor for standalone
     *   don't respond to ping until game started
     *   send URL not raw IP because IP6
-    *   remove gameId, not needed as only one server
-    *   remove allowMultipleGames, not needed as only one server
     *   move name stuff to game
-    *   getting rid of __hft__ and/or make reconnect logic different
     *   Check if port busy
         *   inc port
     *   remove Application.Quit
     *   remove GameSystem
     *   move HFTDialog out of HFTDnsRunner
-    *   Make PlayerSpawner and PlayerConnector use GameServer.Options directly
-    *   remove cwd
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
     *   make instructions work (do I need this?) Maybe this should move to game out of HFT
@@ -57,6 +52,12 @@
 DONE
 ====
 
+*   refactor for standlone
+    *   remove gameId, not needed as only one server
+    *   remove allowMultipleGames, not needed as only one server
+    *   getting rid of __hft__ and/or make reconnect logic different
+    *   Make PlayerSpawner and PlayerConnector use GameServer.Options directly
+    *   remove cwd
 *   upload controller files if other server? (WontFix)
 *   make sure server has started before starting game
 *   fix gear icon
