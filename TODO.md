@@ -15,6 +15,7 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
+    *   don't respond to ping until game started
     *   send URL not raw IP because IP6
     *   remove gameId, not needed as only one server
     *   remove allowMultipleGames, not needed as only one server
