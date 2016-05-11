@@ -163,9 +163,36 @@ namespace HappyFunTimes
                 reader.Close();
                 dataStream.Close();
 
+                // This is hacky. Basically websever repsonds long before
+                // the game is ready to accept players. So players connect
+                // and get rejected (no such game). There's probably a better
+                // solution but this lets the game check if the server is
+                // running immediately but controllers won't be told
+                // until the game has registered with the server.
+                //
+                // The better solution is probably try to figure out
+                // why the game doesn't connect first.
+                //
+                // Note, nornally you'd start a game, then ask players
+                // to join. The case above happens while developing. You
+                // run the game once. Open a browser window. Quit the game.
+                // The browser is now trying to reconnect. The moment you
+                // run the game the browser reconnects but the system
+                // isn't fully ready yet.
                 PostCmd cmd = deserializer_.Deserialize<PostCmd>(result);
-                if (cmd.cmd == "happyFunTimesPing")
+                if (cmd.cmd == "happyFunTimesPingForGame")
                 {
+                    m_webServerUtils.SendJsonBytes(res, m_ping);
+                }
+                else if (cmd.cmd == "happyFunTimesPing")
+                {
+                    // Yes reaching up this far is shit :(
+                    if (!HFTGameManager.GetInstance().HaveGame())
+                    {
+                        res.StatusCode = (int)HttpStatusCode.NotFound;
+                        return;
+                    }
+
                     m_webServerUtils.SendJsonBytes(res, m_ping);
                 }
                 // TODO: use router

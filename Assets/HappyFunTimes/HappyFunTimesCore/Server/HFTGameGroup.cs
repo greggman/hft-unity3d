@@ -157,7 +157,7 @@ namespace HappyFunTimes
         //  this.relayServer.addFilesForGame(this.gameId, files);
         //};
 
-        bool HasClient()
+        public bool HasClient()
         {
             return masterGame_ != null && masterGame_.HasClient();
         }

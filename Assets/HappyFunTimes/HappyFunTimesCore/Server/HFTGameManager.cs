@@ -53,6 +53,7 @@ namespace HappyFunTimes
             }
             else
             {
+                --gameCount_;
                 log_.Info("removed game group: " + gameId + ", num game groups = " + gameGroups_.Count);
             }
         }
@@ -76,16 +77,26 @@ namespace HappyFunTimes
         {
             string gameId = String.IsNullOrEmpty(data.gameId) ? "HFTUnity" : data.gameId;
             HFTGameGroup gameGroup = GetGameGroup(gameId, true);
+            if (!gameGroup.HasClient())
+            {
+                ++gameCount_;
+            }
             HFTGame game = gameGroup.AssignClient(client, data);
             //FIX!
             //if (options_.instructions)
             //{
             //    game.SendInstructions("//FIX", true/* position */);
             //}
+
+        }
+
+        public bool HaveGame()
+        {
+            return gameCount_ > 0;
         }
 
         int connectCount_ = 0;
-
+        int gameCount_ = 0;
         HFTLog log_;
         Dictionary<string, HFTGameGroup> gameGroups_ = new Dictionary<string, HFTGameGroup>();
         static HFTGameManager s_instance;

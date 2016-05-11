@@ -83,7 +83,7 @@ namespace HappyFunTimes
 
         IEnumerator PingHFT()
         {
-            string json = JsonUtility.ToJson(new PostCmd("happyFunTimesPing"));
+            string json = JsonUtility.ToJson(new PostCmd("happyFunTimesPingForGame"));
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
             var headers = new Dictionary<string, string>();
             headers["Content-Type"] = "application/json";
