@@ -7,10 +7,30 @@ namespace HappyFunTimes
 {
     public class HFTLog
     {
+        public delegate string PrintFunc();
+
         public HFTLog(string prefix = "")
         {
             prefix_ = prefix.Length > 0 ? (prefix + ": ") : "";
-            debug_ = s_debug;
+            console_ = System.Environment.GetEnvironmentVariable("HFT_LOG") != null;
+            debug_ = s_debug || console_;
+            if (console_ && s_out == null)
+            {
+                s_out = new System.IO.StreamWriter(System.Console.OpenStandardOutput());
+                s_out.AutoFlush = true;
+            }
+        }
+
+        public string prefix
+        {
+            get
+            {
+                return prefix_;
+            }
+            set
+            {
+                prefix_ = value;
+            }
         }
 
         static public bool debug
@@ -56,28 +76,102 @@ namespace HappyFunTimes
             Debug.Log(sb.ToString());
         }
 
+
+        /// <summary>Print message always</summary>
+        ///
+        /// <param name="fn">function to generaete message</param>
+        public void Tell(PrintFunc fn)
+        {
+            Tell(fn());
+        }
+
+        /// <summary>Print message always</summary>
+        ///
+        /// <param name="msg">message</param>
+        public void Tell(string msg)
+        {
+            Debug.Log(prefix_ + msg);
+
+            if (console_)
+            {
+                WriteLine(prefix_ + msg);
+            }
+        }
+
+        /// <summary>Print message if debugging</summary>
+        ///
+        /// <param name="fn">function to generaete message</param>
+        public void Info(PrintFunc fn)
+        {
+            if (debug_)
+            {
+                Info(fn());
+            }
+        }
+
+        /// <summary>Print message if debugging</summary>
+        ///
+        /// <param name="msg">message</param>
         public void Info(string msg)
         {
             if (debug_)
             {
                 Debug.Log(prefix_ + msg);
             }
+            if (console_)
+            {
+                WriteLine(prefix_ + msg);
+            }
+        }
+
+        public void Warn(PrintFunc fn)
+        {
+            Warn(fn());
         }
 
         public void Warn(string msg)
         {
             Debug.Log(prefix_ + msg);
+            if (console_)
+            {
+                WriteLine(prefix_ + "WARNING: " + msg);
+            }
+        }
+
+        public void Error(PrintFunc fn)
+        {
+            Error(fn());
         }
 
         public void Error(string msg)
         {
             Debug.LogError(prefix_ + msg);
+            if (console_)
+            {
+                WriteLine(prefix_ + "ERROR: " + msg);
+            }
+        }
+
+        public void Error(System.Exception ex)
+        {
+            Debug.LogException(ex);
+            if (console_)
+            {
+                WriteLine(prefix_ + "ERROR: " + ex.ToString());
+            }
+        }
+
+        private void WriteLine(string msg)
+        {
+            s_out.WriteLine(msg);
         }
 
         string prefix_;
         bool debug_;
+        bool console_;
 
-        static bool s_debug = false;
+        static System.IO.StreamWriter s_out = null;
+        static bool s_debug = true; //false;
     }
 
 }  // namespace HappyFunTimes
