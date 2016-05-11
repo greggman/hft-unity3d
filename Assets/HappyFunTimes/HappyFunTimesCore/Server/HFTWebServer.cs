@@ -31,7 +31,7 @@ namespace HappyFunTimes
             {
                 sysName = sysName.Substring(0, sysName.Length - 6);
             }
-            string gameName = String.IsNullOrEmpty(m_options.name) ? gameId : m_options.name;
+            string gameName = String.IsNullOrEmpty(m_options.name) ? Application.productName : m_options.name;
             string ping = Serializer.Serialize(new HFTPing(sysName + ": " + gameName, "HappyFunTimes"));
             m_ping = System.Text.Encoding.UTF8.GetBytes(ping);
             m_log.Info("Ping: " + ping);
