@@ -39,7 +39,6 @@ define([
     './io',
     './hft-splash',
     './hft-settings',
-    './hft-system',
     './misc/cookies',
     './misc/dialog',
     './misc/fullscreen',
@@ -52,7 +51,6 @@ define([
     IO,
     HFTSplash,
     hftSettings,
-    HFTSystem,
     Cookie,
     dialog,
     fullScreen,
@@ -220,6 +218,13 @@ define([
       }, false);
     }
 
+
+    function makeHFTPingRequest(fn) {
+      IO.sendJSON(window.location.href, {cmd: 'happyFunTimesPing'}, function(err, obj) {
+        fn(err, obj);
+      }, { timeout: 2000 });
+    };
+
     // setup full screen support
     var requestFullScreen = function() {
       if (!fullScreen.isFullScreen()) {
@@ -285,53 +290,23 @@ define([
         options.disconnectFn();
       }
 
-      var hftSystemDisconnected = false;
-      var hftSystem = new HFTSystem();
-      hftSystem.on('runningGames', function(obj) {
-        // Is the game running
-        for (var ii = 0; ii < obj.length; ++ii) {
-          var game = obj[ii];
-          if (game.gameId === client.getGameId()) {
-            // Yes! Reload
-            window.location.reload();
+      function waitForPing() {
+        makeHFTPingRequest(function(err, obj) {
+          if (err) {
+            setTimeout(waitForPing, 1000);
             return;
           }
-        }
+          window.location.reload();
+        });
+      }
+      // give it a moment to recover
+      setTimeout(waitForPing, 2000);
 
-        // Are any games running? If 1 game, go to it.
-        if (obj.length === 1 && obj[0].controllerUrl) {
-          window.location.href = obj[0].controllerUrl;
-          return;
-        }
-        // If 2+ games, go to the menu.
-        if (obj.length > 1) {
-          // Go to main menu
-          window.location.href = "/";
-          return;
-        }
-      });
-      hftSystem.on('disconnect', function() {
-        // if the HFT system disconnected it means
-        // HFT is no longer running. Since we might be
-        // doing DEV we don't want to leave but if
-        // it's a player give them the option to restart
-        if (!hftSystemDisconnected) {
-          hftSystemDisconnected = true;
-          dialog.modal({
-            title: "HappyFunTimes",
-            msg: "Touch To Restart",
-          }, function() {
-            dialog.modal({
-              title: "HappyFunTimes",
-              msg: "...restarting...",
-            });
-            var redirCookie = new Cookie("redir");
-            var url = redirCookie.get() || "http://happyfuntimes.net";
-            console.log("goto: " + url);
-            window.location.href = url;
-          });
-        }
-      });
+      // Maybe needed for app?
+      // var redirCookie = new Cookie("redir");
+      // var url = redirCookie.get() || "http://happyfuntimes.net";
+      // console.log("goto: " + url);
+      // window.location.href = url;
     });
 
     client.addEventListener('_hft_redirect_', function(data) {
