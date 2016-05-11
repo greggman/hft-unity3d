@@ -28,6 +28,9 @@
     *   remove GameSystem
     *   move HFTDialog out of HFTDnsRunner
     *   Make PlayerSpawner and PlayerConnector use GameServer.Options directly
+    *   remove cwd
+    *   remove showInList
+    *   remove disonnectPlayersIfGameDisonnects
 *   Log to console
 *   make hft.net keep trying
 *   test switching games
