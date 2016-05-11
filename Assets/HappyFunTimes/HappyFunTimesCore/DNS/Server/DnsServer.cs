@@ -179,12 +179,14 @@ namespace DNS.Server {
         }
 
         private void ProcessEvents() {
-            MoveQueuedEventsToExecuting();
+            if (m_executingEvents != null) {
+                MoveQueuedEventsToExecuting();
 
-            while (m_executingEvents.Count > 0) {
-                Emit emit = m_executingEvents[0];
-                m_executingEvents.RemoveAt(0);
-                emit();
+                while (m_executingEvents.Count > 0) {
+                    Emit emit = m_executingEvents[0];
+                    m_executingEvents.RemoveAt(0);
+                    emit();
+                }
             }
         }
 
