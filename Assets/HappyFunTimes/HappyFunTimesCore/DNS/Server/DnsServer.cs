@@ -30,9 +30,11 @@ namespace DNS.Server {
         public event RequestedEventHandler Requested;
         public event RespondedEventHandler Responded;
 
-        public DnsServer(IQuestionAnswerer questionAnswerer, IPEndPoint endServer) {
+        public DnsServer(IQuestionAnswerer questionAnswerer, IPEndPoint endServer = null) {
             this.emitter = new EventEmitter();
-            this.client = new DnsClient(endServer, new UdpRequestResolver());
+            if (endServer != null) {
+                this.client = new DnsClient(endServer, new UdpRequestResolver());
+            }
             this.questionAnswerer = questionAnswerer;
         }
 
