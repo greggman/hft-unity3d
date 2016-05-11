@@ -112,7 +112,7 @@ namespace HappyFunTimes
 
         void FailedToStart(object sender, System.EventArgs e)
         {
-            Debug.LogError("could not connect to server:");
+            m_log.Error("could not connect to server:");
         }
 
         void StartGameServer(object sender, System.EventArgs e)
@@ -187,7 +187,7 @@ namespace HappyFunTimes
 
         void Disconnected(object sender, EventArgs e)
         {
-            Debug.Log("Quitting");
+            m_log.Tell("Quitting");
             Application.Quit();
         }
 
@@ -227,6 +227,7 @@ namespace HappyFunTimes
         private GameServer m_server;
         private PlayerManager m_playerManager;
         private HFTManager m_hftManager;
+        private HFTLog m_log = new HFTLog("PlayerSpawner");
     };
 
 }   // namespace HappyFunTimes

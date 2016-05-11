@@ -41,6 +41,7 @@ namespace HappyFunTimes
         };
 
         private NetPlayer m_netPlayer;
+        private HFTLog m_log = new HFTLog("GameSystem");
 
         public NetPlayer NetPlayer
         {
@@ -59,7 +60,7 @@ namespace HappyFunTimes
 
         private void OnExit(MessageExit data)
         {
-            Debug.Log("quit!");
+            m_log.Info("quit!");
             Application.Quit();
         }
 

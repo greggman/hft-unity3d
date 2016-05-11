@@ -49,6 +49,7 @@ public class LocalNetPlayer : NetPlayer {
     public LocalNetPlayer(GameServer server, Options options = null) : base(server, options != null ? options.name : "LocalPlayer") {
         m_gameHandlers = new Dictionary<string, GameCmdEventHandler>();
         m_sessionId = options != null ? options.sessionId : "";
+        m_log = new HFTLog("LocalNetPlayer");  // add name
     }
 
     public delegate void UntypedGameCmdEventHandler(Dictionary<string, object> data);
@@ -207,13 +208,13 @@ public class LocalNetPlayer : NetPlayer {
             GameCmdEventHandler handler;
             if (!m_gameHandlers.TryGetValue(cmd, out handler)) {
                 if (m_debug) {
-                    Debug.LogError("unhandled LocalNetPlayer cmd: " + cmd);
+                    m_log.Error("unhandled LocalNetPlayer cmd: " + cmd);
                 }
                 return;
             }
             handler(m_deserializer, data);
         } catch (Exception ex) {
-            Debug.LogException(ex);
+            m_log.Error(ex);
         }
 
     }
@@ -248,6 +249,7 @@ public class LocalNetPlayer : NetPlayer {
     private bool m_debug = false;
     private string m_sessionId = "";
     private Dictionary<string, GameCmdEventHandler> m_gameHandlers;  // handlers by command name
+    private HFTLog m_log;
 };
 
 

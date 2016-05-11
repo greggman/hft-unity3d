@@ -83,6 +83,7 @@ public abstract class NetPlayer
         m_internalHandlers = new Dictionary<string, CmdEventHandler>();
         m_deserializer = new Deserializer();
         m_name = name;
+        m_log = new HFTLog("NetPlayer[" + name + "]");
 
         AddHandlers();
     }
@@ -299,13 +300,13 @@ public abstract class NetPlayer
             CmdEventHandler handler;
             if (!m_handlers.TryGetValue(cmd.cmd, out handler)) {
                 if (!m_internalHandlers.TryGetValue(cmd.cmd, out handler)) {
-                    Debug.LogError("unhandled NetPlayer cmd: " + cmd.cmd);
+                    m_log.Error("unhandled NetPlayer cmd: " + cmd.cmd);
                     return;
                 }
             }
             handler(m_deserializer, m_server, cmd.data);
         } catch (Exception ex) {
-            Debug.LogException(ex);
+            m_log.Error(ex);
         }
     }
 
@@ -320,6 +321,8 @@ public abstract class NetPlayer
     void HandleSetNameMsg(MessageSetName data) {
         if (data.name.Length > 0 && data.name != m_name) {
             m_name = data.name;
+            m_log.prefix = "NetPlayer[" + m_name + "]";
+
             EventHandler<EventArgs> handler = OnNameChange;
             if (handler != null) {
                 handler(this, new EventArgs());
@@ -340,9 +343,9 @@ public abstract class NetPlayer
     private string errorStr = @"error";
     void HandleLogMsg(MessageLog data) {
         if (errorStr.Equals(data.type, StringComparison.Ordinal)) {
-            Debug.LogError(data.msg);
+            m_log.Error(data.msg);
         } else {
-            Debug.Log(data.msg);
+            m_log.Tell(data.msg);
         }
     }
 
@@ -391,6 +394,7 @@ public abstract class NetPlayer
     private GameServer m_server;
     private string m_name;
     private bool m_busy = false;
+    private HFTLog m_log;
 
     protected Deserializer Deserializer {
         get {

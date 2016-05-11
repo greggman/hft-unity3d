@@ -41,6 +41,7 @@ public class PlayerManager
     public delegate GameObject GetGameObject(int ndx);
 
     public PlayerManager(GameServer server, GameObject gameObject, int maxPlayers, int timeoutForDisconnectedPlayerToReconnect, GetGameObject getGameObjectFn) {
+        m_log = new HFTLog("PlayerManager");
         m_maxPlayers = maxPlayers;
         m_gameObject = gameObject;
         m_getGameObject = getGameObjectFn;
@@ -167,7 +168,7 @@ public class PlayerManager
                         StartActivePlayer(m_getGameObject(pndx), playerState, netPlayerState);
                         return;
                     } else {
-                        Debug.LogError("Player with same ID joined but they're already playing???");
+                        m_log.Error("Player with same ID joined but they're already playing???");
                     }
                 }
             }
@@ -274,6 +275,7 @@ public class PlayerManager
     private List<NetPlayerState> m_activePlayers = new List<NetPlayerState>();
     private List<NetPlayerState> m_waitingPlayers = new List<NetPlayerState>();
     private PlayerState[] m_playerState;
+    private HFTLog m_log;
 };
 
 }   // namespace HappyFunTimes

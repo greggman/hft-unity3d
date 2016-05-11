@@ -58,6 +58,11 @@ public class PlayerConnector : MonoBehaviour
         }
     }
 
+    public PlayerConnector()
+    {
+        m_log = new HFTLog("PlayerConnector");
+    }
+
     /// <summary>
     /// Call this to rotate an active player out and start the next waiting player.
     /// </summary>
@@ -95,7 +100,7 @@ public class PlayerConnector : MonoBehaviour
 
     void FailedToStart(object sender, System.EventArgs e)
     {
-        Debug.LogError("could not connect to server:");
+        m_log.Error("could not connect to server:");
     }
 
     void StartGameServer(object sender, System.EventArgs e)
@@ -128,7 +133,7 @@ public class PlayerConnector : MonoBehaviour
 
     void Disconnected(object sender, EventArgs e)
     {
-        Debug.Log("Quitting");
+        m_log.Tell("Quitting");
         Application.Quit();
     }
 
@@ -156,6 +161,7 @@ public class PlayerConnector : MonoBehaviour
     private PlayerManager m_playerManager;
     private GameServer m_server;
     private HFTManager m_hftManager;
+    private HFTLog m_log;
 };
 
 }   // namespace HappyFunTimes

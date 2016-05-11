@@ -40,6 +40,7 @@ namespace HappyFunTimes
     [AddComponentMenu("")]
     public class HFTCheck : MonoBehaviour {
 
+        HFTLog m_log = new HFTLog("HFTCheck");
         Action m_connectFunc;       // func to call if connected
         Action m_failFunc;          // func to call if failed to connect
         string m_url;
@@ -64,14 +65,14 @@ namespace HappyFunTimes
             while (!m_found && m_tries < s_maxTries)
             {
                 ++m_tries;
-                Debug.Log("Checking for HFT(" + m_url + ") try" + m_tries + " of " + s_maxTries);
+                m_log.Tell("Checking for HFT(" + m_url + ") try" + m_tries + " of " + s_maxTries);
                 yield return PingHFT();
                 yield return new WaitForSeconds(1.0f);
             }
 
             if (!m_found)
             {
-                Debug.Log("could not connect to HappyFunTimes server");
+                m_log.Tell("could not connect to HappyFunTimes server");
                 m_failFunc();
             }
             else
@@ -104,7 +105,7 @@ namespace HappyFunTimes
 
             if (!m_found)
             {
-                Debug.Log("error: " + err + ", result:" + result);
+                m_log.Tell("error: " + err + ", result:" + result);
             }
         }
 
