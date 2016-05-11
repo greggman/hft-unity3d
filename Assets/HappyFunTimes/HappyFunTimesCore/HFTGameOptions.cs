@@ -114,7 +114,7 @@ namespace HappyFunTimes
         /// Normally the controller files are served from disk read
         /// directly by HappyFunTimes
         /// </summary>
-        public bool uploadControllerFiles = false;
+//        public bool uploadControllerFiles = false;
 
         ///<summary>
         /// don't set this. it will be set automatically
