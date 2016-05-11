@@ -90,7 +90,6 @@ namespace HappyFunTimes
         {
             public Options()
             {
-                disconnectPlayersIfGameDisconnects = true;
                 url = System.Environment.GetEnvironmentVariable("HFT_URL");
                 if (url == null)
                 {
