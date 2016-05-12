@@ -15,12 +15,14 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
+    *   add controller folder name to pick controller
     *   send URL not raw IP because IP6
     *   move name stuff to game
     *   Check if port busy
         *   inc port
     *   remove Application.Quit
     *   remove GameSystem
+    *   remove "main menu" from menu
     *   move HFTDialog out of HFTDnsRunner
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
