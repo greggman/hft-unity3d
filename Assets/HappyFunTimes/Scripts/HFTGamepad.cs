@@ -135,6 +135,8 @@ public class HFTGamepad : MonoBehaviour {
     public bool provideOrientation = false;
     public bool provideAcceleration = false;
     public bool provideRotationRate = false;
+    public bool askForName = true;
+    public bool showGearMenu = true;
   }
 
   public ControllerOptions controllerOptions;
