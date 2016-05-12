@@ -48,7 +48,6 @@ namespace HappyFunTimes
 
             m_getRouter.Add(HandleRoot);
             m_getRouter.Add(HandleLiveSettings);
-            m_getRouter.Add(HandleController);
             m_getRouter.Add(HandleFile);
 
             m_addresses = addresses;
@@ -288,69 +287,6 @@ namespace HappyFunTimes
             }
 
             m_webServerUtils.SendJsonBytes(res, m_liveSettings);
-            return true;
-        }
-
-        bool HandleController(string path, HttpListenerRequest req, HttpListenerResponse res)
-        {
-            if (!path.EndsWith("/controller.html"))
-            {
-                return false;
-            }
-            byte[] templateData = null;
-            string templatePath = "/hft/0.x.x/templates/controller.index.html";
-            if (!m_webServerUtils.GetGameFile(templatePath, out templateData))
-            {
-                m_log.Error("missing template file: " + templatePath);
-                res.StatusCode = (int)HttpStatusCode.NotFound;
-                return true;
-            }
-            string template = System.Text.Encoding.UTF8.GetString(templateData);
-            byte[] controllerData;
-            if (!m_webServerUtils.GetGameFile(path, out controllerData))
-            {
-                m_log.Error("missing file: " + path);
-                res.StatusCode = (int)HttpStatusCode.NotFound;
-                return true;
-            }
-            string contents = System.Text.Encoding.UTF8.GetString(controllerData);
-            // info.name
-            // hftSettings
-            // pages.controller.beforeScripts
-            // pages.controller.afterScripts
-            // contents
-            Dictionary<string, string> subs = new Dictionary<string, string>();
-
-            subs["filename"] = Path.GetFileNameWithoutExtension(path);
-            subs["urls.favicon"] = "icon.png";
-            subs["info.name"] = "???";
-            subs["pages.controller.beforeScripts"] = "<script  src=\"/hft/0.x.x/extra/apphelper.js\"></script>";
-            subs["pages.controller.afterScripts"] = @"
-<script src=""3rdparty/require.js"" data-main=""scripts/controller.js"" type=""hft-late""></script>
-<script type=""hft-late"">
-requirejs.config({
-  paths: {
-    hft: '/hft/0.x.x/scripts',//'../../../../hft/0.x.x/scripts',
-    },
-    shim: {
-      '3rdparty/pep.min': {
-          //These script dependencies should be loaded before loading
-          //pep.js
-          deps: [],
-          //Once loaded, use the global 'PEPNOREALLY' as the
-          //module value.
-          exports: 'PEPNOTREALLY',
-      },
-  },
-});
-</script>
-";
-            subs["content"] = contents;
-            subs["hftSettings"] = m_hftSettingsStr;
-
-            string s = HFTUtil.ReplaceParamsFlat(template, subs);
-
-            m_webServerUtils.SendContent(res, path, s);
             return true;
         }
 
