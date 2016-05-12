@@ -43,8 +43,8 @@
   <meta name="format-detection" content="telephone=no" />
   <title>happyfuntimes Controls</title>
   <link rel="stylesheet" href="css/controller.css">
-  <link rel="shortcut icon" href="icon-16.png" type="image/png">
-  <link rel="apple-touch-icon" href="icon-16.png">
+  <link rel="shortcut icon" href="/icon-16.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icon-16.png">
 <script src="/hft/0.x.x/extra/apphelper.js"></script>
 </head>
 <body touch-action="none">
@@ -199,15 +199,10 @@ linear-gradient(
   %(dark)s
 )
     </script>
-<script src="3rdparty/gyronorm.complete.min.js"></script>
-    <div id="hft-menu"><img src="../../hft/assets/gear-icon.svg"></div>
+    <div id="hft-menu"><img src="/hft/assets/gear-icon.svg"></div>
     <div id="hft-disconnected">
       <div class="hft-fullcenter">
         <div class="hft-instruction">Switching Games...</div>
-        <!--
-        <div class="hft-menubutton" id="hft-reload"><div>Restart</div></div>
-        <div class="hft-menubutton" id="hft-mainmenu"><div>Main Menu</div></div>
-        -->
       </div>
     </div>
     <div id="hft-debug">
@@ -227,7 +222,6 @@ linear-gradient(
     <div class="hft-fullcenter">
       <div id="hft-setname" class="hft-menubutton"><div>Set Name</div></div>
       <div id="hft-restart" class="hft-menubutton"><div>Restart</div></div>
-      <div id="hft-exit"    class="hft-menubutton"><div>Main Menu</div></div>
       <div id="hft-back"    class="hft-menubutton"><div>Back</div></div>
     </div>
   </div>
@@ -235,6 +229,7 @@ linear-gradient(
   <div id="hft-touchstart">
   </div>
 </div>
+<script src="3rdparty/gyronorm.complete.min.js"></script>
 <script src="3rdparty/require.js" data-main="scripts/controller.js" type="hft-late"></script>
 <script type="hft-late">
 requirejs.config({

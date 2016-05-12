@@ -249,9 +249,6 @@ define([
     $("hft-restart").addEventListener('click', function() {
       window.location.reload();
     }, false);
-    $("hft-exit").addEventListener('click', function() {
-      window.location.href = "/";
-    }, false);
     $("hft-back").addEventListener('click', function() {
       settingsElement.style.display = "none";
     });
