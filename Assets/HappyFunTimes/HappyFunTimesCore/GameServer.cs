@@ -525,33 +525,13 @@ namespace HappyFunTimes
         {
             MessageGameStart data = m_deserializer.Deserialize<MessageGameStart>(msg.data);
             m_id = data.id;
-            if (data.needNewHFT)
+            QueueEvent(delegate()
             {
-                QueueEvent(delegate()
+                if (OnConnect != null)
                 {
-                    m_log.Error("This game needs a newer version of HappyFunTimes");
-                    //SendMessageToRunner("HFTNeedNewHFT");
-                    Application.Quit();
-                });
-            }
-            else
-            {
-                QueueEvent(delegate()
-                {
-                    //if (m_options.uploadControllerFiles)
-                    //{
-                    //    HFTUploader uploader = new HFTUploader(false);
-                    //    string baseFolder = System.IO.Path.Combine(System.IO.Path.Combine(Application.dataPath, "WebPlayerTemplates"), "HappyFunTimes");
-                    //    string url = GetBaseHttpUrl() + "api/v0/uploadFile/";
-                    //    uploader.UploadTree(url, data.gameId, baseFolder);
-                    //
-                    //}
-                    if (OnConnect != null)
-                    {
-                        OnConnect.Emit(this, new EventArgs());
-                    }
-                });
-            }
+                    OnConnect.Emit(this, new EventArgs());
+                }
+            });
         }
 
         private void LogMessage(MessageToClient msg)

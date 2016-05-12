@@ -120,8 +120,6 @@ public class PlayerConnector : MonoBehaviour
 
     void Disconnected(object sender, EventArgs e)
     {
-        m_log.Tell("Quitting");
-        Application.Quit();
     }
 
     void Cleanup()
