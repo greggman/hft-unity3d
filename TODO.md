@@ -40,12 +40,7 @@
     *   Make it return 1 where it's currently returning 0
 *   Add captive portal support
 *   Make DNS server not on mobile?
-*   Remove file uploader
 *   Move JS to separate project? Build it into 1 file
-*   Remove package.json
-*   Remove version stuff
-    *   JS
-    *   C#
 *   Put all samples in same package? (can't because one folder? Fix that shit!)
 *   try to support Android captive portal
     *   monitor requests
@@ -53,7 +48,12 @@
 DONE
 ====
 
+*   Remove file uploader
 *   refactor for standlone
+    *   Remove package.json
+    *   Remove version stuff
+        *   JS
+        *   C#
     *   don't respond to ping until game started
     *   remove gameId, not needed as only one server
     *   remove allowMultipleGames, not needed as only one server
