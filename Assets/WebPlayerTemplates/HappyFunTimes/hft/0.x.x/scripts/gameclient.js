@@ -216,23 +216,23 @@ define([
       sendCmd("_hft_log_", { type: type, msg: msg });
     }
 
-    this.error = hftSettings.versionedFunc("1.11.0", function() {
+    this.error = function() {
       console.error.apply(console, arguments);
       sendLogMsg("error", Array.prototype.join.call(arguments, " "));
-    });
+    };
 
-    this.errorImpl = hftSettings.versionedFunc("1.11.0", function() {
+    this.errorImpl = function() {
       sendLogMsg("error", Array.prototype.join.call(arguments, " "));
-    });
+    };
 
-    this.log = hftSettings.versionedFunc("1.11.0", function() {
+    this.log = function() {
       console.log.apply(console, arguments);
       sendLogMsg("log", Array.prototype.join.call(arguments, " "));
-    });
+    };
 
-    this.logImpl = hftSettings.versionedFunc("1.11.0", function() {
+    this.logImpl = function() {
       sendLogMsg("log", Array.prototype.join.call(arguments, " "));
-    });
+    };
 
     connect_();
 

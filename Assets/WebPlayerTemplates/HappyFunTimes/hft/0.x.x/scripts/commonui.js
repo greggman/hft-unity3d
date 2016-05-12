@@ -135,8 +135,6 @@ define([
    * @param {bool} [orientationOptional]
    */
   function setOrientation(desiredOrientation, orientationOptional) {
-    orientationOptional = orientationOptional && hftSettings.requireVersion("1.13.0");
-
     g.orientation = desiredOrientation;
     if (orientation.canOrient()) {
       resetOrientation();
@@ -198,14 +196,6 @@ define([
     var settingsElement = $("hft-settings");
     var disconnectedElement = $("hft-disconnected");
     var touchStartElement = $("hft-touchstart");
-
-    hftSettings.setErrorFunc(function(msg) {
-        client.error(msg);
-        dialog.modal({
-          title: "HappyFunTimes",
-          msg: msg,
-        });
-    });
 
     if (!hftSettings.menu) {
       menuElement.style.display = "none";
@@ -313,14 +303,10 @@ define([
       window.location.href = data.url;
     });
 
-    setOrientation(hftSettings.haveVersion("1.10.0") ? options.orientation : undefined, options.orientationOptional);
+    setOrientation(options.orientation, options.orientationOptional);
 
     if (options.requireApp) {
-      if (hftSettings.requireVersion("1.10.0")) {
-        if (!hftSettings.inApp) {
-          showRequireApp();
-        }
-      }
+      showRequireApp();
     }
 
     if (options.debug) {
@@ -387,13 +373,13 @@ define([
     g.logger.error(str);
   };
 
-  return hftSettings.versionFuncs({
+  return {
     log: log,
     error: error,
-    setOrientation: { version: "1.10.0", func: setOrientation },
+    setOrientation: setOrientation,
     setStatus: setStatus,
     setupStandardControllerUI: setupStandardControllerUI,
-  });
+  };
 });
 
 

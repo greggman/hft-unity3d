@@ -120,7 +120,7 @@
 
   function cordovaLoaded() {
     // wait for cordova to finish loading
-    window.hftSettings = window.hftSettings || {};
+    window.hftSettings = {};
     window.hftSettings.isApp = true;
     document.addEventListener('deviceready', loadAfter);
   }
