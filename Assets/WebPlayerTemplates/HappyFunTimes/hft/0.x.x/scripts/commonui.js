@@ -67,6 +67,8 @@ define([
   var g = {
     logger: new logger.NullLogger(),
   };
+  var s = {
+  };
 
   var requireLandscapeHTML = [
       '<div id="hft-portrait" class="hft-fullsize hft-fullcenter">',
@@ -164,6 +166,11 @@ define([
     });
   }
 
+  function showMenu(show) {
+    var menuElement = $("hft-menu");
+    menuElement.style.display = show ? "block" : "none";
+  }
+
   /**
    * @typedef {Object} ControllerUI~Options
    * @property {callback} [connectFn] function to call when controller
@@ -192,22 +199,19 @@ define([
   var setupStandardControllerUI = function(client, options) {
     options = options || {};
     var hftSettings = window.hftSettings || {};
-    var menuElement = $("hft-menu");
     var settingsElement = $("hft-settings");
     var disconnectedElement = $("hft-disconnected");
     var touchStartElement = $("hft-touchstart");
 
-    if (!hftSettings.menu) {
-      menuElement.style.display = "none";
-    } else {
-      menuElement.addEventListener('click', function() {
-        settingsElement.style.display = "block";
-      }, false);
-      menuElement.addEventListener('touchstart', function() {
-        settingsElement.style.display = "block";
-      }, false);
-    }
+    var menuElement = $("hft-menu");
+    menuElement.addEventListener('click', function() {
+      settingsElement.style.display = "block";
+    }, false);
+    menuElement.addEventListener('touchstart', function() {
+      settingsElement.style.display = "block";
+    }, false);
 
+    showMenu(false);
 
     function makeHFTPingRequest(fn) {
       IO.sendJSON(window.location.href, {cmd: 'happyFunTimesPing'}, function(err, obj) {
@@ -240,11 +244,11 @@ define([
        goFullScreenIfNotFullScreen();
     }
 
-    var playerNameHandler = new PlayerNameHandler(client, $("hft-name"));
+    s.playerNameHandler = new PlayerNameHandler(client, $("hft-name"));
 
     $("hft-setname").addEventListener('click', function() {
       settingsElement.style.display = "none";
-      playerNameHandler.startNameEntry();
+      s.playerNameHandler.startNameEntry();
     }, false);
     $("hft-restart").addEventListener('click', function() {
       window.location.reload();
@@ -338,6 +342,13 @@ define([
     }
   };
 
+  var askForNameOnce = function() {
+    askForNameOnce = function() {};
+    if (!s.playerNameHandler.isNameSet()) {
+      s.playerNameHandler.startNameEntry();
+    }
+  };
+
   /**
    * Sets the content of the status element. Only visible of debug
    * is true.
@@ -371,11 +382,13 @@ define([
   };
 
   return {
+    askForNameOnce: askForNameOnce,
     log: log,
     error: error,
     setOrientation: setOrientation,
     setStatus: setStatus,
     setupStandardControllerUI: setupStandardControllerUI,
+    showMenu: showMenu,
   };
 });
 

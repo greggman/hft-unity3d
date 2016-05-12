@@ -185,6 +185,7 @@ requirejs([
 
     var layout = layouts[controllerType];
     commonUI.setOrientation(layout.orientation, layout.orientationOptional);
+    commonUI.showMenu(controllerOptions.showMenu);
 
     globals.provideOrientation  = controllerOptions.provideOrientation;
     globals.provideAcceleration = controllerOptions.provideAcceleration;
@@ -196,6 +197,12 @@ requirejs([
       startOrientationData(); // eslint-disable-line
     } else {
       stopOrientationData();  // eslint-disable-line
+    }
+
+    // Only try to set name once and only if it doesn't appear to already
+    // be set
+    if (controllerOptions.askForName) {
+      commonUI.askForNameOnce();
     }
   }
 

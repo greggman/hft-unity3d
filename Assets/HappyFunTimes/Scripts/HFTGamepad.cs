@@ -120,6 +120,8 @@ public class HFTGamepad : MonoBehaviour {
       provideOrientation = src.provideOrientation;
       provideAcceleration = src.provideAcceleration;
       provideRotationRate = src.provideRotationRate;
+      askForName = src.askForName;
+      showMenu = src.showMenu;
     }
 
     // Because I don't understand the whole Equals, GetHashCode C# mess
@@ -128,7 +130,9 @@ public class HFTGamepad : MonoBehaviour {
       return controllerType == other.controllerType &&
              provideOrientation == other.provideOrientation &&
              provideAcceleration == other.provideAcceleration &&
-             provideRotationRate == other.provideRotationRate;
+             provideRotationRate == other.provideRotationRate &&
+             askForName == other.askForName &&
+             showMenu == other.showMenu;
     }
 
     public ControllerType controllerType = ControllerType.c_1dpad_2button;
@@ -136,9 +140,13 @@ public class HFTGamepad : MonoBehaviour {
     public bool provideAcceleration = false;
     public bool provideRotationRate = false;
     public bool askForName = true;
-    public bool showGearMenu = true;
+    public bool showMenu = true;
+    // NOTE: If you add a field you need to add to the constructor and SameValues above!
   }
 
+  public string playerName;
+  public bool autoChooseColor = true;
+  public Color color = new Color(0.0f, 1.0f, 0.0f);
   public ControllerOptions controllerOptions;
 
   HFTGamepad() {
@@ -150,19 +158,25 @@ public class HFTGamepad : MonoBehaviour {
     }
   }
 
+  // For backward compatibility
+  // use gamepad.color instead
   public Color Color {
       get {
-          return m_color;
+          return color;
       }
       set {
-          m_color = value;
-          SendColor();
+          color = value;
       }
   }
 
+  // For backward compatibility
+  // use gamepad.playerName instead
   public string Name {
     get {
-      return m_netPlayer == null ? "localplayer" : m_netPlayer.Name;
+      return playerName;
+    }
+    set {
+      playerName = value;
     }
   }
 
@@ -181,9 +195,10 @@ public class HFTGamepad : MonoBehaviour {
 
   // Manages the connection between this object and the phone.
   private NetPlayer m_netPlayer;
-  private Color m_color = new Color(0.0f, 1.0f, 0.0f);
+  private HFTPlayerNameManager m_playerNameManager;
   private static int s_colorCount = 0;
 
+  private Color m_oldColor;
   private ControllerOptions m_oldControllerOptions = new ControllerOptions();
 
   private class MessageOptions : MessageCmdData {
@@ -236,6 +251,7 @@ public class HFTGamepad : MonoBehaviour {
     public float g = 0.0f;
   }
 
+
   void InitializeNetPlayer(SpawnInfo spawnInfo) {
     m_netPlayer = spawnInfo.netPlayer;
     m_netPlayer.OnDisconnect += Remove;
@@ -248,7 +264,8 @@ public class HFTGamepad : MonoBehaviour {
     m_netPlayer.RegisterCmdHandler<MessageRot>("rot", HandleRot);
     m_netPlayer.RegisterCmdHandler<MessageTouch>("touch", HandleTouch);
 
-    m_netPlayer.OnNameChange += ChangeName;
+    m_playerNameManager = new HFTPlayerNameManager(m_netPlayer);
+    m_playerNameManager.OnNameChange += HandleNameChange;
 
     // If the controller is showing the player "game full"
     // then tell it can play.
@@ -259,14 +276,17 @@ public class HFTGamepad : MonoBehaviour {
 
   void Awake()
   {
-    SetDefaultColor();
+    if (autoChooseColor)
+    {
+      SetDefaultColor();
+    }
   }
 
   void SendColor()
   {
     if (m_netPlayer != null)
     {
-      m_netPlayer.SendCmd("color", new MessageColor(m_color));
+      m_netPlayer.SendCmd("color", new MessageColor(color));
     }
   }
 
@@ -285,11 +305,14 @@ public class HFTGamepad : MonoBehaviour {
     float alpha = 1.0f;
 
     Vector4 hsva = new Vector4(hue, sat, value, alpha);
-    m_color = HFTColorUtils.HSVAToColor(hsva);
+    color = HFTColorUtils.HSVAToColor(hsva);
   }
 
   void Remove(object sender, System.EventArgs e)
   {
+      if (m_playerNameManager != null) {
+        m_playerNameManager.Close();
+      }
       Destroy(gameObject);
   }
 
@@ -307,6 +330,12 @@ public class HFTGamepad : MonoBehaviour {
     {
       m_oldControllerOptions = new ControllerOptions(controllerOptions);
       SendControllerOptions();
+    }
+
+    if (m_oldColor != color)
+    {
+      m_oldColor = color;
+      SendColor();
     }
   }
 
@@ -374,13 +403,12 @@ public class HFTGamepad : MonoBehaviour {
     axes[AXIS_TOUCH_Y + index] = (float)data.y / 500.0f - 1.0f;
   }
 
-  void ChangeName(object sender, System.EventArgs e)
-  {
-      System.EventHandler<System.EventArgs> handler = OnNameChange;
-      if (handler != null) {
-          handler(this, e);
-      }
+  void HandleNameChange(string name) {
+    playerName = name;
+    System.EventHandler<System.EventArgs> handler = OnNameChange;
+    if (handler != null) {
+        handler(this, new System.EventArgs());
+    }
   }
-
 }
 

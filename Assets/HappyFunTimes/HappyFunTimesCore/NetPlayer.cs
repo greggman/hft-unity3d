@@ -216,16 +216,10 @@ public abstract class NetPlayer
     /// </summary>
     public void RemoveAllHandlers() {
         OnDisconnect = null;
-        OnNameChange = null;
-        OnBusy = null;
         m_handlers.Clear();
     }
 
     void AddHandlers() {
-        RegisterInternalCmdHandler<MessageSetName>("setName", IgnoreSetNameMsg);
-        RegisterInternalCmdHandler<MessageSetName>("_hft_setname_", HandleSetNameMsg);
-        RegisterInternalCmdHandler<MessageBusy>("busy", IgnoreBusyMsg);
-        RegisterInternalCmdHandler<MessageBusy>("_hft_busy_", HandleBusyMsg);
         RegisterInternalCmdHandler<MessageLog>("_hft_log_", HandleLogMsg);
     }
 
@@ -310,36 +304,6 @@ public abstract class NetPlayer
         }
     }
 
-    void IgnoreSetNameMsg(MessageSetName unused) {
-        // Do nothing
-    }
-
-    void IgnoreBusyMsg(MessageBusy unused) {
-        // Do nothing
-    }
-
-    void HandleSetNameMsg(MessageSetName data) {
-        if (data.name.Length > 0 && data.name != m_name) {
-            m_name = data.name;
-            m_log.prefix = "NetPlayer[" + m_name + "]";
-
-            EventHandler<EventArgs> handler = OnNameChange;
-            if (handler != null) {
-                handler(this, new EventArgs());
-            }
-        }
-    }
-
-    void HandleBusyMsg(MessageBusy data) {
-        if (data.busy != m_busy) {
-            m_busy = data.busy;
-            EventHandler<EventArgs> handler = OnBusy;
-            if (handler != null) {
-                handler(this, new EventArgs());
-            }
-        }
-    }
-
     private string errorStr = @"error";
     void HandleLogMsg(MessageLog data) {
         if (errorStr.Equals(data.type, StringComparison.Ordinal)) {
@@ -354,32 +318,13 @@ public abstract class NetPlayer
         get {
             return m_name;
         }
-    }
-    public bool Busy {
-        get {
-            return m_busy;
+        set {
+            m_name = value;
+            m_log.prefix = "NetPlayer[" + value + "]";
         }
     }
 
     public event EventHandler<EventArgs> OnDisconnect;
-    public event EventHandler<EventArgs> OnNameChange;
-    public event EventHandler<EventArgs> OnBusy;
-
-    // Message when player changes their name.
-    private class MessageSetName
-    {
-        public MessageSetName() {  // needed for deserialization
-        }
-        public MessageSetName(string _name) {
-            name = _name;
-        }
-        public string name = "";
-    }
-
-    // Message then player is busy (on system menu)
-    private class MessageBusy {
-        public bool busy = false;
-    }
 
     // We need to separate m_internalHandlers because we check if
     // m_handlers.count is 0. If it is we assume no one has had
@@ -392,8 +337,7 @@ public abstract class NetPlayer
     private bool m_connected;
     private bool m_haveHandlers = false;
     private GameServer m_server;
-    private string m_name;
-    private bool m_busy = false;
+    private string m_name;  // used only for debugging
     private HFTLog m_log;
 
     protected Deserializer Deserializer {

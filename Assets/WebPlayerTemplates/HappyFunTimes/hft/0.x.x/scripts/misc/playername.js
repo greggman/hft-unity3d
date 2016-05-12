@@ -53,6 +53,15 @@ define(['./cookies'], function(Cookie) {
       element.value = name;
     };
 
+    this.getName = function() {
+      return name;
+    };
+
+    var nameIsPlayerRE = /^player\d*$/i;
+    this.isNameSet = function() {
+      return name && !nameIsPlayerRE.test(name);
+    };
+
     var handleSetNameMsg = function(msg) {
       name = msg.name;
       setName();
@@ -62,18 +71,10 @@ define(['./cookies'], function(Cookie) {
       client.sendCmd('_hft_setname_', {
           name: name,
       });
-      // deprecated msg .. left for legacy reasons
-      client.sendCmd('setName', {
-          name: name,
-      });
     };
 
     var sendBusy = function(busy) {
       client.sendCmd('_hft_busy_', {
-          busy: busy,
-      });
-      // deprecated msg .. left for legacy reasons
-      client.sendCmd('busy', {
           busy: busy,
       });
     };
@@ -122,7 +123,6 @@ define(['./cookies'], function(Cookie) {
     };
 
     // If the user's name is "" the game may send a name.
-    client.addEventListener('setName', handleSetNameMsg);
     client.addEventListener('_hft_setname_', handleSetNameMsg);
 
     element.addEventListener('click', startEnteringName, false);
