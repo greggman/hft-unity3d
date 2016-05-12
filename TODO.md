@@ -15,6 +15,7 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
+    *   merge css
     *   add controller folder name to pick controller
     *   send URL not raw IP because IP6
     *   move name stuff to game
