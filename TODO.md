@@ -20,7 +20,6 @@
     *   move name stuff to game
     *   Check if port busy
         *   inc port
-    *   remove "main menu" from menu
     *   move HFTDialog out of HFTDnsRunner
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
@@ -49,6 +48,7 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   remove Application.Quit
+    *   remove "main menu" from menu
     *   remove GameSystem
     *   Remove package.json
     *   Remove version stuff
