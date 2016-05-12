@@ -19,8 +19,7 @@ namespace HappyFunTimes
         {
             m_log = new HFTLog("WebServer");
             m_options = options;
-            string gameId = m_options.gameId;
-            m_gamePath = "/games/" + gameId + "/";  // FIX: don't need this path? Just use root?
+            m_gamePath = "/";
             m_webServerUtils = new HFTWebServerUtils(m_gamePath);
 
             HFTWebFileDB.GetInstance();
@@ -270,7 +269,7 @@ namespace HappyFunTimes
                 (path.Equals("/enter-name.html") && !(true /* FIX:m_options.askUserForName*/)))
             {
                 var uri = req.Url;
-                string url = uri.GetLeftPart(UriPartial.Authority) + m_gamePath + "controller.html" + uri.Query + uri.Fragment;
+                string url = uri.GetLeftPart(UriPartial.Authority) + m_gamePath + m_options.controllerFilename + uri.Query + uri.Fragment;
                 res.StatusCode = (int)HttpStatusCode.Redirect;
                 res.AddHeader("Location", url);
                 res.ContentType = "text/html";
@@ -331,7 +330,7 @@ namespace HappyFunTimes
 <script type=""hft-late"">
 requirejs.config({
   paths: {
-    hft: '../../../../hft/0.x.x/scripts',
+    hft: '/hft/0.x.x/scripts',//'../../../../hft/0.x.x/scripts',
     },
     shim: {
       '3rdparty/pep.min': {

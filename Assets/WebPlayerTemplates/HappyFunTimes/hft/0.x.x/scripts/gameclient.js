@@ -77,21 +77,8 @@ define([
     var log = options.quiet === true ? console.log.bind(console) : function() {};
 
     if (!options.gameId) {
-      var m = /games\/([^\/]+)\//.exec(window.location.href);
-      if (m) {
-        options.gameId = m[1];
-      } else {
-        throw new Error("can't derive gameId");
-      }
+      options.gameId = "HFTUnity";  // FIX: pass in hftSettings? Or don't care?
     }
-
-    /**
-     * returns the game's gameId
-     * @returns {String} the game's gameId
-     */
-    this.getGameId = function() {
-      return options.gameId;
-    };
 
     /**
      * @callback GameClient~Listener

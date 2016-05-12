@@ -40,6 +40,9 @@ namespace HappyFunTimes
     [Serializable]
     public class HFTUserOptions
     {
+        [Tooltip("name of controller html file. Must be in 'WebPlayerTemplates/HappyFunTimes'")]
+        public string controllerFilename = "controller.html";
+
         /// <summary>
         /// Name of game (shown if more than one game running on WiFi)
         /// </summary>
@@ -151,6 +154,11 @@ namespace HappyFunTimes
             dns = userOptions.dns;
             captivePortal = userOptions.captivePortal;
             showMessages = userOptions.showMessages;
+            controllerFilename = userOptions.controllerFilename;
+            if (String.IsNullOrEmpty(controllerFilename))
+            {
+                controllerFilename = "controller.html";
+            }
 
             if (String.IsNullOrEmpty(url))
             {
@@ -177,6 +185,7 @@ namespace HappyFunTimes
         public string id = "";
         public string name = "";
         public string gameId = "HFTUnity";  // this is kind of left over from when one server supported mutiple games
+        public string controllerFilename = "";
         public bool disconnectPlayersIfGameDisconnects = true;
         public bool installationMode = false;
         public bool master = false;
