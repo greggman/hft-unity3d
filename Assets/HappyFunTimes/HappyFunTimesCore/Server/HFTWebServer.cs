@@ -38,8 +38,6 @@ namespace HappyFunTimes
             m_liveSettingsStr = "define([], function() { return " + Serializer.Serialize(new LiveSettings()) + "; })\n";
             m_liveSettings = System.Text.Encoding.UTF8.GetBytes(m_liveSettingsStr);
 
-            m_hftSettingsStr = "window.hftSettings = " + Serializer.Serialize(new HFTSettings(true /* FIX options.showMenu */));
-
             if (options.captivePortal || options.installationMode)
             {
                 m_captivePortalHandler = new HFTCaptivePortalHandler(m_webServerUtils);
@@ -300,16 +298,6 @@ namespace HappyFunTimes
             public SystemSettings system = new SystemSettings();
         }
 
-        class HFTSettings
-        {
-            public HFTSettings(bool showMenu)
-            {
-                menu = showMenu;
-            }
-            public bool menu = true;
-            public string apiVersion = "1.14.0";
-        }
-
         Deserializer deserializer_ = new Deserializer();
         HFTRuntimeOptions m_options;
         string[] m_addresses;  // Addresses to listen in ip:port format?
@@ -322,7 +310,6 @@ namespace HappyFunTimes
         byte[] m_ping;
         string m_liveSettingsStr;
         byte[] m_liveSettings;
-        string m_hftSettingsStr;
     }
 
 }  // namespace HappyFunTimes
