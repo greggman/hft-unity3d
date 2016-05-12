@@ -15,8 +15,7 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
-    *   merge css
-    *   add controller folder name to pick controller
+    *   move controller into gamepad subfolder?
     *   send URL not raw IP because IP6
     *   move name stuff to game
     *   Check if port busy
@@ -61,6 +60,8 @@ DONE
     *   getting rid of __hft__ and/or make reconnect logic different
     *   Make PlayerSpawner and PlayerConnector use GameServer.Options directly
     *   remove cwd
+    *   merge css
+    *   add controller folder name to pick controller
 *   upload controller files if other server? (WontFix)
 *   make sure server has started before starting game
 *   fix gear icon
