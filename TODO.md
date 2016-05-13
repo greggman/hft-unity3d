@@ -15,6 +15,7 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
+    *   move the disconnect handing out of commonUI
     *   check controllers work on windows
     *   check controller path with / and \
     *   remove enter-name.html
