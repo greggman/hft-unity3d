@@ -56,10 +56,10 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
   void InitSounds()
   {
     s_sounds = new Sounds();
-    string soundFolder = "sounds";
+    string soundFolder = "/";    // This gets all sounds. Should I change it?
     HFTWebFileDB db = HFTWebFileDB.GetInstance();
-    AddSoundFiles(db.GetFiles(soundFolder, "*.mp3"));
-    AddSoundFiles(db.GetFiles(soundFolder, "*.wav"));
+    AddSoundFiles(soundFolder, db.GetFiles(soundFolder, "*.mp3"));
+    AddSoundFiles(soundFolder, db.GetFiles(soundFolder, "*.wav"));
     AddJSFXSounds(db.GetFiles(soundFolder, "*.jsfx.txt"));
   }
 
@@ -127,11 +127,11 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
     }
   }
 
-  void AddSoundFiles(string[] filenames)
+  void AddSoundFiles(string folder, string[] filenames)
   {
     foreach(string filename in filenames)
     {
-      string filepath = filename.Replace("\\", "/");
+      string filepath = Path.Combine(folder, filename.Replace("\\", "/"));
       s_sounds[Path.GetFileNameWithoutExtension(filename)] = new SoundFile(filepath);
     }
   }
