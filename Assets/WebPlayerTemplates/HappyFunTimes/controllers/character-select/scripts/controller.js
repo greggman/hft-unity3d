@@ -31,96 +31,87 @@
 "use strict";
 
 // Start the main app logic.
-requirejs([
-    'hft/commonui',
-    'hft/gameclient',
-    'hft/misc/input',
-    'hft/misc/misc',
-    'hft/misc/mobilehacks',
-    'hft/misc/touch',
-  ], function(
-    commonUI,
-    GameClient,
-    input,
-    misc,
-    mobileHacks,
-    touch) {
+var commonUI = sampleUI.commonUI;
+var input = sampleUI.input;
+var misc = sampleUI.misc;
+var mobileHacks = sampleUI.mobileHacks;
+var strings = sampleUI.strings;
+var touch = sampleUI.touch;
 
-  var globals = {
-    debug: false,
-    //orientation: "landscape-primary",
-  };
-  misc.applyUrlSettings(globals);
-  mobileHacks.fixHeightHack();
-  mobileHacks.disableContextMenu();
+var globals = {
+  debug: false,
+  //orientation: "landscape-primary",
+};
+misc.applyUrlSettings(globals);
+mobileHacks.fixHeightHack();
+mobileHacks.disableContextMenu();
 
-  var score = 0;
-  var choice = -1;
-  var statusElem = document.getElementById("gamestatus");
-  var inputElem = document.getElementById("inputarea");
-  var colorElem = document.getElementById("display");
-  var client = new GameClient();
+var score = 0;
+var choice = -1;
+var statusElem = document.getElementById("gamestatus");
+var inputElem = document.getElementById("inputarea");
+var colorElem = document.getElementById("display");
+var client = new hft.GameClient();
 
-  commonUI.setupStandardControllerUI(client, globals);
-  commonUI.askForNameOnce();
-  commonUI.showMenu(true);
+commonUI.setupStandardControllerUI(client, globals);
+commonUI.askForNameOnce();
+commonUI.showMenu(true);
 
-  var randInt = function(range) {
-    return Math.floor(Math.random() * range);
-  };
+var randInt = function(range) {
+  return Math.floor(Math.random() * range);
+};
 
-  // Sends a move command to the game.
-  //
-  // This will generate a 'move' event in the corresponding
-  // NetPlayer object in the game.
-  var sendMoveCmd = function(position, target) {
-    client.sendCmd('move', {
-      x: position.x / target.clientWidth,
-      y: position.y / target.clientHeight,
-    });
-  };
-
-  // Send a message to the game when the screen is touched
-  inputElem.addEventListener('pointermove', function(event) {
-    var position = input.getRelativeCoordinates(event.target, event);
-    sendMoveCmd(position, event.target);
-    event.preventDefault();
+// Sends a move command to the game.
+//
+// This will generate a 'move' event in the corresponding
+// NetPlayer object in the game.
+var sendMoveCmd = function(position, target) {
+  client.sendCmd('move', {
+    x: position.x / target.clientWidth,
+    y: position.y / target.clientHeight,
   });
+};
 
-  // Update our score when the game tells us.
-  client.addEventListener('scored', function(cmd) {
-    score += cmd.points;
-    statusElem.innerHTML = "You scored: " + cmd.points + " total: " + score;
-  });
-
-  function to255(v) {
-    return v * 255 | 0;
-  }
-
-  client.addEventListener('color', function(cmd) {
-    // Pick a random color
-    var c = cmd.color;
-    var color =  'rgb(' + to255(c.r) + "," + to255(c.g) + "," + to255(c.b) + ")";
-    colorElem.style.backgroundColor = color;
-  });
-
-  function selectCharacter(id) {
-    // only do this once
-    if (choice < 0) {
-      choice = id;
-      // Send the character choice to the game
-      client.sendCmd('character', { id: id });
-      // Hide the choose HTML
-      document.getElementById("choose").style.display = "none";
-    }
-  }
-
-  var $ = document.getElementById.bind(document);
-  $("choice0").addEventListener('click', function() { selectCharacter(0); });
-  $("choice1").addEventListener('click', function() { selectCharacter(1); });
-  $("choice2").addEventListener('click', function() { selectCharacter(2); });
-  $("choice0").addEventListener('touchstart', function() { selectCharacter(0); });
-  $("choice1").addEventListener('touchstart', function() { selectCharacter(1); });
-  $("choice2").addEventListener('touchstart', function() { selectCharacter(2); });
+// Send a message to the game when the screen is touched
+inputElem.addEventListener('pointermove', function(event) {
+  var position = input.getRelativeCoordinates(event.target, event);
+  sendMoveCmd(position, event.target);
+  event.preventDefault();
 });
+
+// Update our score when the game tells us.
+client.addEventListener('scored', function(cmd) {
+  score += cmd.points;
+  statusElem.innerHTML = "You scored: " + cmd.points + " total: " + score;
+});
+
+function to255(v) {
+  return v * 255 | 0;
+}
+
+client.addEventListener('color', function(cmd) {
+  // Pick a random color
+  var c = cmd.color;
+  var color =  'rgb(' + to255(c.r) + "," + to255(c.g) + "," + to255(c.b) + ")";
+  colorElem.style.backgroundColor = color;
+});
+
+function selectCharacter(id) {
+  // only do this once
+  if (choice < 0) {
+    choice = id;
+    // Send the character choice to the game
+    client.sendCmd('character', { id: id });
+    // Hide the choose HTML
+    document.getElementById("choose").style.display = "none";
+  }
+}
+
+var $ = document.getElementById.bind(document);
+$("choice0").addEventListener('click', function() { selectCharacter(0); });
+$("choice1").addEventListener('click', function() { selectCharacter(1); });
+$("choice2").addEventListener('click', function() { selectCharacter(2); });
+$("choice0").addEventListener('touchstart', function() { selectCharacter(0); });
+$("choice1").addEventListener('touchstart', function() { selectCharacter(1); });
+$("choice2").addEventListener('touchstart', function() { selectCharacter(2); });
 

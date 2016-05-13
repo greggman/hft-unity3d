@@ -1,0 +1,35 @@
+{
+  "name": "hft-unity3d",
+  "version": "2.0.0",
+  "description": "builder for happyfuntimes unity javascript runtime support",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greggman/hft-unity3d.git"
+  },
+  "keywords": [
+    "unity",
+    "happyfuntimes",
+    "happy",
+    "fun",
+    "games",
+    "game",
+    "gaming",
+    "controller",
+    "controllers",
+    "multiplayer",
+    "localmultiplayer"
+  ],
+  "author": "Gregg Tavares",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/greggman/hft-unity3d/issues"
+  },
+  "homepage": "https://github.com/greggman/hft-unity3d#readme",
+  "devDependencies": {
+    "webpack": "^1.13.0"
+  }
+}
