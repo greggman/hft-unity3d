@@ -38,7 +38,6 @@
 define([
     './io',
     './hft-splash',
-    './hft-settings',
     './misc/cookies',
     './misc/dialog',
     './misc/fullscreen',
@@ -50,7 +49,6 @@ define([
   ], function(
     IO,
     HFTSplash,
-    hftSettings,
     Cookie,
     dialog,
     fullScreen,
@@ -198,7 +196,6 @@ define([
    */
   var setupStandardControllerUI = function(client, options) {
     options = options || {};
-    var hftSettings = window.hftSettings || {};
     var settingsElement = $("hft-settings");
     var disconnectedElement = $("hft-disconnected");
     var touchStartElement = $("hft-touchstart");

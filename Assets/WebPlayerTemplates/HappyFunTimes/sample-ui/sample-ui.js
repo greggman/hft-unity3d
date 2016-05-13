@@ -46,7 +46,7 @@
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	    __webpack_require__(1),
-	    __webpack_require__(6),
+	    __webpack_require__(5),
 	    __webpack_require__(13),
 	    __webpack_require__(14),
 	    __webpack_require__(9),
@@ -123,7 +123,6 @@
 	    __webpack_require__(4),
 	    __webpack_require__(5),
 	    __webpack_require__(6),
-	    __webpack_require__(7),
 	    __webpack_require__(2),
 	    __webpack_require__(9),
 	    __webpack_require__(10),
@@ -132,7 +131,6 @@
 	  ], __WEBPACK_AMD_DEFINE_RESULT__ = function(
 	    IO,
 	    HFTSplash,
-	    hftSettings,
 	    Cookie,
 	    dialog,
 	    fullScreen,
@@ -280,7 +278,6 @@
 	   */
 	  var setupStandardControllerUI = function(client, options) {
 	    options = options || {};
-	    var hftSettings = window.hftSettings || {};
 	    var settingsElement = $("hft-settings");
 	    var disconnectedElement = $("hft-disconnected");
 	    var touchStartElement = $("hft-touchstart");
@@ -765,56 +762,6 @@
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
-	 * Copyright 2014, Gregg Tavares.
-	 * All rights reserved.
-	 *
-	 * Redistribution and use in source and binary forms, with or without
-	 * modification, are permitted provided that the following conditions are
-	 * met:
-	 *
-	 *     * Redistributions of source code must retain the above copyright
-	 * notice, this list of conditions and the following disclaimer.
-	 *     * Redistributions in binary form must reproduce the above
-	 * copyright notice, this list of conditions and the following disclaimer
-	 * in the documentation and/or other materials provided with the
-	 * distribution.
-	 *     * Neither the name of Gregg Tavares. nor the names of its
-	 * contributors may be used to endorse or promote products derived from
-	 * this software without specific prior written permission.
-	 *
-	 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-	 * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-	 * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-	 * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-	 * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	 * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	 * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-	 * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-	 * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-	 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 */
-	"use strict";
-	(function(window) {
-
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
-
-	  if (window === undefined) {
-	    window = {};
-	  }
-	  window.hftSettings = window.hftSettings || {};
-
-	  return window.hftSettings;
-	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(this));
-
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*
 	 * Copyright 2014, Gregg Tavares.
 	 * All rights reserved.
@@ -937,7 +884,7 @@
 
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -1091,7 +1038,7 @@
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
@@ -1127,7 +1074,7 @@
 	"use strict";
 
 	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	    __webpack_require__(4),
+	    __webpack_require__(7),
 	  ], __WEBPACK_AMD_DEFINE_RESULT__ = function(
 	    hftSettings) {
 
@@ -1203,6 +1150,56 @@
 	    requestFullScreen: requestFullScreen,
 	  };
 	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+	 * Copyright 2014, Gregg Tavares.
+	 * All rights reserved.
+	 *
+	 * Redistribution and use in source and binary forms, with or without
+	 * modification, are permitted provided that the following conditions are
+	 * met:
+	 *
+	 *     * Redistributions of source code must retain the above copyright
+	 * notice, this list of conditions and the following disclaimer.
+	 *     * Redistributions in binary form must reproduce the above
+	 * copyright notice, this list of conditions and the following disclaimer
+	 * in the documentation and/or other materials provided with the
+	 * distribution.
+	 *     * Neither the name of Gregg Tavares. nor the names of its
+	 * contributors may be used to endorse or promote products derived from
+	 * this software without specific prior written permission.
+	 *
+	 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+	 * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+	 * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+	 * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+	 * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+	 * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+	 * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+	 * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+	 * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+	 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+	 */
+	"use strict";
+	(function(window) {
+
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+
+	  if (window === undefined) {
+	    window = {};
+	  }
+	  window.hftSettings = window.hftSettings || {};
+
+	  return window.hftSettings;
+	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	}(this));
+
 
 
 /***/ },
@@ -2059,7 +2056,7 @@
 	"use strict";
 
 	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	    __webpack_require__(4),
+	    __webpack_require__(7),
 	    __webpack_require__(9),
 	  ], __WEBPACK_AMD_DEFINE_RESULT__ = function(
 	    hftSettings,
@@ -2177,7 +2174,7 @@
 	// Functions for dealing with the player's name. The name events are arguably
 	// not part of the HappyFunTimes library but they are used in most of the samples
 	// so I put them here.
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_RESULT__ = function(Cookie) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(4)], __WEBPACK_AMD_DEFINE_RESULT__ = function(Cookie) {
 
 	  var $ = function(id) {
 	    return document.getElementById(id);
