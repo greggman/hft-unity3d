@@ -85,8 +85,9 @@ public class HFTPlayerNameManager {
         public bool busy = false;
     }
 
-
     void RemoveAllHandlers() {
+        m_netPlayer.UnregisterCmdHandler("_hft_setname_");
+        m_netPlayer.UnregisterCmdHandler("_hft_busy_");
         OnNameChange = null;
         OnBusy = null;
     }

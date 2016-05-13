@@ -98,7 +98,6 @@ public class PlayerManager
     void SendSpawnInfoToGameObject(string msg, GameObject gameObject, NetPlayerState netPlayerState, SendMessageOptions sendMessageOptions = SendMessageOptions.RequireReceiver) {
         SpawnInfo spawnInfo = new SpawnInfo();
         spawnInfo.netPlayer = netPlayerState.netPlayer;
-        spawnInfo.name = netPlayerState.netPlayer.Name;
         spawnInfo.data = netPlayerState.data;
         gameObject.SendMessage(msg, spawnInfo, sendMessageOptions);
     }

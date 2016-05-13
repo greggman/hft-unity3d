@@ -40,7 +40,6 @@ namespace HappyFunTimes
     public class SpawnInfo
     {
         public NetPlayer netPlayer;
-        public string name;
         public object data;
     };
 
@@ -127,7 +126,6 @@ namespace HappyFunTimes
 
             SpawnInfo spawnInfo = new SpawnInfo();
             spawnInfo.netPlayer = netPlayer;
-            spawnInfo.name = netPlayer.Name;
             spawnInfo.data = data;
             gameObject.SendMessage("InitializeNetPlayer", spawnInfo);
         }

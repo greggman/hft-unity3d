@@ -82,7 +82,6 @@ public abstract class NetPlayer
         m_handlers = new Dictionary<string, CmdEventHandler>();
         m_internalHandlers = new Dictionary<string, CmdEventHandler>();
         m_deserializer = new Deserializer();
-        m_name = name;
         m_log = new HFTLog("NetPlayer[" + name + "]");
 
         AddHandlers();
@@ -315,11 +314,7 @@ public abstract class NetPlayer
 
     public abstract string GetSessionId();
     public string Name {
-        get {
-            return m_name;
-        }
         set {
-            m_name = value;
             m_log.prefix = "NetPlayer[" + value + "]";
         }
     }
@@ -337,7 +332,6 @@ public abstract class NetPlayer
     private bool m_connected;
     private bool m_haveHandlers = false;
     private GameServer m_server;
-    private string m_name;  // used only for debugging
     private HFTLog m_log;
 
     protected Deserializer Deserializer {
