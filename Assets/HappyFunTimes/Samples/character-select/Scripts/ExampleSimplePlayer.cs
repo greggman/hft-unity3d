@@ -44,7 +44,11 @@ class ExampleSimplePlayer : MonoBehaviour {
         }
     }
 
-    public void InitializeNetPlayer(NetPlayer netPlayer, HFTPlayerNameManager playerNameManager) {
+    void InitializeNetPlayer(NetPlayer netPlayer) {
+        Initialize(netPlayer, null);
+    }
+
+    public void Initialize(NetPlayer netPlayer, HFTPlayerNameManager playerNameManager) {
         Init();
         // Save the netplayer object so we can use it send messages to the phone
         m_netPlayer = netPlayer;
@@ -52,8 +56,8 @@ class ExampleSimplePlayer : MonoBehaviour {
         // Register handler to call if the player disconnects from the game.
         m_netPlayer.OnDisconnect += Remove;
 
-        // Handle Namechange.
-        m_playerNameManager = playerNameManager;
+        // Handle Namechange. Either use the one passed in or make a new one
+        m_playerNameManager = (playerNameManager != null) ? playerNameManager : new HFTPlayerNameManager(netPlayer);
         m_playerNameManager.OnNameChange += ChangeName;
 
         // Setup events for the different messages.
