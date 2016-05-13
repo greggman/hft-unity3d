@@ -44,8 +44,14 @@ class ExampleSimplePlayer : MonoBehaviour {
         }
     }
 
+    // Called by PlayerSpawner/PlayerConnector using GameObject.SendMessage
     void InitializeNetPlayer(NetPlayer netPlayer) {
         Initialize(netPlayer, null);
+    }
+
+    // Called by ExampleCharacterSelect using GameObject.SendMessage
+    void InitializeFromCharacterSelect(ExampleCharacterSelect.StartInfo startInfo) {
+        Initialize(startInfo.netPlayer, startInfo.playerNameManager);
     }
 
     public void Initialize(NetPlayer netPlayer, HFTPlayerNameManager playerNameManager) {

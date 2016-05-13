@@ -8,6 +8,16 @@ class ExampleCharacterSelect : MonoBehaviour {
 
     public GameObject[] characterPrefabs = null;
 
+    public class StartInfo {
+        public StartInfo(NetPlayer netPlayer, HFTPlayerNameManager playerNameManager) {
+            this.netPlayer = netPlayer;
+            this.playerNameManager = playerNameManager;
+        }
+
+        public NetPlayer netPlayer;
+        public HFTPlayerNameManager playerNameManager;
+    }
+
     private class MessageCharacter : MessageCmdData {
         public int id = 0;
     }
@@ -46,9 +56,8 @@ class ExampleCharacterSelect : MonoBehaviour {
         GameObject newGameObject = (GameObject)Instantiate(characterPrefabs[ndx]);
         // Send the netplayer to the character. We use a message
         // because then every character can have a differnet script if we want.
-        ExampleSimplePlayer sp = newGameObject.GetComponent<ExampleSimplePlayer>();
-        sp.InitializeNetPlayer(m_netPlayer, m_playerNameManager);
-//        newGameObject.SendMessage("InitializeNetPlayer", m_netPlayer);
+        newGameObject.SendMessage("InitializeFromCharacterSelect", new StartInfo(m_netPlayer, m_playerNameManager));
+
         // We're done. Destory ourselves
         Destroy(gameObject);
     }
