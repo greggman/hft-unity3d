@@ -17,7 +17,6 @@
 *   refactor for standalone
     *   move controller into gamepad subfolder?
     *   send URL not raw IP because IP6
-    *   move name stuff to game
     *   Check if port busy
         *   inc port
     *   move HFTDialog out of HFTDnsRunner
@@ -47,6 +46,8 @@ DONE
 
 *   Remove file uploader
 *   refactor for standlone
+    *   change color to public field
+    *   move name stuff to game
     *   remove Application.Quit
     *   remove "main menu" from menu
     *   remove GameSystem
