@@ -19,7 +19,6 @@
     *   check controllers work on windows
     *   check controller path with / and \
     *   remove enter-name.html
-    *   move controller into gamepad subfolder?
     *   send URL not raw IP because IP6
     *   Check if port busy
         *   inc port
@@ -51,6 +50,7 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   move controller into gamepad subfolder?
     *   move name stuff to game
     *   remove Application.Quit
     *   remove "main menu" from menu
