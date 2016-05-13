@@ -287,7 +287,7 @@ define([
             setTimeout(waitForPing, 1000);
             return;
           }
-          window.location.reload();
+          window.location.href = "/";
         });
       }
       // give it a moment to recover
