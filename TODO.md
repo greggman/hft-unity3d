@@ -15,6 +15,9 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
+    *   check controllers work on windows
+    *   check controller path with / and \
+    *   remove enter-name.html
     *   move controller into gamepad subfolder?
     *   send URL not raw IP because IP6
     *   Check if port busy

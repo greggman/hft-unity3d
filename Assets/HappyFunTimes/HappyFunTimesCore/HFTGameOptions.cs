@@ -159,6 +159,7 @@ namespace HappyFunTimes
             {
                 controllerFilename = "controller.html";
             }
+            controllerFilename = controllerFilename.replace("\\", "/");
 
             if (String.IsNullOrEmpty(url))
             {
