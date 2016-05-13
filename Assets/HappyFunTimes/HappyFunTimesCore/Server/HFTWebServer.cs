@@ -263,7 +263,7 @@ namespace HappyFunTimes
         bool HandleRoot(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
             if (path.Equals("/index.html") ||
-                (path.Equals("/enter-name.html") && !(true /* FIX:m_options.askUserForName*/)))
+                path.Equals("/enter-name.html"))
             {
                 var uri = req.Url;
                 string url = uri.GetLeftPart(UriPartial.Authority) + m_gamePath + m_options.controllerFilename + uri.Query + uri.Fragment;
