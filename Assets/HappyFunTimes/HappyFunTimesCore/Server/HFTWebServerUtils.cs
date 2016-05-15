@@ -55,16 +55,16 @@ namespace HappyFunTimes {
             return found;
         }
 
-        public void SendFile(string path, HttpListenerRequest req, HttpListenerResponse res)
+        public bool SendFile(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
             byte[] content = null;
             if (!GetGameFile(path, out content))
             {
-                res.StatusCode = (int)HttpStatusCode.NotFound;
-                return;
+                return false;
             }
 
             SendContent(res, path, content);
+            return true;
         }
 
         private string m_gamePath;

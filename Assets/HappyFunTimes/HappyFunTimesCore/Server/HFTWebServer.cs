@@ -47,6 +47,7 @@ namespace HappyFunTimes
             m_getRouter.Add(HandleRoot);
             m_getRouter.Add(HandleLiveSettings);
             m_getRouter.Add(HandleFile);
+            m_getRouter.Add(HandleMissingRoute);
 
             m_addresses = addresses;
         }
@@ -252,6 +253,17 @@ namespace HappyFunTimes
                 m_servers.RemoveAt(0);
                 server.Stop();
             }
+        }
+
+        bool HandleMissingRoute(string path, HttpListenerRequest req, HttpListenerResponse res)
+        {
+            if (path.EndsWith(".html")) {
+                if (m_webServerUtils.SendFile("/missing.html", req, res)) {
+                    return true;
+                }
+            }
+            res.StatusCode = (int)HttpStatusCode.NotFound;
+            return true;
         }
 
         bool HandleFile(string path, HttpListenerRequest req, HttpListenerResponse res)
