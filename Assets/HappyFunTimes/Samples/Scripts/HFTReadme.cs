@@ -48,7 +48,7 @@ namespace HappyFunTimes {
 
         void OnDrawGizmos()
         {
-            if (!enabled)
+            if (Application.isPlaying || !enabled)
             {
                 return;
             }
@@ -67,7 +67,7 @@ namespace HappyFunTimes {
 
         void OnGUI()
         {
-            if (!Application.isEditor || !enabled)
+            if (Application.isPlaying || !enabled)
             {
                 return;
             }
