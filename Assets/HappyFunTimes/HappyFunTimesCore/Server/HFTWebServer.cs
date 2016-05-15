@@ -38,7 +38,14 @@ namespace HappyFunTimes
             m_liveSettingsStr = "define([], function() { return " + Serializer.Serialize(new LiveSettings()) + "; })\n";
             m_liveSettings = System.Text.Encoding.UTF8.GetBytes(m_liveSettingsStr);
 
-            string redirStr = Serializer.Serialize(new Redir(m_gamePath + m_options.controllerFilename));
+            string controllerPath = m_gamePath + m_options.controllerFilename;
+            if (!HFTWebFileDB.GetInstance().FileExists(controllerPath))
+            {
+                throw new System.ArgumentException(
+                    "\"Assets/WebPlayerTemplates/HappyFunTimes" + controllerPath + "\" does not exist. Did you forget to set \"controllerFilename\" in your \"PlayerSpawner\" or \"PlayerConnector\"?");
+            }
+
+            string redirStr = Serializer.Serialize(new Redir(controllerPath));
             m_redir = System.Text.Encoding.UTF8.GetBytes(redirStr);
 
             if (options.captivePortal || options.installationMode)
