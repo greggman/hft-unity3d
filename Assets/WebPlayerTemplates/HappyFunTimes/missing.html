@@ -1,0 +1,156 @@
+<!--
+/*
+ * Copyright 2014, Gregg Tavares.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer
+ * in the documentation and/or other materials provided with the
+ * distribution.
+ *     * Neither the name of Gregg Tavares. nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="format-detection" content="telephone=no" />
+  <title>happyfuntimes missing file</title>
+  <style>
+  html {
+    box-sizing: border-box;
+    height: 100%;
+  }
+  *, *:before, *:after {
+    box-sizing: inherit;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  body {
+      height: 100%;
+      margin: 0;
+      font-family: sans-serif;
+  }
+  /* class to make a column based flexbox with everything centered */
+  .hft-fullcenter {
+    width: 100%;
+    height: 100%;
+
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-box-orient: vertical;
+    -webkit-flex-flow: column;
+    flex-flow: column;
+
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -webkit-align-content: center;
+    -webkit-align-items: center;
+
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    min-height: auto;
+  }
+  .hft-instruction {
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+  }
+  code {
+      background: #DDD;
+      padding: 0.1em 0.2em 0.1em 0.2em;
+      word-break: break-word;
+  }
+
+  @media only screen and (max-width: 550px) {
+      .hft-instruction {
+          font-size: medium;
+      }
+  }
+  </style>
+</head>
+<body>
+<div class="hft-fullcenter">
+    <div class="hft-instruction">
+        <div>
+            <code id="filename"></code> is missing.
+        </div>
+        <p></p>
+        <div>
+            Did you forget to set the <code>controllerFilename</code>
+            in your <code>PlayerSpawner</code> or <code>PlayerConnector</code>?
+        </div>
+    </div>
+</div>
+</body>
+<script>
+var $ = document.querySelector.bind(document);
+$("#filename").innerHTML = "Assets/WebPlayerTemplates/HappyFunTimes" + window.location.pathname;
+
+function getJSON(url, obj, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try {
+        var obj = JSON.parse(xhr.responseText)
+        callback(null, obj);
+      } catch (e) {
+        callback(e);
+      }
+    } else {
+      callback("status not 200. Was " + xhr.status);
+    }
+  }
+  xhr.onerror = function(e) {
+    callback(e);
+  };
+  xhr.send(JSON.stringify(obj));
+}
+
+function waitForNewLocation() {
+  getJSON(window.location.href, {cmd: "happyFunTimesRedir"}, function(err, obj) {
+    if (err || obj.pathname === window.location.pathname) {
+      setTimeout(waitForNewLocation, 1000);
+      return;
+    }
+    window.location.href = "/";
+  });
+}
+setTimeout(waitForNewLocation, 2000);
+</script>
+</html>
