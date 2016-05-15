@@ -62,7 +62,7 @@ namespace HappyFunTimes {
             int y = (camera.pixelHeight - height) / 2;
             Rect r = ScreenRect(x, y, width, height);
 
-            UnityEditor.Handles.DrawSolidRectangleWithOutline(r, new Color(0f, 0f, 0f, 0.3f), Color.white);
+            UnityEditor.Handles.DrawSolidRectangleWithOutline(r, new Color(0f, 0f, 0f, 0.6f), Color.white);
             UnityEditor.Handles.Label(ScreenToWorld(x + border, y + border), GetContent(), GetStyle(width, height));
         }
 
