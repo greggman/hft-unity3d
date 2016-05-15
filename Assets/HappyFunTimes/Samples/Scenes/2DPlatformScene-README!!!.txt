@@ -1,7 +1,13 @@
-This scene does bla bla
+In the <color=cyan>LevelManager</color> GameObject you'll find a <color=cyan>PlayerSpanwer</color> that spawns
+the <color=cyan>HappyFunTimes/Samples/Prefabs/Character</color> prefab each time a player connects.
 
-bla bla bla
+The <color=cyan>Character</color> prefab has an <color=cyan>HFTGamepad</color> component which talks
+to the player's phone through <color=cyan>Assets/WebPlayerTemplates/HappyFunTimes/controllers/gamepad/controller.js</color>
+and allows you choose various styles of controller. Of course you are free to make your own controller.js and do whatever
+you want.
 
-And be sure to bla the bla before you bla
+There's also a <color=cyan>HFTInput</color> component which emulates the built in <color=cyan>Input</color> class.
 
-
+Finally there's a <color=cyan>BirdScript</color> component which controls each player's character. It interacts
+with the <color=cyan>HFTInput</color> component to control the player as well as the <color=cyan>HFTGamepad</color>
+component to let the game set the color of the controller and get the user's name.
