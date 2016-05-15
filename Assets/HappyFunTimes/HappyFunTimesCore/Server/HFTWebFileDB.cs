@@ -26,6 +26,13 @@ namespace HappyFunTimes
             return s_instance;
         }
 
+        public bool FileExists(string path)
+        {
+            // hacky
+            byte[] data = null;
+            return GetFile(path, out data);
+        }
+
         public bool GetFile(string path, out byte[] content)
         {
             path = path.Replace('\\', '/');
