@@ -8,6 +8,7 @@ namespace HappyFunTimes {
     public class HFTReadmeFile : MonoBehaviour {
 
         public TextAsset file;
+        public bool richText = false;
 
         #if UNITY_EDITOR
         private Rect m_windowRect;
@@ -28,8 +29,20 @@ namespace HappyFunTimes {
             return new Rect(tl.x, tl.y, br.x - tl.x, br.y - tl.y);
         }
 
-        string GetText() {
-            return file.text.Replace("\n\n", "--EOL--").Replace("\n", " ").Replace("--EOL--", "\n\n");
+        GUIContent GetContent() {
+            return new GUIContent(file.text.Replace("\n\n", "--EOL--").Replace("\n", " ").Replace("--EOL--", "\n\n"));
+        }
+
+        GUIStyle GetStyle(float width) {
+            GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Label"));
+
+            style.normal.textColor = Color.white;
+            style.wordWrap = true;
+            style.fixedWidth = width - border * 2;
+            style.fontSize = 12;
+            style.richText = richText;
+
+            return style;
         }
 
         void OnDrawGizmos()
@@ -38,9 +51,6 @@ namespace HappyFunTimes {
             {
                 return;
             }
-
-            GUIContent textContent = new GUIContent(GetText());
-            GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Label"));
 
             Camera camera = Camera.current;
             int width = Mathf.Min(maxWidth, camera.pixelWidth - 20);
@@ -51,16 +61,12 @@ namespace HappyFunTimes {
             Rect r = ScreenRect(x, y, width, height);
 
             UnityEditor.Handles.DrawSolidRectangleWithOutline(r, new Color(0f, 0f, 0f, 0.3f), Color.white);
-            style.normal.textColor = Color.white;
-            style.wordWrap = true;
-            style.fixedWidth = width - border * 2;
-            style.fontSize = 12;
-            UnityEditor.Handles.Label(ScreenToWorld(x + border, y + border), textContent, style);
+            UnityEditor.Handles.Label(ScreenToWorld(x + border, y + border), GetContent(), GetStyle(width));
         }
 
         void OnGUI()
         {
-            if (!Application.isEditor || !enabled)
+            if (!Application.isEditor || !enabled || file == null)
             {
                 return;
             }
@@ -86,7 +92,7 @@ namespace HappyFunTimes {
                     border,
                     m_windowRect.width - border * 2,
                     m_windowRect.height - border * 2);
-                GUI.Label(l, GetText());
+                GUI.Label(l, GetContent(), GetStyle(m_windowRect.width));
             }
         }
         #endif
