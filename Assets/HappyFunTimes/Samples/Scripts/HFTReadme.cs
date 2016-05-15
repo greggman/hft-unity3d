@@ -34,12 +34,13 @@ namespace HappyFunTimes {
             return new GUIContent(message.Replace("\n\n", "--EOL--").Replace("\n", " ").Replace("--EOL--", "\n\n"));
         }
 
-        GUIStyle GetStyle(float width) {
+        GUIStyle GetStyle(float width, float height) {
             GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Label"));
 
             style.normal.textColor = Color.white;
             style.wordWrap = true;
             style.fixedWidth = width - border * 2;
+            style.fixedHeight = height - border * 2;
             style.fontSize = 12;
             style.richText = richText;
 
@@ -62,7 +63,7 @@ namespace HappyFunTimes {
             Rect r = ScreenRect(x, y, width, height);
 
             UnityEditor.Handles.DrawSolidRectangleWithOutline(r, new Color(0f, 0f, 0f, 0.3f), Color.white);
-            UnityEditor.Handles.Label(ScreenToWorld(x + border, y + border), GetContent(), GetStyle(width));
+            UnityEditor.Handles.Label(ScreenToWorld(x + border, y + border), GetContent(), GetStyle(width, height));
         }
 
         void OnGUI()
@@ -95,7 +96,7 @@ namespace HappyFunTimes {
                 border,
                 m_windowRect.width - border * 2,
                 m_windowRect.height - border * 2);
-            GUI.Label(l, GetContent(), GetStyle(m_windowRect.width));
+            GUI.Label(l, GetContent(), GetStyle(m_windowRect.width, m_windowRect.height));
         }
         #endif
     }
