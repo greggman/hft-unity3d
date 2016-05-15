@@ -15,10 +15,10 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
-    *   move the disconnect handing out of commonUI
+    *   for missing .html file serve missing.html which pings for restart
+        *   needs to check it will be redirected to a different place than it already is?
     *   check controllers work on windows
     *   check controller path with / and \
-    *   remove enter-name.html
     *   send URL not raw IP because IP6
     *   Check if port busy
         *   inc port
@@ -29,6 +29,7 @@
         *   have default instructions
         *   settable from cmdline/envar
 *   Log to console
+*   move the disconnect handing out of commonUI
 *   make hft.net keep trying
 *   test switching games
 *   ../
@@ -50,6 +51,7 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   remove enter-name.html
     *   move controller into gamepad subfolder?
     *   move name stuff to game
     *   remove Application.Quit
