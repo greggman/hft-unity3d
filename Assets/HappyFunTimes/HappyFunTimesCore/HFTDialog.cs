@@ -9,19 +9,21 @@ namespace HappyFunTimes {
         Action m_action;
         string m_title;
         string m_msg;
+        bool m_richText;
 
-        static public void MessageBox(string title, string msg, Action action = null)
+        static public void MessageBox(string title, string msg, Action action = null, bool richText = false)
         {
             GameObject go = new GameObject("HFTDialog");
             HFTDialog dlg = go.AddComponent<HFTDialog>();
-            dlg.Init(title, msg, action);
+            dlg.Init(title, msg, action, richText);
         }
 
-        void Init(string title, string msg, Action action)
+        void Init(string title, string msg, Action action, bool richText)
         {
             m_title = title;
             m_msg = msg;
             m_action = action;
+            m_richText = richText;
         }
 
         void OnGUI()
@@ -52,7 +54,16 @@ namespace HappyFunTimes {
                 border + spacing,
                 m_windowRect.width - border * 2,
                 m_windowRect.height - border * 2 - height - spacing);
-            GUI.Label(l, m_msg);
+            GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Label"));
+
+            style.normal.textColor = Color.white;
+            style.wordWrap = true;
+            //style.fixedWidth = width - border * 2;
+            //style.fixedHeight = height - border * 2;
+            style.fontSize = 12;
+            style.richText = m_richText;
+
+            GUI.Label(l, m_msg, style);
 
             Rect b = new Rect(
                 m_windowRect.width - width - border,
