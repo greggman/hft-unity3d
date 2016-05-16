@@ -2,10 +2,10 @@ const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
-    entry: './audiomanager.js',
+    entry: './game-utils.js',
     output: {
         path: path.join(__dirname, '../Assets/WebPlayerTemplates/HappyFunTimes/3rdparty'),
-        filename: 'audiomanager-min.js',
+        filename: 'game-utils-min.js',
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({

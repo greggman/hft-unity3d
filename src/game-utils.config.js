@@ -3,10 +3,10 @@ const path = require('path');
 var plugins = require('webpack-load-plugins')();
 
 module.exports = {
-    entry: './audiomanager.js',
+    entry: './game-utils.js',
     output: {
         path: path.join(__dirname, '../Assets/WebPlayerTemplates/HappyFunTimes/3rdparty'),
-        filename: 'audiomanager.js',
+        filename: 'game-utils.js',
     },
 };
 
