@@ -211,6 +211,7 @@ namespace HappyFunTimes
         public string gameId;
         public object data;
 
+        public MessageSwitchGame() { } // for deserialization
         public MessageSwitchGame(string id, object d)
         {
             gameId = id;
