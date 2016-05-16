@@ -161,12 +161,6 @@ namespace HappyFunTimes
             }
             controllerFilename = controllerFilename.Replace("\\", "/");
 
-            if (String.IsNullOrEmpty(url))
-            {
-                url = "ws://localhost:18679";
-                startServer = true;
-            }
-
             // Prefix all HFT arguments with "hft-" so user can filter them out
             ArgParser p = new ArgParser();
 
@@ -180,6 +174,15 @@ namespace HappyFunTimes
             p.TryGet<string>("hft-id", ref id);
             p.TryGet<string>("hft-rendezvous-url", ref rendezvousUrl);
             p.TryGet<string>("hft-server-port", ref serverPort);
+
+            if (String.IsNullOrEmpty(url))
+            {
+                url = "ws://localhost:18679";
+                startServer = true;
+            } else {
+                startServer = false;
+            }
+
         }
 
         public string url = "";
