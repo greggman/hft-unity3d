@@ -16,14 +16,14 @@
 *   Turn on log from command line/env
 *   refactor for standalone
     *   remove startServer?
-    *   for missing .html file serve missing.html which pings for restart
-        *   needs to check it will be redirected to a different place than it already is?
+    *   add debug server flag, different from show messages
+    *   remove disconnect from HFTGamepad and add to BirdScript and others
     *   check controllers work on windows
     *   check controller path with / and \
     *   send URL not raw IP because IP6
     *   Check if port busy
         *   inc port
-    *   move HFTDialog out of HFTDnsRunner
+    *   move HFTDialog out of HFTDnsRunner?
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
     *   make instructions work (do I need this?) Maybe this should move to game out of HFT
@@ -52,6 +52,8 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   for missing .html file serve missing.html which pings for restart
+        *   needs to check it will be redirected to a different place than it already is?
     *   remove enter-name.html
     *   move controller into gamepad subfolder?
     *   move name stuff to game
