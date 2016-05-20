@@ -12,7 +12,7 @@ This is a sample Unity3D game for the [HappyFunTimes party games system](http://
 This one emulates a bunch of simple controllers. This allows you to get started with HappyFunTimes in
 your Unity project very quickly.
 
-<img src="Assets/WebPlayerTemplates/HappyFunTimes/screenshot.png" />
+<img src="src/images/screenshot.png" />
 
 Samples include a 2D platformer example inspired by [this tutorial from the unity website](https://unity3d.com/learn/tutorials/modules/beginner/2d)
 unity website but with HappyFunTimes control added. There is also an example showing using orientation and
