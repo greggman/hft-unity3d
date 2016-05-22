@@ -101,13 +101,6 @@ namespace HappyFunTimes
         public bool showMessages;
 
         /// <summary>
-        /// Whether or not to start the server
-        ///
-        /// By default it's true unless HFT_URL is set then it's false;
-        /// </summary>
-        public bool startServer = true;
-
-        /// <summary>
         /// Whether or not to run DNS server
         /// </summary>
         [Tooltip("for debugging. Set automatically with --hft-installation-mode")]
@@ -150,7 +143,6 @@ namespace HappyFunTimes
             rendezvousUrl = userOptions.rendezvousUrl;
             master = userOptions.master;
             url = userOptions.url;
-            startServer = userOptions.startServer;
             dns = userOptions.dns;
             captivePortal = userOptions.captivePortal;
             showMessages = userOptions.showMessages;
@@ -164,11 +156,8 @@ namespace HappyFunTimes
             // Prefix all HFT arguments with "hft-" so user can filter them out
             ArgParser p = new ArgParser();
 
-            installationMode = p.Contains("hft-installation-mode");
-            if (!master)
-            {
-                master = p.Contains("hft-master");
-            }
+            p.TryGetBool("hft-installation-mode", ref installationMode);
+            p.TryGetBool("hft-master", ref master);
 
             p.TryGet<string>("hft-url", ref url);
             p.TryGet<string>("hft-id", ref id);
