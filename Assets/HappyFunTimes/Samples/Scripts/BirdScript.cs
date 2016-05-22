@@ -77,6 +77,14 @@ public class BirdScript : MonoBehaviour {
 
         // Notify us if the name changes.
         m_gamepad.OnNameChange += ChangeName;
+
+        // Delete ourselves if disconnected
+        m_gamepad.OnDisconnect += Remove;
+    }
+
+    void Remove()
+    {
+        Destroy(gameObject);
     }
 
     void Update()

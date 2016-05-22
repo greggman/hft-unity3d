@@ -54,12 +54,16 @@ public class ControllerTestScript : MonoBehaviour {
 
         m_gamepad = GetComponent<HFTGamepad>();
         m_hftInput = GetComponent<HFTInput>();
-        m_gamepad.NetPlayer.OnDisconnect += OnDisconnect;
+
+        // Delete ourselves if disconnected
+        m_gamepad.OnDisconnect += Remove;
+
     }
 
-    void OnDisconnect(object sender, System.EventArgs args)
+    void Remove()
     {
         s_ids.Remove(m_id);
+        Destroy(gameObject);
     }
 
     void OnGUI()

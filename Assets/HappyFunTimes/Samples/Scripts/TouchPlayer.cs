@@ -50,10 +50,19 @@ class TouchPlayer : MonoBehaviour
         m_rawImage = transform.FindChild("NameUI/NameBackground").gameObject.GetComponent<UnityEngine.UI.RawImage>();
         m_rawImage.material = (Material)Instantiate(m_rawImage.material);
 
+        // Notify us if the name changes.
         m_gamepad.OnNameChange += ChangeName;
+
+        // Delete ourselves if disconnected
+        m_gamepad.OnDisconnect += Remove;
 
         SetName(m_gamepad.Name);
         SetColor(m_gamepad.Color);
+    }
+
+    void Remove()
+    {
+        Destroy(gameObject);
     }
 
     void Update()

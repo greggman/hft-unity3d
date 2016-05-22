@@ -31,6 +31,7 @@
 
 using HappyFunTimes;
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class HFTGamepad : MonoBehaviour {
@@ -187,6 +188,7 @@ public class HFTGamepad : MonoBehaviour {
   }
 
   public event System.EventHandler<System.EventArgs> OnNameChange;
+  public event Action OnDisconnect;
 
   [System.NonSerialized]
   public float[] axes;
@@ -254,7 +256,7 @@ public class HFTGamepad : MonoBehaviour {
 
   void InitializeNetPlayer(SpawnInfo spawnInfo) {
     m_netPlayer = spawnInfo.netPlayer;
-    m_netPlayer.OnDisconnect += Remove;
+    m_netPlayer.OnDisconnect += HandleDisconnect;
 
     // Setup events for the different messages.
     m_netPlayer.RegisterCmdHandler<MessageButton>("button", HandleButton);
@@ -282,6 +284,27 @@ public class HFTGamepad : MonoBehaviour {
     }
   }
 
+  void OnDestroy() {
+    Cleanup();
+  }
+
+  void Cleanup() {
+    m_netPlayer.OnDisconnect -= HandleDisconnect;
+    if (m_playerNameManager != null) {
+      m_playerNameManager.Close();
+      m_playerNameManager = null;
+    }
+  }
+
+  void HandleDisconnect(object sender, System.EventArgs e)
+  {
+    Action handler = OnDisconnect;
+    if (handler != null)
+    {
+      handler();
+    }
+  }
+
   void SendColor()
   {
     if (m_netPlayer != null)
@@ -306,14 +329,6 @@ public class HFTGamepad : MonoBehaviour {
 
     Vector4 hsva = new Vector4(hue, sat, value, alpha);
     color = HFTColorUtils.HSVAToColor(hsva);
-  }
-
-  void Remove(object sender, System.EventArgs e)
-  {
-      if (m_playerNameManager != null) {
-        m_playerNameManager.Close();
-      }
-      Destroy(gameObject);
   }
 
   public void ReturnPlayer()

@@ -37,6 +37,15 @@ public class SoundTest : MonoBehaviour {
     void Awake ()
     {
         m_soundPlayer = GetComponent<HFTSoundPlayer>();
+        m_gamepad = GetComponent<HFTGamepad>();
+
+        // Delete ourselves if disconnected
+        m_gamepad.OnDisconnect += Remove;
+    }
+
+    void Remove()
+    {
+        Destroy(gameObject);
     }
 
     void Start()
@@ -59,5 +68,6 @@ public class SoundTest : MonoBehaviour {
         }
     }
 
+    private HFTGamepad m_gamepad;
     private HFTSoundPlayer m_soundPlayer;
 }
