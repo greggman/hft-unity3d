@@ -41,6 +41,11 @@ namespace HappyFunTimes {
 
         static public void ShowReadme(string name, string text, bool richText, Component component)
         {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
             System.Type t = GetWindowType();
             if (t != null)
             {
