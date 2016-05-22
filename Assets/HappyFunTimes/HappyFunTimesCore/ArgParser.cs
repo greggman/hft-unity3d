@@ -68,9 +68,7 @@ namespace HappyFunTimes {
 ///
 ///    p.TryGet<string>("name", name);
 ///    p.TryGet<int>("count", count);
-///    if (p.Contains("debug")) {
-///      debug = true;
-///    }
+///    p.TryGetBool("debug", debug);
 /// ]]>
 /// </code>
 /// </example>
@@ -130,6 +128,29 @@ public class ArgParser {
             value = (T)System.Convert.ChangeType(v, typeof(T));
         }
         return v != null;
+    }
+
+    /// <summary>
+    /// Specialed for bool because we care about whether or not it
+    /// exists and/or is preceeded by `--no`
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public bool TryGetBool(string id, ref bool value)
+    {
+        string v = null;
+        if (TryGet<string>(id, ref v))
+        {
+            value = true;
+            return true;
+        }
+        if (TryGet<string>("--no" + id, ref v))
+        {
+            value = false;
+            return true;
+        }
+        return false;
     }
 
     private void Init(string[] arguments)
