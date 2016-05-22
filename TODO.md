@@ -15,7 +15,6 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
-    *   remove startServer?
     *   add debug server flag, different from show messages
     *   remove disconnect from HFTGamepad and add to BirdScript and others
     *   check controllers work on windows
@@ -52,6 +51,7 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   remove startServer?
     *   for missing .html file serve missing.html which pings for restart
         *   needs to check it will be redirected to a different place than it already is?
     *   remove enter-name.html
