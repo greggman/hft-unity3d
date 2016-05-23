@@ -1500,6 +1500,15 @@
 	  };
 
 	  /**
+	   * Gets a random element from array
+	   * @param {Array<*>} array array to select element from
+	   * @return {*} picked element
+	   */
+	  function pickRandomElement(array) {
+	    return array[randInt(array.length)];
+	  }
+
+	  /**
 	   * get a random 32bit color
 	   * @param {function(number): number?) opt_randFunc function to generate random numbers
 	   * @return {string} random 32bit color
@@ -1778,6 +1787,7 @@
 	    objectToSearchString: objectToSearchString,
 	    parseUrlQuery: parseUrlQuery,
 	    parseUrlQueryString: parseUrlQueryString,
+	    pickRandomElement: pickRandomElement,
 	    radToDeg: radToDeg,
 	    randInt: randInt,
 	    randCSSColor: randCSSColor,
@@ -2174,15 +2184,36 @@
 	// Functions for dealing with the player's name. The name events are arguably
 	// not part of the HappyFunTimes library but they are used in most of the samples
 	// so I put them here.
-	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(4)], __WEBPACK_AMD_DEFINE_RESULT__ = function(Cookie) {
+	!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+	    __webpack_require__(4),
+	    __webpack_require__(9),
+	  ], __WEBPACK_AMD_DEFINE_RESULT__ = function(
+	    Cookie,
+	    misc) {
 
 	  var $ = function(id) {
 	    return document.getElementById(id);
 	  };
 
+	  var q = misc.parseUrlQuery();
+
+	  var startingNames = [
+	    "Aaron",    "Momo",
+	    "Michael",  "Remi",
+	    "Matt",     "Aya",
+	    "John",     "Stephanie",
+	    "Brian",    "Anna",
+	    "Danny",    "Jen",
+	    "Gregg",    "Tami",
+	    "Vincent",  "Carole",
+	    "Eric",     "Anita",
+	    "Rick",     "Joss",
+	    "Colin",    "Angel",
+	  ];
+
 	  var PlayerNameHandler = function(client, element) {
 	    var nameCookie = new Cookie("name");
-	    var name = nameCookie.get() || "";
+	    var name = nameCookie.get() || q.name || "";
 
 	    // UGH! I guess this name stuff should move to CommonUI. At one point
 	    // it seemed separte
@@ -2190,7 +2221,7 @@
 	    var content = $("hft-content");
 	    var contentOriginalDisplay = content.style.display;
 
-	    var setName = function() {
+	    var copyNameToElement = function() {
 	      element.value = name;
 	    };
 
@@ -2199,13 +2230,15 @@
 	    };
 
 	    var nameIsPlayerRE = /^player\d*$/i;
-	    this.isNameSet = function() {
+	    function isNameSet() {
 	      return name && !nameIsPlayerRE.test(name);
 	    };
 
+	    this.isNameSet = isNameSet;
+
 	    var handleSetNameMsg = function(msg) {
 	      name = msg.name;
-	      setName();
+	      copyNameToElement();
 	    };
 
 	    var sendName = function() {
@@ -2260,6 +2293,9 @@
 	      // solution. Just hide the controls while entering the name. (see below)
 	      nameentry.style.display = "block";
 	      content.style.display = "none";
+	      if (!isNameSet()) {
+	        element.value = misc.pickRandomElement(startingNames);
+	      }
 	      element.focus();
 	    };
 
@@ -2275,7 +2311,7 @@
 	      element.form.addEventListener('submit', finishEnteringName, false);
 	    }
 
-	    setName();
+	    copyNameToElement();
 	    sendName();
 	  };
 
