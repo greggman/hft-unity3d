@@ -33,15 +33,36 @@
 // Functions for dealing with the player's name. The name events are arguably
 // not part of the HappyFunTimes library but they are used in most of the samples
 // so I put them here.
-define(['./cookies'], function(Cookie) {
+define([
+    './cookies',
+    './misc',
+  ], function(
+    Cookie,
+    misc) {
 
   var $ = function(id) {
     return document.getElementById(id);
   };
 
+  var q = misc.parseUrlQuery();
+
+  var startingNames = [
+    "Aaron",    "Momo",
+    "Michael",  "Remi",
+    "Matt",     "Aya",
+    "John",     "Stephanie",
+    "Brian",    "Anna",
+    "Danny",    "Jen",
+    "Gregg",    "Tami",
+    "Vincent",  "Carole",
+    "Eric",     "Anita",
+    "Rick",     "Joss",
+    "Colin",    "Angel",
+  ];
+
   var PlayerNameHandler = function(client, element) {
     var nameCookie = new Cookie("name");
-    var name = nameCookie.get() || "";
+    var name = nameCookie.get() || q.name || "";
 
     // UGH! I guess this name stuff should move to CommonUI. At one point
     // it seemed separte
@@ -49,7 +70,7 @@ define(['./cookies'], function(Cookie) {
     var content = $("hft-content");
     var contentOriginalDisplay = content.style.display;
 
-    var setName = function() {
+    var copyNameToElement = function() {
       element.value = name;
     };
 
@@ -58,13 +79,15 @@ define(['./cookies'], function(Cookie) {
     };
 
     var nameIsPlayerRE = /^player\d*$/i;
-    this.isNameSet = function() {
+    function isNameSet() {
       return name && !nameIsPlayerRE.test(name);
     };
 
+    this.isNameSet = isNameSet;
+
     var handleSetNameMsg = function(msg) {
       name = msg.name;
-      setName();
+      copyNameToElement();
     };
 
     var sendName = function() {
@@ -119,6 +142,9 @@ define(['./cookies'], function(Cookie) {
       // solution. Just hide the controls while entering the name. (see below)
       nameentry.style.display = "block";
       content.style.display = "none";
+      if (!isNameSet()) {
+        element.value = misc.pickRandomElement(startingNames);
+      }
       element.focus();
     };
 
@@ -134,7 +160,7 @@ define(['./cookies'], function(Cookie) {
       element.form.addEventListener('submit', finishEnteringName, false);
     }
 
-    setName();
+    copyNameToElement();
     sendName();
   };
 
