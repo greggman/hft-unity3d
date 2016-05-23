@@ -1,3 +1,5 @@
+script_dir=$(dirname $0)
+cd "$script_dir"
 ../node_modules/webpack/bin/webpack.js --config hft.config.js
 ../node_modules/webpack/bin/webpack.js --config hft-min.config.js
 ../node_modules/webpack/bin/webpack.js --config sample-ui.config.js
