@@ -56,18 +56,6 @@ namespace HappyFunTimes
         [Tooltip("For multi-computer games. Set from command line --hft-id=<id>")]
         public string id = "";
 
-        /// <summary>
-        /// Ask the user for a name when they start
-        /// </summary>
-        [Tooltip("ask users for name when they join")]
-        public bool askUserForName = true;
-
-        /// <summary>
-        /// Show game menu(allow user to set name)
-        /// </summary>
-        [Tooltip("show gear menu on controller")]
-        public bool showMenu = true;
-
         ///<summary>
         ///For a multiple machine game designates this game as the game where players start.
         ///Default: false
