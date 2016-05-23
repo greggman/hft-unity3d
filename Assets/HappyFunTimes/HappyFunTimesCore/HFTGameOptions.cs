@@ -82,18 +82,6 @@ namespace HappyFunTimes
         ///</summary>
         public bool disconnectPlayersIfGameDisconnects;
 
-        ///<summary>
-        ///Prints all the messages in and out to the console.
-        ///</summary>
-        [Tooltip("show messages from/to controllers")]
-        public bool showMessages;
-
-        ///<summary>
-        ///Prints all the things!
-        ///</summary>
-        [Tooltip("print all the things!")]
-        public bool debug;
-
         /// <summary>
         /// Whether or not to run DNS server
         /// </summary>
@@ -139,8 +127,8 @@ namespace HappyFunTimes
             url = userOptions.url;
             dns = userOptions.dns;
             captivePortal = userOptions.captivePortal;
-            showMessages = userOptions.showMessages;
-            debug = userOptions.debug;
+            showMessages = HFTHappyFunTimesSettings.showMessages;
+            debug = HFTHappyFunTimesSettings.debug;
             controllerFilename = userOptions.controllerFilename;
             if (String.IsNullOrEmpty(controllerFilename))
             {
@@ -168,7 +156,6 @@ namespace HappyFunTimes
             } else {
                 startServer = false;
             }
-
         }
 
         public string url = "";
