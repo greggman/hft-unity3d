@@ -165,6 +165,8 @@ namespace HappyFunTimes
 
             p.TryGetBool("hft-installation-mode", ref installationMode);
             p.TryGetBool("hft-master", ref master);
+            p.TryGetBool("hft-showMessages", ref showMessages);
+            p.TryGetBool("hft-debug", ref debug);
 
             p.TryGet<string>("hft-url", ref url);
             p.TryGet<string>("hft-id", ref id);
