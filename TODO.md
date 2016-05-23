@@ -18,6 +18,7 @@
 *   refactor for standalone
     *   inform both ipv6 and ipv4
         *   only report errors if tries > 2 and !success
+    *   move debug, showMessages to globals with EditorWindow
     *   add debug server flag, different from show messages
     *   remove disconnect from HFTGamepad and add to BirdScript and others
     *   check controllers work on windows
