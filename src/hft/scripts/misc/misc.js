@@ -238,6 +238,15 @@ define(function() {
   };
 
   /**
+   * Gets a random element from array
+   * @param {Array<*>} array array to select element from
+   * @return {*} picked element
+   */
+  function pickRandomElement(array) {
+    return array[randInt(array.length)];
+  }
+
+  /**
    * get a random 32bit color
    * @param {function(number): number?) opt_randFunc function to generate random numbers
    * @return {string} random 32bit color
@@ -516,6 +525,7 @@ define(function() {
     objectToSearchString: objectToSearchString,
     parseUrlQuery: parseUrlQuery,
     parseUrlQueryString: parseUrlQueryString,
+    pickRandomElement: pickRandomElement,
     radToDeg: radToDeg,
     randInt: randInt,
     randCSSColor: randCSSColor,
