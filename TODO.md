@@ -16,10 +16,7 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
-    *   inform both ipv6 and ipv4
-        *   only report errors if tries > 2 and !success
     *   move debug, showMessages to globals with EditorWindow
-    *   add debug server flag, different from show messages
     *   remove disconnect from HFTGamepad and add to BirdScript and others
     *   check controllers work on windows
     *   check controller path with / and \
@@ -55,6 +52,9 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   add debug server flag, different from show messages
+    *   inform both ipv6 and ipv4
+        *   only report errors if tries > 2 and !success
     *   remove startServer?
     *   for missing .html file serve missing.html which pings for restart
         *   needs to check it will be redirected to a different place than it already is?
