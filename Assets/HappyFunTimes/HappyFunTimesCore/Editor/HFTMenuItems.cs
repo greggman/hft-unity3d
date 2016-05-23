@@ -34,7 +34,13 @@ using UnityEditor;
 namespace HappyFunTimesEditor {
 
 public class HFTMenuItems {
-    [MenuItem("Window/HappyFunTimes/Docs", false, 1)]
+    [MenuItem ("Window/HappyFunTimes/Settings", false, 1)]
+    static void HappyFunTimesWindow () {
+        ScriptableObject s = HappyFunTimes.HFTHappyFunTimesSettings.GetInstance();
+        Selection.objects = new UnityEngine.Object[] { s };
+    }
+
+    [MenuItem("Window/HappyFunTimes/Docs", false, 2)]
     static void Docs() {
         Application.OpenURL("http://docs.happyfuntimes.net/docs/unity");
     }
