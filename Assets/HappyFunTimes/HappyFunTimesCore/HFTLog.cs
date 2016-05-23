@@ -171,7 +171,7 @@ namespace HappyFunTimes
         bool console_;
 
         static System.IO.StreamWriter s_out = null;
-        static bool s_debug = true; //false;
+        static bool s_debug = false;
     }
 
 }  // namespace HappyFunTimes
