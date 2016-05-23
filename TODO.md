@@ -4,9 +4,10 @@
 *   make starup emit status messages
     *   make object that displays status
         *   checking for server
+        *   pinging hftsite
         *   getting domain
         *   getting certificate
-        *   done
+        *   ready
         *   disconnected
 *   test android
 *   test ios
@@ -15,6 +16,8 @@
 *   Turn on log with showMessages?
 *   Turn on log from command line/env
 *   refactor for standalone
+    *   inform both ipv6 and ipv4
+        *   only report errors if tries > 2 and !success
     *   add debug server flag, different from show messages
     *   remove disconnect from HFTGamepad and add to BirdScript and others
     *   check controllers work on windows
