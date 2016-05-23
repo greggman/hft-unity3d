@@ -32,11 +32,21 @@ namespace HappyFunTimes
             result = "";
             try
             {
-                System.Net.WebRequest request = System.Net.WebRequest.Create(options.url);
+                System.Net.HttpWebRequest request = System.Net.WebRequest.Create(options.url) as System.Net.HttpWebRequest;
                 request.Method = options.verb;
                 byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(options.content);
                 request.ContentType = options.contentType;
                 request.ContentLength = byteArray.Length;
+// Filter for address?
+//                request.ServicePoint.BindIPEndPointDelegate = (System.Net.ServicePoint servicePoint, System.Net.IPEndPoint remoteEndPoint, int retryCount) =>
+//                {
+//                    if (remoteEndPoint.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+//                    {
+//                        return new System.Net.IPEndPoint(System.Net.IPAddress.IPv6Any, 0);
+//                    }
+//
+//                    throw new System.InvalidOperationException("no IPv6 address");
+//                };
                 Stream dataStream = request.GetRequestStream();
                 dataStream.Write(byteArray, 0, byteArray.Length);
                 dataStream.Close();
