@@ -11,7 +11,6 @@
         *   disconnected
 *   test android
 *   test ios
-*   don't ping hft.net if installation mode?
 *   Add Start/Stop for server
 *   refactor for standalone
     *   check controllers work on windows
@@ -25,7 +24,6 @@
     *   make instructions work (do I need this?) Maybe this should move to game out of HFT
         *   have default instructions
         *   settable from cmdline/envar
-*   move the disconnect handing out of commonUI
 *   make hft.net keep trying
 *   ../
 *   make GameServer stop Server?
@@ -42,6 +40,8 @@
 DONE
 ====
 
+*   move the disconnect handing out of commonUI
+*   don't ping hft.net if installation mode?
 *   Turn on log from command line/env
 *   Turn on log with showMessages?
 *   Move JS to separate project? Build it into 1 file
