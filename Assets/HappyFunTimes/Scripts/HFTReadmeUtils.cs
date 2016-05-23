@@ -99,9 +99,9 @@ namespace HappyFunTimes {
             return true;
         }
 
-        static public void ShowReadme(string name, string text, bool richText, Component component)
+        static public void ShowReadme(string name, string text, bool richText, Component component, bool force)
         {
-            if (!ShouldShowReadme())
+            if (!force && !ShouldShowReadme())
             {
                 return;
             }

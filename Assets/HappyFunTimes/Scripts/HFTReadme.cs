@@ -20,11 +20,11 @@ namespace HappyFunTimes {
             HFTReadmeUtils.CloseReadme(this);
         }
 
-        public void ShowReadme()
+        public void ShowReadme(bool force = false)
         {
             if (message != null)
             {
-                HFTReadmeUtils.ShowReadme("**README**", message, richText, this);
+                HFTReadmeUtils.ShowReadme("**README**", message, richText, this, force);
             }
         }
         #endif

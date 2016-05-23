@@ -2,8 +2,6 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections;
 
-// Custom Editor using SerializedProperties.
-// Automatic handling of multi-object editing, undo, and prefab overrides.
 [CustomEditor(typeof(HappyFunTimes.HFTReadmeFile))]
 [CanEditMultipleObjects]
 public class HFTReadmeFileEditor : Editor {
@@ -11,7 +9,7 @@ public class HFTReadmeFileEditor : Editor {
         DrawDefaultInspector();
         if (GUILayout.Button("Show Readme")) {
             HappyFunTimes.HFTReadmeFile readme = target as HappyFunTimes.HFTReadmeFile;
-            readme.ShowReadme();
+            readme.ShowReadme(true);
         }
     }
 }
