@@ -13,11 +13,7 @@
 *   test ios
 *   don't ping hft.net if installation mode?
 *   Add Start/Stop for server
-*   Turn on log with showMessages?
-*   Turn on log from command line/env
 *   refactor for standalone
-    *   move debug, showMessages to globals with EditorWindow
-    *   remove disconnect from HFTGamepad and add to BirdScript and others
     *   check controllers work on windows
     *   check controller path with / and \
     *   send URL not raw IP because IP6
@@ -29,29 +25,34 @@
     *   make instructions work (do I need this?) Maybe this should move to game out of HFT
         *   have default instructions
         *   settable from cmdline/envar
-*   Log to console
 *   move the disconnect handing out of commonUI
 *   make hft.net keep trying
-*   test switching games
 *   ../
-*   check multi-game
 *   make GameServer stop Server?
 *   Check lots of clients
 *   Add DNS server
     *   Make it return 1 where it's currently returning 0
 *   Add captive portal support
 *   Make DNS server not on mobile?
-*   Move JS to separate project? Build it into 1 file
 *   Put all samples in same package? (can't because one folder? Fix that shit!)
+    *   Objects in scene
 *   try to support Android captive portal
     *   monitor requests
 
 DONE
 ====
 
+*   Turn on log from command line/env
+*   Turn on log with showMessages?
+*   Move JS to separate project? Build it into 1 file
+*   check multi-game
+*   test switching games
+*   Log to console (couldn't get this to work)
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   remove disconnect from HFTGamepad and add to BirdScript and others
+    *   move debug, showMessages to globals with EditorWindow
     *   add debug server flag, different from show messages
     *   inform both ipv6 and ipv4
         *   only report errors if tries > 2 and !success
