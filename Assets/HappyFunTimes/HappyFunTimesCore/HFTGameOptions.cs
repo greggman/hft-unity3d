@@ -97,8 +97,14 @@ namespace HappyFunTimes
         ///<summary>
         ///Prints all the messages in and out to the console.
         ///</summary>
-        [Tooltip("debugging")]
+        [Tooltip("show messages from/to controllers")]
         public bool showMessages;
+
+        ///<summary>
+        ///Prints all the things!
+        ///</summary>
+        [Tooltip("print all the things!")]
+        public bool debug;
 
         /// <summary>
         /// Whether or not to run DNS server
@@ -117,7 +123,7 @@ namespace HappyFunTimes
         /// http://happyfuntimes.net/api/inform2. If you're running your
         /// own server you'd change this.
         /// </summary>
-        [Tooltip("default: happyfuntimes.net")]
+        [Tooltip("default: happyfuntimes.net/api/inform2")]
         public string rendezvousUrl;
 
         /// <summary>
@@ -146,6 +152,7 @@ namespace HappyFunTimes
             dns = userOptions.dns;
             captivePortal = userOptions.captivePortal;
             showMessages = userOptions.showMessages;
+            debug = userOptions.debug;
             controllerFilename = userOptions.controllerFilename;
             if (String.IsNullOrEmpty(controllerFilename))
             {
@@ -184,6 +191,7 @@ namespace HappyFunTimes
         public bool master = false;
         public bool showInList = true;
         public bool showMessages;
+        public bool debug;
         public bool startServer;
         public bool dns;
         public bool captivePortal;
