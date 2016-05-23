@@ -100,22 +100,23 @@ namespace HappyFunTimes
 
         public void StartServer()
         {
-            var hftOptions = new HFTSite.Options();
-            //hftOptions.port = ??
-            HFTUtil.SetIfNotNullOrEmpty(m_options.rendezvousUrl, ref hftOptions.rendezvousUrl);
-            HFTUtil.SetIfNotNullOrEmpty(m_options.serverPort, ref hftOptions.port);
-            m_hftSite = m_gameObject.AddComponent<HFTSite>();
-            m_hftSite.Init(hftOptions);
-
             List<string> addresses = new List<string>();
             addresses.Add("http://[::0]:18679");
 //            addresses.Add("http://0.0.0.0:18679");
-
 
             if (m_options.installationMode)
             {
                 addresses.Add("http://[::0]:80");
 //                addresses.Add("http://0.0.0.0:80");
+            }
+            else
+            {
+                var hftOptions = new HFTSite.Options();
+                //hftOptions.port = ??
+                HFTUtil.SetIfNotNullOrEmpty(m_options.rendezvousUrl, ref hftOptions.rendezvousUrl);
+                HFTUtil.SetIfNotNullOrEmpty(m_options.serverPort, ref hftOptions.port);
+                m_hftSite = m_gameObject.AddComponent<HFTSite>();
+                m_hftSite.Init(hftOptions);
             }
 
             m_webServer = new HFTWebServer(m_options, addresses.ToArray());
