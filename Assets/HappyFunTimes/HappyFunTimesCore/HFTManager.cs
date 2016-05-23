@@ -48,6 +48,7 @@ namespace HappyFunTimes
         {
             m_options = options;
             m_gameObject = gameObject;
+            HFTLog.debug = options.debug;
 
             string hftUrl = System.Environment.GetEnvironmentVariable("HFT_URL");
             if (hftUrl == null && options.startServer)
