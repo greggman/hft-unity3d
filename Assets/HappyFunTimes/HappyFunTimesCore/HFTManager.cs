@@ -107,12 +107,18 @@ namespace HappyFunTimes
             m_hftSite = m_gameObject.AddComponent<HFTSite>();
             m_hftSite.Init(hftOptions);
 
-            string[] addresses = {
-                "0.0.0.0:18679",
-//                "0.0.0.0:80",
-            };
+            List<string> addresses = new List<string>();
+            addresses.Add("http://[::0]:18679");
+//            addresses.Add("http://0.0.0.0:18679");
 
-            m_webServer = new HFTWebServer(m_options, addresses);
+
+            if (m_options.installationMode)
+            {
+                addresses.Add("http://[::0]:80");
+//                addresses.Add("http://0.0.0.0:80");
+            }
+
+            m_webServer = new HFTWebServer(m_options, addresses.ToArray());
             m_webServer.Start();
 
             if (m_options.dns || m_options.installationMode)

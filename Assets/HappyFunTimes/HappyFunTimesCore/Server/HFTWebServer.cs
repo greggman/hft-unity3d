@@ -58,6 +58,7 @@ namespace HappyFunTimes
             m_getRouter.Add(HandleLiveSettings);
             m_getRouter.Add(HandleFile);
             m_getRouter.Add(HandleMissingRoute);
+            m_getRouter.Add(HandleNotFound);
 
             m_addresses = addresses;
         }
@@ -74,27 +75,26 @@ namespace HappyFunTimes
             }
         }
 
+        string Unwrap(string s)
+        {
+            return (s.StartsWith("[") && s.EndsWith("]")) ? s.Substring(1, s.Length - 2) : s;
+        }
+
         HttpServer StartServer(string addressAndOptionalPort)
         {
             // FIX: deal with ip6
-            int port = 18679;
-            string[] ap = addressAndOptionalPort.Split(':');
-            string address = ap[0];
-            if (ap.Length > 1)
-            {
-                if (!String.IsNullOrEmpty(ap[1]) && !Int32.TryParse(ap[1].Trim(), out port))
-                {
-                    throw new System.ArgumentException("Bad server port, NaN: " + ap[1]);
-                }
-            }
-
+//            string host = "http://" + addressAndOptionalPort;
+//            var addressUri = new System.Uri(addressAndOptionalPort);
+//            int port = addressUri.Port;
+//            string address = Unwrap(addressUri.Host);
             //server = new HttpServer (5963, true);
             //server = new HttpServer (System.Net.IPAddress.Parse ("127.0.0.1"), 4649);
             //server = new HttpServer (System.Net.IPAddress.Parse ("127.0.0.1"), 5963, true);
             //server = new HttpServer ("http://localhost:4649");
             //server = new HttpServer ("https://localhost:5963");
             //server = new HttpServer(System.Net.IPAddress.Parse("127.0.0.1"), 18679);
-            HttpServer server = new HttpServer(System.Net.IPAddress.Parse(address), port);
+//            HttpServer server = new HttpServer(System.Net.IPAddress.Parse(address), port);
+            HttpServer server = new HttpServer(addressAndOptionalPort);
             //server.Log.Level = LogLevel.Trace;
             //server.Log.File = "/Users/gregg/temp/foo.txt";
             #if FALSE
@@ -206,6 +206,12 @@ namespace HappyFunTimes
                 {
                     m_webServerUtils.SendJsonBytes(res, m_redir);
                 }
+                else
+                {
+                    res.ContentType = "application/json";
+                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"unknown cmd: " + cmd.cmd + "\"}"));
+                    res.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
                 // TODO: use router
             };
 
@@ -276,8 +282,7 @@ namespace HappyFunTimes
                     return true;
                 }
             }
-            res.StatusCode = (int)HttpStatusCode.NotFound;
-            return true;
+            return false;
         }
 
         bool HandleFile(string path, HttpListenerRequest req, HttpListenerResponse res)
@@ -310,6 +315,14 @@ namespace HappyFunTimes
             }
 
             m_webServerUtils.SendJsonBytes(res, m_liveSettings);
+            return true;
+        }
+
+        bool HandleNotFound(string path, HttpListenerRequest req, HttpListenerResponse res)
+        {
+            res.ContentType = "text/text";
+            res.WriteContent(System.Text.Encoding.UTF8.GetBytes("unknown path: " + path + "\n"));
+            res.StatusCode = (int)HttpStatusCode.NotFound;
             return true;
         }
 
