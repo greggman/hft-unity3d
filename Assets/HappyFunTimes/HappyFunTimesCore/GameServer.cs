@@ -96,9 +96,6 @@ namespace HappyFunTimes
             m_deserializer = new Deserializer();
             m_handlers = new Dictionary<string, CmdEventHandler>();
 
-            HFTInstructions instructions = m_gameObject.AddComponent<HFTInstructions>();
-            instructions.Init(/*m_gameSystem*/);
-
             m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
 
             m_msgHandlers.Add("update", UpdatePlayer);
