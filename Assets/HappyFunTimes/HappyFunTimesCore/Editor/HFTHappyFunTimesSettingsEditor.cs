@@ -44,7 +44,9 @@ namespace HappyFunTimesEditor
         // UnityEditor.EditorPrefs, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         public override void OnInspectorGUI()
         {
-            GUILayout.Label("These settings are used in editor only");
+            GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Label"));
+            style.wordWrap = true;
+            GUILayout.Label("These settings are used in editor only and only take effect when a game starts.", style);
             GUILayout.Space(5);
 
             bool showMessages = HFTHappyFunTimesSettings.showMessages;
