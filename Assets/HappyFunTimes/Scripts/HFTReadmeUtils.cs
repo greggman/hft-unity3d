@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace HappyFunTimes {
@@ -18,16 +19,45 @@ namespace HappyFunTimes {
         static Regex m_3HashRE = new Regex(@"^\#\#\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
         static Regex m_4HashRE = new Regex(@"^\#\#\#\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
         static Regex m_5HashRE = new Regex(@"^\#\#\#\#\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
+        static Regex m_linkRE = new Regex(@"\[(.*?)\]\((.*?)\)", RegexOptions.CultureInvariant | RegexOptions.Multiline);
 
         class Snippets {
-            public string tick;
-            public string tripleTick;
-            public string bold;
-            public string oneHash;
-            public string twoHash;
-            public string threeHash;
-            public string fourHash;
-            public string fiveHash;
+            public string startTick;
+            public string endTick;
+            public string startTripleTick;
+            public string endTripleTick;
+            public string startBold;
+            public string endBold;
+            public string startOneHash;
+            public string endOneHash;
+            public string startTwoHash;
+            public string endTwoHash;
+            public string startThreeHash;
+            public string endThreeHash;
+            public string startFourHash;
+            public string endFourHash;
+            public string startFiveHash;
+            public string endFiveHash;
+        }
+
+        public class Link {
+            public Link(string description, string url)
+            {
+                this.description = description;
+                this.url = url;
+            }
+            public string description;
+            public string url;
+        }
+        public class Markdownish {
+            public Markdownish(string richText, Link[] links)
+            {
+                this.richText = richText;
+                this.links = links;
+            }
+
+            public string richText;
+            public Link[] links;
         }
 
         static Snippets s_lightTheme;
@@ -40,31 +70,32 @@ namespace HappyFunTimes {
             return c.r > 0.5f || c.g > 0.5f || c.b > 0.5f;
         }
 
-        HFTReadmeUtils()
+        static void SetCurrentTheme()
         {
             if (s_lightTheme == null)
             {
                 s_lightTheme = new Snippets();
                 s_darkTheme = new Snippets();
 
-                s_lightTheme.tick = "<color=blue>";
-                s_lightTheme.tripleTick = "<color=purple>";
-                s_lightTheme.bold = "<color=red>";
-                s_lightTheme.oneHash = "<size=24><b>";
-                s_lightTheme.twoHash = "<size=18><b>";
-                s_lightTheme.threeHash = "<size=14><b>";
-                s_lightTheme.fourHash = "<size=12><b>";
-                s_lightTheme.fiveHash = "<size=11><b>";
+                s_lightTheme.startTick       = "<color=blue>";   s_lightTheme.endTick       = "</color>";
+                s_lightTheme.startTripleTick = "<color=purple>"; s_lightTheme.endTripleTick = "</color>";
+                s_lightTheme.startBold       = "<color=red><b>"; s_lightTheme.endBold       = "</b></color>";
+                s_lightTheme.startOneHash    = "<size=24><b>";   s_lightTheme.endOneHash    = "</b></size>";
+                s_lightTheme.startTwoHash    = "<size=18><b>";   s_lightTheme.endTwoHash    = "</b></size>";
+                s_lightTheme.startThreeHash  = "<size=14><b>";   s_lightTheme.endThreeHash  = "</b></size>";
+                s_lightTheme.startFourHash   = "<size=12><b>";   s_lightTheme.endFourHash   = "</b></size>";
+                s_lightTheme.startFiveHash   = "<size=11><b>";   s_lightTheme.endFiveHash   = "</b></size>";
 
-                s_darkTheme.tick = "<color=cyan>";
-                s_darkTheme.tripleTick = "<color=magenta>";
-                s_darkTheme.bold = "<color=red>";
-                s_darkTheme.oneHash = "<size=24><b>";
-                s_darkTheme.twoHash = "<size=18><b>";
-                s_darkTheme.threeHash = "<size=14><b>";
-                s_darkTheme.fourHash = "<size=12><b>";
-                s_darkTheme.fiveHash = "<size=11><b>";
+                s_darkTheme.startTick       = "<color=cyan>";    s_darkTheme.endTick       = "</color>";
+                s_darkTheme.startTripleTick = "<color=magenta>"; s_darkTheme.endTripleTick = "</color>";
+                s_darkTheme.startBold       = "<color=red><b>";  s_darkTheme.endBold       = "</b></color>";
+                s_darkTheme.startOneHash    = "<size=24><b>";    s_darkTheme.endOneHash    = "</b></size>";
+                s_darkTheme.startTwoHash    = "<size=18><b>";    s_darkTheme.endTwoHash    = "</b></size>";
+                s_darkTheme.startThreeHash  = "<size=14><b>";    s_darkTheme.endThreeHash  = "</b></size>";
+                s_darkTheme.startFourHash   = "<size=12><b>";    s_darkTheme.endFourHash   = "</b></size>";
+                s_darkTheme.startFiveHash   = "<size=11><b>";    s_darkTheme.endFiveHash   = "</b></size>";
             }
+            s_currentTheme = isDarkTheme() ? s_darkTheme : s_lightTheme;
         }
 
         static public void CloseReadme(Component component)
@@ -82,47 +113,49 @@ namespace HappyFunTimes {
 
         static string ReplaceTripleTick(Match m)
         {
-            return s_currentTheme.tripleTick + m.Groups[1].Value + "</color>";
+            return s_currentTheme.startTripleTick + m.Groups[1].Value + s_currentTheme.endTripleTick;
         }
 
         static string ReplaceTick(Match m)
         {
-            return s_currentTheme.tick + m.Groups[1].Value + "</color>";
+            return s_currentTheme.startTick + m.Groups[1].Value + s_currentTheme.endTick;
         }
 
         static string ReplaceBold(Match m)
         {
-            return s_currentTheme.bold + m.Groups[1].Value + "</b></color>";
+            return s_currentTheme.startBold + m.Groups[1].Value + s_currentTheme.endBold;
         }
 
         static string Replace1Hash(Match m)
         {
-            return s_currentTheme.oneHash + m.Groups[1].Value + "</b></size>";
+            return s_currentTheme.startOneHash + m.Groups[1].Value + s_currentTheme.endOneHash;
         }
 
         static string Replace2Hash(Match m)
         {
-            return s_currentTheme.twoHash + m.Groups[1].Value + "</b></size>";
+            return s_currentTheme.startTwoHash + m.Groups[1].Value + s_currentTheme.endTwoHash;
         }
 
         static string Replace3Hash(Match m)
         {
-            return s_currentTheme.threeHash + m.Groups[1].Value + "</b></size>";
+            return s_currentTheme.startThreeHash + m.Groups[1].Value + s_currentTheme.endThreeHash;
         }
 
         static string Replace4Hash(Match m)
         {
-            return s_currentTheme.fourHash + m.Groups[1].Value + "</b></size>";
+            return s_currentTheme.startFourHash + m.Groups[1].Value + s_currentTheme.endFourHash;
         }
 
         static string Replace5Hash(Match m)
         {
-            return s_currentTheme.fiveHash + m.Groups[1].Value + "</b></size>";
+            return s_currentTheme.startFiveHash + m.Groups[1].Value + s_currentTheme.endFiveHash;
         }
 
-        static public string MarkdownishToRichText(string markdownish)
+
+        static public Markdownish MarkdownishToRichText(string markdownish)
         {
-            s_currentTheme = isDarkTheme() ? s_darkTheme : s_lightTheme;
+            SetCurrentTheme();
+            List<Link> links = new List<Link>();
 
             string s = markdownish.Replace("\n\n", "--EOL--").Replace("\n", " ").Replace("--EOL--", "\n\n");
             s = m_tripleTickRE.Replace(s, ReplaceTripleTick);
@@ -133,7 +166,23 @@ namespace HappyFunTimes {
             s = m_3HashRE.Replace(s, Replace3Hash);
             s = m_2HashRE.Replace(s, Replace2Hash);
             s = m_1HashRE.Replace(s, Replace1Hash);
-            return s;
+            s = m_linkRE.Replace(s, (Match m) => {
+                string description = m.Groups[1].Value;
+                string url = m.Groups[2].Value;
+                try
+                {
+                    new System.Uri(url);
+                }
+                catch (System.Exception)
+                {
+                    // NOTE a url = no link
+                    return m.Groups[0].Value;
+                }
+                links.Add(new Link(description, url));
+                return description + "[" + links.Count.ToString() + "]";
+            });
+
+            return new Markdownish(s, links.ToArray());
         }
 
         static System.Type GetWindowType() {

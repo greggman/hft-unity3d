@@ -43,7 +43,9 @@ namespace HappyFunTimesEditor
         private GUIContent m_content;
         private string m_text;
         private bool m_richText;
+        private HFTReadmeUtils.Link[] m_links;
         private Component m_component;
+        private bool m_showLinks;
 
         static HFTReadmeWindow s_window = null;
 
@@ -80,7 +82,9 @@ namespace HappyFunTimesEditor
 
         public void SetContent(string title, string text, bool richText, Component component) {
             titleContent = new GUIContent(title);
-            m_text = HFTReadmeUtils.MarkdownishToRichText(text);
+            var markdownish = HFTReadmeUtils.MarkdownishToRichText(text);
+            m_links = markdownish.links;
+            m_text = markdownish.richText;
             m_content = new GUIContent(m_text);
             m_richText = richText;
             m_component = component;
@@ -95,11 +99,35 @@ namespace HappyFunTimesEditor
             return style;
         }
 
+        void DrawLinks()
+        {
+            GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Button"));
+            style.alignment = TextAnchor.MiddleLeft;
+
+            if (m_links != null)
+            {
+                for (int i = 0; i < m_links.Length; ++i)
+                {
+                    var link = m_links[i];
+                    if (GUILayout.Button("[" + (i + 1).ToString() + "] " + link.description, style))
+                    {
+                        Application.OpenURL(link.url);
+                    }
+                }
+            }
+        }
+
         void OnGUI()
         {
             GUIStyle style = GetStyle(0, 0);
             EditorGUILayout.BeginVertical();
-            m_scrollPos = EditorGUILayout.BeginScrollView(m_scrollPos, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height (position.height));
+            m_scrollPos = EditorGUILayout.BeginScrollView(m_scrollPos, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(position.height));
+            m_showLinks = EditorGUILayout.Foldout(m_showLinks, "*** Links ***");
+            EditorGUILayout.Separator();
+            if (m_showLinks)
+            {
+                DrawLinks();
+            }
             EditorGUILayout.SelectableLabel(m_text, style, GUILayout.Height(style.CalcHeight(m_content, EditorGUIUtility.currentViewWidth)));
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
