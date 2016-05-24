@@ -21,24 +21,23 @@ To run it build the game with just this scene. Save it as MultiMachine.
 
 On OSX, from a Terminal
 
-<color=purple>
+```
 nameofgame.app/Contents/MacOS/nameofgame --num-games=3 --hft-master --hft-id=game0 &
 
 nameofgame.app/Contents/MacOS/nameofgame --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2 &
 
 nameofgame.app/Contents/MacOS/nameofgame --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2 &
-</color>
+```
 
 On Windows
 
-<color=purple>
+```
 start /B nameofgame.exe --num-games=3 --hft-master --hft-id=game0
 
 start /B nameofgame.exe --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2
 
 start /B nameofgame.exe --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2
-</color>
-
+```
 
 Make each game a window so you see all three games then connect a phone and you should be able to jump from one game to the next.
 

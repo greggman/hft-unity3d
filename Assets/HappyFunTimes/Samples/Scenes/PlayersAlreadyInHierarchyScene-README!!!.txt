@@ -1,5 +1,3 @@
-Players Already In Scene
-
 This is the same as the `2DPlatformScene` except there are 3 players already in the scene.
 
 If you select the `LevelManager` you'll see it has a `PlayerConnector`
