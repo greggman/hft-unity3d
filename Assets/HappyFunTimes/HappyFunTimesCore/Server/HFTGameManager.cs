@@ -81,13 +81,7 @@ namespace HappyFunTimes
             {
                 ++gameCount_;
             }
-            HFTGame game = gameGroup.AssignClient(client, data);
-            //FIX!
-            //if (options_.instructions)
-            //{
-            //    game.SendInstructions("//FIX", true/* position */);
-            //}
-
+            gameGroup.AssignClient(client, data);
         }
 
         public bool HaveGame()
