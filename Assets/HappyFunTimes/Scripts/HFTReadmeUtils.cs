@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace HappyFunTimes {
 
@@ -9,6 +10,13 @@ namespace HappyFunTimes {
         const string kLastScene = "happyFunTimesReadmeSceneHash";
 
         #if UNITY_EDITOR
+        static Regex m_tickRE = new Regex("`(.*?)`", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        static Regex m_tripleTickRE = new Regex("```(.*?)```", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        static Regex m_boldRE = new Regex(@"\*\*(.+?)\*\*", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        static Regex m_1HashRE = new Regex(@"^\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
+        static Regex m_2HashRE = new Regex(@"^\#\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
+        static Regex m_3HashRE = new Regex(@"^\#\#\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
+
         static public void CloseReadme(Component component)
         {
             System.Type t = GetWindowType();
@@ -20,6 +28,48 @@ namespace HappyFunTimes {
                     t.GetMethod("CloseIfOurs").Invoke(w, new object[]{ component });
                 }
             }
+        }
+
+        static string ReplaceTripleTick(Match m)
+        {
+            return "<color=purple>" + m.Groups[1].Value + "</color>";
+        }
+
+        static string ReplaceTick(Match m)
+        {
+            return "<color=blue>" + m.Groups[1].Value + "</color>";
+        }
+
+        static string ReplaceBold(Match m)
+        {
+            return "<color=red>" + m.Groups[1].Value + "</color>";
+        }
+
+        static string Replace1Hash(Match m)
+        {
+            return "<size=24>" + m.Groups[1].Value + "</size>";
+        }
+
+        static string Replace2Hash(Match m)
+        {
+            return "<size=18>" + m.Groups[1].Value + "</size>";
+        }
+
+        static string Replace3Hash(Match m)
+        {
+            return "<size=14>" + m.Groups[1].Value + "</size>";
+        }
+
+        static public string MarkdownishToRichText(string markdownish)
+        {
+            string s = markdownish.Replace("\n\n", "--EOL--").Replace("\n", " ").Replace("--EOL--", "\n\n");
+            s = m_tripleTickRE.Replace(s, ReplaceTripleTick);
+            s = m_tickRE.Replace(s, ReplaceTick);
+            s = m_boldRE.Replace(s, ReplaceBold);
+            s = m_3HashRE.Replace(s, Replace3Hash);
+            s = m_2HashRE.Replace(s, Replace2Hash);
+            s = m_1HashRE.Replace(s, Replace1Hash);
+            return s;
         }
 
         static System.Type GetWindowType() {
