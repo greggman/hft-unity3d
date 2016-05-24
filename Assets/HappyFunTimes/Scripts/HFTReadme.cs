@@ -7,7 +7,7 @@ namespace HappyFunTimes {
     [ExecuteInEditMode]
     public class HFTReadme : MonoBehaviour {
 
-        [Multiline(20)]
+        [TextArea(10, 30)]
         public string message = "";
         public bool richText = false;
 
