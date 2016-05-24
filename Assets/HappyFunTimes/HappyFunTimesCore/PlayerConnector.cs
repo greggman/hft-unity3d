@@ -97,17 +97,22 @@ public class PlayerConnector : MonoBehaviour
         m_server.OnDisconnect += Disconnected;
 
         m_server.Init();
+
+        m_playerManager = new PlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
     }
 
     void Start ()
     {
         m_options = new HFTRuntimeOptions(happyfuntimesOptions);
         StartConnection();
-        m_playerManager = new PlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
     }
 
-    void Update() {
-        m_playerManager.Update();
+    void Update()
+    {
+        if (m_playerManager != null)
+        {
+            m_playerManager.Update();
+        }
     }
 
     GameObject GetPlayer(int ndx) {
