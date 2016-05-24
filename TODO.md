@@ -14,8 +14,6 @@
 *   Add Start/Stop for server
 *   refactor for standalone
     *   check controllers work on windows
-    *   don't print Checking for HFT unless try > 1
-    *   don't print connected to HFT unless debug
     *   check controller path with / and \
     *   send URL not raw IP because IP6
     *   Check if port busy
@@ -23,9 +21,6 @@
     *   move HFTDialog out of HFTDnsRunner?
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
-    *   make instructions work (do I need this?) Maybe this should move to game out of HFT
-        *   have default instructions
-        *   settable from cmdline/envar
 *   make hft.net keep trying
 *   ../
 *   make GameServer stop Server?
@@ -42,6 +37,10 @@
 DONE
 ====
 
+*   make instructions work (do I need this?) Maybe this should move to game out of HFT
+    (no! Instructions should be up to the dev. Maybe an example would be good? Just
+    *   have default instructions
+    *   settable from cmdline/envar
 *   move the disconnect handing out of commonUI
 *   don't ping hft.net if installation mode?
 *   Turn on log from command line/env
@@ -53,6 +52,8 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   don't print Checking for HFT unless try > 1
+    *   don't print connected to HFT unless debug
     *   remove disconnect from HFTGamepad and add to BirdScript and others
     *   move debug, showMessages to globals with EditorWindow
     *   add debug server flag, different from show messages
