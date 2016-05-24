@@ -14,6 +14,8 @@
 *   Add Start/Stop for server
 *   refactor for standalone
     *   check controllers work on windows
+    *   don't print Checking for HFT unless try > 1
+    *   don't print connected to HFT unless debug
     *   check controller path with / and \
     *   send URL not raw IP because IP6
     *   Check if port busy
