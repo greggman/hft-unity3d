@@ -47,17 +47,17 @@ namespace HappyFunTimes {
 
         static string Replace1Hash(Match m)
         {
-            return "<size=24>" + m.Groups[1].Value + "</size>";
+            return "<size=24><b>" + m.Groups[1].Value + "</b></size>";
         }
 
         static string Replace2Hash(Match m)
         {
-            return "<size=18>" + m.Groups[1].Value + "</size>";
+            return "<size=18><b>" + m.Groups[1].Value + "</b></size>";
         }
 
         static string Replace3Hash(Match m)
         {
-            return "<size=14>" + m.Groups[1].Value + "</size>";
+            return "<size=14><b>" + m.Groups[1].Value + "</b></size>";
         }
 
         static public string MarkdownishToRichText(string markdownish)
