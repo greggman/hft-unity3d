@@ -40,6 +40,7 @@ public class BirdScript : MonoBehaviour {
     public LayerMask whatIsGround;
     public float jumpForce = 700f;
     public Transform nameTransform;
+    public bool deleteWhenDisconnected = true;
 
     // this is the base color of the avatar.
     // we need to know it because we need to know what color
@@ -84,7 +85,9 @@ public class BirdScript : MonoBehaviour {
 
     void Remove()
     {
-        Destroy(gameObject);
+        if (deleteWhenDisconnected) {
+            Destroy(gameObject);
+        }
     }
 
     void Update()
