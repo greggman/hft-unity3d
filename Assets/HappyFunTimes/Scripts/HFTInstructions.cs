@@ -91,7 +91,7 @@ namespace HappyFunTimes {
 
             GUI.Box(m_guiBackgroundRect, "", m_guiBackgroundStyle);
             m_guiMsgRect.x = m_scrollOffset;
-            GUI.Box(m_guiMsgRect, instructions, m_guiMsgStyle);
+            GUI.Box(m_guiMsgRect, m_guiContent, m_guiMsgStyle);
 
             GUI.depth = oldDepth;   // I don't think this is needed
         }
@@ -110,7 +110,7 @@ namespace HappyFunTimes {
 
             m_guiBackgroundStyle.normal.background = tex;
 
-            m_guiContent = new GUIContent(instructions);
+            m_guiContent = new GUIContent(instructions.Replace("\n", " "));
             m_guiSize = m_guiMsgStyle.CalcSize(m_guiContent);
             m_guiMsgRect.x = 0.0f;
             m_guiMsgRect.y = bottom ? Screen.height - m_guiSize.y : 0.0f;
