@@ -1,7 +1,7 @@
 **THIS EXAMPLE MUST BE RUN OUTSIDE OF UNITY!!!**
 
 This is an example of running across a game across multiple machines.
-It is similar to the 2dPlatformScene example.
+It is similar to the 2dPlatformScene example except players can jump from one machine to the next.
 
 2 Big differences:
 
