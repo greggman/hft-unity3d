@@ -17,15 +17,28 @@ The ids for the games are up to you to make up. In this example they are just ga
 player jumps off the left or right of the screen the code goes to the game with the same id + or - 1 in number. So a player on game5 goes to game6 if jumping off
 the right and game4 if jumping off the left. A more complex game would make up more ids.
 
-To run it build the game with just this scene. Save it as MultiMachine. The on OSX, from a Terminal
+To run it build the game with just this scene. Save it as MultiMachine.
+
+On OSX, from a Terminal
 
 <color=purple>
-testdelme.app/Contents/MacOS/testdelme --num-games=3 --hft-master --hft-id=game0 &
+nameofgame.app/Contents/MacOS/nameofgame --num-games=3 --hft-master --hft-id=game0 &
 
-testdelme.app/Contents/MacOS/testdelme --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2 &
+nameofgame.app/Contents/MacOS/nameofgame --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2 &
 
-testdelme.app/Contents/MacOS/testdelme --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2 &
+nameofgame.app/Contents/MacOS/nameofgame --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2 &
 </color>
+
+On Windows
+
+<color=purple>
+start /B nameofgame.exe --num-games=3 --hft-master --hft-id=game0
+
+start /B nameofgame.exe --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2
+
+start /B nameofgame.exe --num-games=3 --hft-url=ws://localhost:18679 --hft-id=game2
+</color>
+
 
 Make each game a window so you see all three games then connect a phone and you should be able to jump from one game to the next.
 
