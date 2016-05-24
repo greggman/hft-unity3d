@@ -68,13 +68,17 @@ namespace HappyFunTimes {
             }
             catch (System.Exception ex)
             {
-                eventProcessor_.QueueEvent(() => {
-
-                  HFTDialog.MessageBox(
-                    "ERROR",
+                string msg =
                     "Could not start DNS Server on port:" + port + "\n" +
-                    "Did you run from the command line with sudo?\n\n" + ex.ToString());
-                });
+                    "Did you run from the command line with sudo?\n\n" + ex.ToString();
+
+                if (!HFTGlobalEventEmitter.GetInstance().QueueEvent(HFTGlobalEventType.Error, msg))
+                {
+                    // No one handled it. Let's do it ourselves.
+                    eventProcessor_.QueueEvent(() => {
+                        HFTDialog.MessageBox("ERROR", msg);
+                    });
+                }
             }
         }
 
