@@ -97,6 +97,16 @@ namespace HappyFunTimes
             });
             return output;
         }
+
+        public static Texture2D MakeColor(Color color)
+        {
+            Color[] pix = new Color[1];
+            pix[0] = color;
+            Texture2D tex = new Texture2D(1, 1);
+            tex.SetPixels(pix);
+            tex.Apply();
+            return tex;
+        }
     }
 
 }  // namespace HappyFunTimes
