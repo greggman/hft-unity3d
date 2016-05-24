@@ -1,9 +1,9 @@
-This is just a copy of the "TouchScene" scene except it has an <color=blue>HFTInstructions</color>
-script component on the <color=blue>Instructions</color> GameObject
+This is just a copy of the "TouchScene" scene except it has an `HFTInstructions`
+script component on the `Instructions` GameObject
 
-Clicking it and checking <color=blue>show</color> then running the game will show instructions
+Clicking it and checking `show` then running the game will show instructions
 
-THAT'S NOT THE POINT. <color=red>Leave it unchecked!</color>. It's only for testing
+THAT'S NOT THE POINT. **Leave it unchecked!**. It's only for testing
 
 Instead if you export the game you can run it from the command line and pass in the instructions
 
