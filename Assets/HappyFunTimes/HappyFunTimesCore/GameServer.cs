@@ -96,7 +96,8 @@ namespace HappyFunTimes
             m_deserializer = new Deserializer();
             m_handlers = new Dictionary<string, CmdEventHandler>();
 
-            m_eventProcessor = m_gameObject.AddComponent<EventProcessor>();
+            m_eventProcessor = m_gameObject.AddComponent<HFTEventProcessor>();
+            HFTGlobalEventEmitter.Setup(m_eventProcessor);
 
             m_msgHandlers.Add("update", UpdatePlayer);
             m_msgHandlers.Add("upgame", UpdateGame);
@@ -328,7 +329,7 @@ namespace HappyFunTimes
         private List<String> m_sendQueue;
         private Deserializer m_deserializer;
         private GameObject m_gameObject;
-        private EventProcessor m_eventProcessor;
+        private HFTEventProcessor m_eventProcessor;
         private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
         private string m_id = null;
         private string m_url;

@@ -38,11 +38,11 @@ namespace HappyFunTimes {
 
 // This is needed to send the events to on the correct thread.
 [AddComponentMenu("")]
-public class EventProcessor : MonoBehaviour {
+public class HFTEventProcessor : MonoBehaviour {
 
-    public EventProcessor()
+    public HFTEventProcessor()
     {
-        m_log = new HFTLog("EventProcessor");
+        m_log = new HFTLog("HFTEventProcessor");
     }
 
     public void QueueEvent(Action action) {

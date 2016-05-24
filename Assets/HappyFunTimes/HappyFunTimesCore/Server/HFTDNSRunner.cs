@@ -13,7 +13,7 @@ namespace HappyFunTimes {
         public void Start()
         {
             GameObject go = new GameObject("HFTDnsEventProcessor");
-            eventProcessor_ = go.AddComponent<EventProcessor>();
+            eventProcessor_ = go.AddComponent<HFTEventProcessor>();
             helper_ = new HFTDnsRunnerHelper(eventProcessor_);
             dnsThread_ = new Thread(helper_.DoWork);
             dnsThread_.Start();
@@ -31,7 +31,7 @@ namespace HappyFunTimes {
 
         Thread dnsThread_;
         HFTDnsRunnerHelper helper_;
-        EventProcessor eventProcessor_;
+        HFTEventProcessor eventProcessor_;
     }
 
     class HFTDnsServer : DNS.Server.DnsServer {
@@ -50,7 +50,7 @@ namespace HappyFunTimes {
 
     class HFTDnsRunnerHelper
     {
-        public HFTDnsRunnerHelper(EventProcessor ep)
+        public HFTDnsRunnerHelper(HFTEventProcessor ep)
         {
             eventProcessor_ = ep;
         }
@@ -69,6 +69,7 @@ namespace HappyFunTimes {
             catch (System.Exception ex)
             {
                 eventProcessor_.QueueEvent(() => {
+
                   HFTDialog.MessageBox(
                     "ERROR",
                     "Could not start DNS Server on port:" + port + "\n" +
@@ -85,7 +86,7 @@ namespace HappyFunTimes {
 
         DNS.Server.DnsServer dnsServer_;
         DNSAll dnsAll_;
-        EventProcessor eventProcessor_;
+        HFTEventProcessor eventProcessor_;
         HFTLog log_ = new HFTLog("HFTDnsRunnerHelper");
     }
 
