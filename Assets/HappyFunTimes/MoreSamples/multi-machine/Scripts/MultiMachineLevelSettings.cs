@@ -40,7 +40,7 @@ public class MultiMachineLevelSettings : MonoBehaviour
         }
         s_settings = this;
 
-        ArgParser p = new ArgParser();
+        HFTArgParser p = new HFTArgParser();
         p.TryGet<int>("num-games", ref numGames);
 
         m_playerSpawner = GetComponent<PlayerSpawner>();

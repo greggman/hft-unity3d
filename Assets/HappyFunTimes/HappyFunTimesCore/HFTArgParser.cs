@@ -59,7 +59,7 @@ namespace HappyFunTimes {
 /// using HappyFunTimes;
 ///
 /// ...
-///    ArgParser p = new ArgParser();
+///    HFTArgParser p = new HFTArgParser();
 ///
 ///    // Set Defaults
 ///    string name = "Someone";
@@ -73,12 +73,12 @@ namespace HappyFunTimes {
 /// </code>
 /// </example>
 /// <returns></returns>
-public class ArgParser {
+public class HFTArgParser {
 
     /// <summary>
-    /// Constructor for ArgParser that parses command line arguments
+    /// Constructor for HFTArgParser that parses command line arguments
     /// </summary>
-    public ArgParser()
+    public HFTArgParser()
     {
         #if (!UNITY_IOS)
             Init(System.Environment.GetCommandLineArgs());
@@ -88,10 +88,10 @@ public class ArgParser {
     }
 
     /// <summary>
-    /// Constructor for ArgParser which you can pass your own array of strings.
+    /// Constructor for HFTArgParser which you can pass your own array of strings.
     /// </summary>
     /// <param name="args">Array of command line like argument strings</param>
-    public ArgParser(string[] args)
+    public HFTArgParser(string[] args)
     {
         Init(args);
     }

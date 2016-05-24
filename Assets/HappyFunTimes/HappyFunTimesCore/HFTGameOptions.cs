@@ -137,7 +137,7 @@ namespace HappyFunTimes
             controllerFilename = controllerFilename.Replace("\\", "/");
 
             // Prefix all HFT arguments with "hft-" so user can filter them out
-            ArgParser p = new ArgParser();
+            HFTArgParser p = new HFTArgParser();
 
             p.TryGetBool("hft-installation-mode", ref installationMode);
             p.TryGetBool("hft-master", ref master);
