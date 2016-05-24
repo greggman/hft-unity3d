@@ -53,8 +53,7 @@ namespace HappyFunTimes {
         private float m_minScrollOffset = 0;
         private bool m_msgFitsOnScreen = false;
 
-        void OnAfterDeserialization()
-        {
+        public void Awake() {
             ArgParser p = new ArgParser();
 
             bool found = false;
@@ -64,12 +63,11 @@ namespace HappyFunTimes {
             {
                 show = true;
             }
-            SetupInstructions();
         }
 
         void OnGUI()
         {
-            if (System.String.IsNullOrEmpty(instructions))
+            if (!show || System.String.IsNullOrEmpty(instructions))
             {
                 return;
             }
