@@ -36,54 +36,40 @@ namespace HappyFunTimes {
 
     public class HFTInstructions : MonoBehaviour
     {
+        [TextArea(10, 30)]
+        public string instructions = "connect to local wifi then go to happyfuntimes.net";
+        public bool bottom = false;
+        public bool show = false;
+        public float scrollSpeed = 1.0f;
+
         private Vector2 m_guiSize;
         private GUIStyle m_guiMsgStyle = new GUIStyle();
         private GUIStyle m_guiBackgroundStyle = new GUIStyle();
         private GUIContent m_guiContent = null;
-        private string m_guiMsg = "";
         private Rect m_guiMsgRect = new Rect(0,0,0,0);
         private Rect m_guiBackgroundRect = new Rect(0,0,0,0);
         private float m_startScrollOffset = 0;
         private float m_scrollOffset = 0;
         private float m_minScrollOffset = 0;
-        private float m_scrollSpeed = 0;
-        private bool m_bottom = false;
+        private bool m_msgFitsOnScreen = false;
 
-        private const float SCROLL_SPEED = 1.0f;
-
-        public void Init(/*GameSystem gameSystem*/)
+        void OnAfterDeserialization()
         {
-//            gameSystem.NetPlayer.RegisterCmdHandler<MessageInstructions>(HandleInstructions);
+            ArgParser p = new ArgParser();
 
-            string msg = System.Environment.GetEnvironmentVariable("HFT_INSTRUCTIONS");
-            if (msg != null)
+            bool found = false;
+            found |= p.TryGet<string>("hft-instructions", ref instructions);
+            found |= p.TryGetBool("hft-instructions-bottom", ref bottom);
+            if (found)
             {
-                string pos = System.Environment.GetEnvironmentVariable("HFT_INSTRUCTIONSPOSITION");
-				SetInstructions(msg, pos != null && pos.Equals("bottom", System.StringComparison.OrdinalIgnoreCase));
+                show = true;
             }
-        }
-
-        private void HandleInstructions(MessageInstructions data)
-        {
-            SetInstructions(data.msg, data.bottom);
-        }
-
-        public void SetInstructions(string msg, bool bottom)
-        {
-            m_bottom = bottom;
-            m_guiMsg = msg;
             SetupInstructions();
-        }
-
-        void Awake()
-        {
-            SetInstructions("", false);
-            //SetInstructions("Connect to HappyFunTimes, on iOS just wait, on Android use Chrome and go to \"h.com\"", true);
         }
 
         void OnGUI()
         {
-            if (System.String.IsNullOrEmpty(m_guiMsg))
+            if (System.String.IsNullOrEmpty(instructions))
             {
                 return;
             }
@@ -96,15 +82,18 @@ namespace HappyFunTimes {
                 SetupInstructions();
             }
 
-            m_scrollOffset -= m_scrollSpeed;
-            if (m_scrollOffset < m_minScrollOffset)
+            if (!m_msgFitsOnScreen)
             {
-                m_scrollOffset = m_startScrollOffset;
+                m_scrollOffset -= scrollSpeed;
+                if (m_scrollOffset < m_minScrollOffset)
+                {
+                    m_scrollOffset = m_startScrollOffset;
+                }
             }
 
             GUI.Box(m_guiBackgroundRect, "", m_guiBackgroundStyle);
             m_guiMsgRect.x = m_scrollOffset;
-            GUI.Box(m_guiMsgRect, m_guiMsg, m_guiMsgStyle);
+            GUI.Box(m_guiMsgRect, instructions, m_guiMsgStyle);
 
             GUI.depth = oldDepth;   // I don't think this is needed
         }
@@ -123,10 +112,10 @@ namespace HappyFunTimes {
 
             m_guiBackgroundStyle.normal.background = tex;
 
-            m_guiContent = new GUIContent(m_guiMsg);
+            m_guiContent = new GUIContent(instructions);
             m_guiSize = m_guiMsgStyle.CalcSize(m_guiContent);
             m_guiMsgRect.x = 0.0f;
-            m_guiMsgRect.y = m_bottom ?  Screen.height - m_guiSize.y : 0.0f;
+            m_guiMsgRect.y = bottom ? Screen.height - m_guiSize.y : 0.0f;
             m_guiMsgRect.width = Screen.width;
             m_guiMsgRect.height = m_guiSize.y;
 
@@ -135,13 +124,11 @@ namespace HappyFunTimes {
             m_startScrollOffset = Screen.width;
             m_scrollOffset = m_startScrollOffset;
             m_minScrollOffset = -m_guiSize.x - 400.0f;  // the -400 makes it not repeat immediately
-            m_scrollSpeed = SCROLL_SPEED;
 
-            bool msgFitsOnScreen = m_guiSize.x < Screen.width;
-            if (msgFitsOnScreen)
+            m_msgFitsOnScreen = m_guiSize.x < Screen.width;
+            if (m_msgFitsOnScreen)
             {
                 m_scrollOffset = Screen.width * 0.5f - m_guiSize.x * 0.5f;
-                m_scrollSpeed = 0.0f;
             }
         }
     }
