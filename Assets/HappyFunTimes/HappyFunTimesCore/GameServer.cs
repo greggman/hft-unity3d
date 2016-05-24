@@ -97,7 +97,7 @@ namespace HappyFunTimes
             m_handlers = new Dictionary<string, CmdEventHandler>();
 
             m_eventProcessor = m_gameObject.AddComponent<HFTEventProcessor>();
-            HFTGlobalEventEmitter.Setup(m_eventProcessor);
+            HFTGlobalEventEmitter.GetInstance().Setup(m_eventProcessor);
 
             m_msgHandlers.Add("update", UpdatePlayer);
             m_msgHandlers.Add("upgame", UpdateGame);
