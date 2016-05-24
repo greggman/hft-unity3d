@@ -355,7 +355,7 @@ namespace HappyFunTimes
         private void SocketOpened(object sender, System.EventArgs e)
         {
             //invoke when socket opened
-            m_log.Tell("Connnected to HappyFunTimes");
+            m_log.Info("Connnected to HappyFunTimes");
             m_connected = true;
 
             List<String>.Enumerator i = m_sendQueue.GetEnumerator();
