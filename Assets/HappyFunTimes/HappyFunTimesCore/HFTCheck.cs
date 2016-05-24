@@ -65,7 +65,10 @@ namespace HappyFunTimes
             while (!m_found && m_tries < s_maxTries)
             {
                 ++m_tries;
-                m_log.Tell("Checking for HFT(" + m_url + ") try" + m_tries + " of " + s_maxTries);
+                if (m_tries > 1)
+                {
+                    m_log.Tell("Checking for HFT(" + m_url + ") try" + m_tries + " of " + s_maxTries);
+                }
                 yield return PingHFT();
                 yield return new WaitForSeconds(1.0f);
             }
