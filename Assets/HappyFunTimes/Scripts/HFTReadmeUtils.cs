@@ -42,7 +42,7 @@ namespace HappyFunTimes {
 
         static string ReplaceBold(Match m)
         {
-            return "<color=red>" + m.Groups[1].Value + "</color>";
+            return "<color=red><b>" + m.Groups[1].Value + "</b></color>";
         }
 
         static string Replace1Hash(Match m)
