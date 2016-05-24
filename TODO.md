@@ -18,9 +18,10 @@
     *   send URL not raw IP because IP6
     *   Check if port busy
         *   inc port
-    *   move HFTDialog out of HFTDnsRunner?
+    *   move HFTDialog out of HFTDnsRunner or at least detach them.
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
+*   link all samples to online docs
 *   make hft.net keep trying
 *   ../
 *   make GameServer stop Server?
@@ -29,14 +30,14 @@
     *   Make it return 1 where it's currently returning 0
 *   Add captive portal support
 *   Make DNS server not on mobile?
-*   Put all samples in same package? (can't because one folder? Fix that shit!)
-    *   Objects in scene
 *   try to support Android captive portal
     *   monitor requests
 
 DONE
 ====
 
+*   Put all samples in same package? (can't because one folder? Fix that shit!)
+    *   Objects in scene
 *   make instructions work (do I need this?) Maybe this should move to game out of HFT
     (no! Instructions should be up to the dev. Maybe an example would be good? Just
     *   have default instructions
