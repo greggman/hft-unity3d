@@ -11,3 +11,6 @@ There's also a `HFTInput` component which emulates the built in `Input` class.
 Finally there's a `BirdScript` component which controls each player's character. It interacts
 with the `HFTInput` component to control the player as well as the `HFTGamepad`
 component to let the game set the color of the controller and get the user's name.
+
+[For more info about this sample see http://docs.happyfuntimes.net/docs/unity/gamepad.html](http://docs.happyfuntimes.net/docs/unity/gamepad.html).
+
