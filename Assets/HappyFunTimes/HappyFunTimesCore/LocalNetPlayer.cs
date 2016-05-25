@@ -124,7 +124,7 @@ public class LocalNetPlayer : NetPlayer {
     /// </summary>
     /// <example>
     /// <code>
-    /// private class MessageColor : MessageCmdData {
+    /// private class MessageColor {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
     /// };
     ///
@@ -167,7 +167,7 @@ public class LocalNetPlayer : NetPlayer {
     /// or
     /// <code>
     /// <![CDATA[
-    /// private class MessageColor : MessageCmdData {
+    /// private class MessageColor {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
     /// };
     /// ...

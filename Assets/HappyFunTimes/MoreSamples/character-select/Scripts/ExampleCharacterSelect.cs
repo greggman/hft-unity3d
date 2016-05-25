@@ -18,7 +18,7 @@ class ExampleCharacterSelect : MonoBehaviour {
         public HFTPlayerNameManager playerNameManager;
     }
 
-    private class MessageCharacter : MessageCmdData {
+    private class MessageCharacter {
         public int id = 0;
     }
 

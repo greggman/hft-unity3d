@@ -11,14 +11,14 @@ namespace HappyFunTimesExample {
 class ExampleCharacterSelectPlayer : MonoBehaviour {
     // Classes based on MessageCmdData are automatically registered for deserialization
     // by CmdName.
-    private class MessageColor : MessageCmdData {
+    private class MessageColor {
         public MessageColor(Color _color) {
             color = _color;
         }
         public Color color;
     };
 
-    private class MessageMove : MessageCmdData {
+    private class MessageMove {
         public float x = 0;
         public float y = 0;
     };
@@ -27,7 +27,7 @@ class ExampleCharacterSelectPlayer : MonoBehaviour {
     // therefore it does not need a no parameter constructor.
     // If you do receive one you'll get an error unless you
     // add a no parameter constructor.
-    private class MessageScored : MessageCmdData {
+    private class MessageScored {
         public MessageScored(int _points) {
             points = _points;
         }

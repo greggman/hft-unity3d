@@ -198,7 +198,7 @@ namespace HappyFunTimes
         /// </summary>
         /// <example>
         /// <code>
-        /// private class MessageColor : MessageCmdData {
+        /// private class MessageColor {
         ///     public string color = "";    // in CSS format rgb(r,g,b)
         /// };
         ///
@@ -243,7 +243,7 @@ namespace HappyFunTimes
         /// or
         /// <code>
         /// <![CDATA[
-        /// private class MessageColor : MessageCmdData {
+        /// private class MessageColor {
         ///     public string color = "";    // in CSS format rgb(r,g,b)
         /// };
         /// ...
@@ -655,7 +655,7 @@ namespace HappyFunTimes
         }
 
         // HFT system data that comes when the player starts
-        class HFTPlayerStartData : MessageCmdData // don't think this needs to inherit from MessageCmdData
+        class HFTPlayerStartData // don't think this needs to inherit from MessageCmdData
         {
             public string __hft_session_id__ = "";
             public string __hft_name__ = "";

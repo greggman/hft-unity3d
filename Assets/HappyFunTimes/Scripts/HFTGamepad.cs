@@ -203,7 +203,7 @@ public class HFTGamepad : MonoBehaviour {
   private Color m_oldColor;
   private ControllerOptions m_oldControllerOptions = new ControllerOptions();
 
-  private class MessageOptions : MessageCmdData {
+  private class MessageOptions {
     public MessageOptions(ControllerOptions _controllerOptions) {
       controllerOptions = _controllerOptions;
     }
@@ -211,43 +211,43 @@ public class HFTGamepad : MonoBehaviour {
     public ControllerOptions controllerOptions;
   }
 
-  private class MessageButton : MessageCmdData {
+  private class MessageButton {
     public int id = 0;
     public bool pressed = false;
   }
 
-  private class MessageColor : MessageCmdData {
+  private class MessageColor {
     public MessageColor(Color _color) {
       color = _color;
     }
     public Color color;
   }
 
-  private class MessageDPad : MessageCmdData {
+  private class MessageDPad {
     public int pad = 0;
     public int dir = -1;
   }
 
-  private class MessageTouch : MessageCmdData {
+  private class MessageTouch {
     public int id = 0;
     public int x = 0;
     public int y = 0;
   }
 
-  private class MessageOrient : MessageCmdData {
+  private class MessageOrient {
     public float a = 0.0f;
     public float b = 0.0f;
     public float g = 0.0f;
     public bool abs = false;
   }
 
-  private class MessageAccel : MessageCmdData {
+  private class MessageAccel {
     public float x = 0.0f;
     public float y = 0.0f;
     public float z = 0.0f;
   }
 
-  private class MessageRot : MessageCmdData {
+  private class MessageRot {
     public float a = 0.0f;
     public float b = 0.0f;
     public float g = 0.0f;

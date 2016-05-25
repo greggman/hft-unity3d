@@ -41,7 +41,7 @@ using System.Collections.Generic;
 public class HFTSoundPlayer : MonoBehaviour
 {
 
-    private class MessageLoadSounds : MessageCmdData
+    private class MessageLoadSounds
     {
         public MessageLoadSounds(Sounds _sounds)
         {
@@ -50,7 +50,7 @@ public class HFTSoundPlayer : MonoBehaviour
         public Sounds sounds = null;
     }
 
-    private class MessagePlaySound : MessageCmdData
+    private class MessagePlaySound
     {
         public MessagePlaySound(string _name, bool _loop = false)
         {

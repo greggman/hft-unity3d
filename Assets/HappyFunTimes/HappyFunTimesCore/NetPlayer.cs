@@ -124,7 +124,7 @@ public abstract class NetPlayer
     /// </summary>
     /// <example>
     /// <code>
-    /// private class MessageColor : MessageCmdData {
+    /// private class MessageColor {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
     /// };
     ///
@@ -170,7 +170,7 @@ public abstract class NetPlayer
     /// or
     /// <code>
     /// <![CDATA[
-    /// private class MessageColor : MessageCmdData {
+    /// private class MessageColor {
     ///     public string color = "";    // in CSS format rgb(r,g,b)
     /// };
     /// ...
