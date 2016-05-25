@@ -38,9 +38,9 @@ namespace HappyFunTimesEditor
 {
 
 [InitializeOnLoad]
-class Startup
+class HFTStartup
 {
-    static Startup ()
+    static HFTStartup ()
     {
         PlayerSettings.runInBackground = true;
     }
