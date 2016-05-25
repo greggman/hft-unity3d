@@ -69,7 +69,7 @@ namespace HappyFunTimesEditor
         void OnProjectChange() {
             if (s_window)
             {
-                Destroy(s_window);
+                Close();
             }
         }
 
