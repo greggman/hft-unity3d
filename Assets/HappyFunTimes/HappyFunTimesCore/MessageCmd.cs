@@ -120,92 +120,6 @@ namespace HappyFunTimes
         }
     }
 
-// Deserialize from base MessageCmdData into a concrete derived type.
-//    public class MessageCmdDataCreator : Deserializer.CustomCreator
-//    {
-//
-//        // base class that goes in dictionary of names -> creators
-//        public abstract class Creator
-//        {
-//            public abstract object Create();
-//        }
-//
-//        // concrete creators
-//        public class TypedCreator<T> : Creator where T: new()
-//        {
-//            public override object Create()
-//            {
-//                return new T();
-//            }
-//        }
-//
-//        public class TypeBasedCreator : Creator
-//        {
-//            public TypeBasedCreator(System.Type type)
-//            {
-//                m_type = type;
-//            }
-//
-//            public override object Create()
-//            {
-//                return Activator.CreateInstance(m_type);
-//            }
-//
-//            private System.Type m_type;
-//        }
-//
-//        public MessageCmdDataCreator()
-//        {
-//            m_creators = new Dictionary<string, Creator>();
-//        }
-//
-//        public void RegisterCreator<T>()where T : new()
-//        {
-//            string name = MessageCmdData.GetCmdName(typeof(T));
-//            if(name == null)
-//            {
-//                System.InvalidOperationException ex = new System.InvalidOperationException("missing CmdNameAttribute");
-//                throw ex;
-//            }
-//
-//            m_creators[name] = new TypedCreator<T>();
-//        }
-//
-//        public void RegisterCreator(System.Type type)
-//        {
-//            string name = MessageCmdData.GetCmdName(type);
-//            if (name == null)
-//            {
-//                System.InvalidOperationException ex = new System.InvalidOperationException("missing CmdNameAttribute");
-//                throw ex;
-//            }
-//            m_creators[name] = new TypeBasedCreator(type);
-//        }
-//
-//        public void RegisterCreator(string name, System.Type type)
-//        {
-//            m_creators[name] = new TypeBasedCreator(type);
-//        }
-//
-//        public override object Create(Dictionary<string, object> src, Dictionary<string, object> parentSrc)
-//        {
-//            string typeName = (string)parentSrc["cmd"];
-//            Creator creator;
-//            if (m_creators.TryGetValue(typeName, out creator))
-//            {
-//                return creator.Create();
-//            }
-//            return null;
-//        }
-//
-//        public override System.Type TypeToCreate()
-//        {
-//            return typeof(MessageCmdData);
-//        }
-//
-//        Dictionary<string, Creator> m_creators;
-//    };
-
     public class MessageSwitchGame
     {
         public string gameId;
@@ -233,9 +147,6 @@ namespace HappyFunTimes
     {
         public string id = "";
         public string gameId = "";
-        public bool needNewHFT = false;
-        public string instructions = "";
-        public bool instructionsBottom = false;
     };
 
     public class RelayServerCmd
