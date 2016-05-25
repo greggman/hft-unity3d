@@ -41,7 +41,7 @@ namespace HappyFunTimes
     public class HFTUserOptions
     {
         [Tooltip("name of controller html file. Must be in 'WebPlayerTemplates/HappyFunTimes'")]
-        public string controllerFilename = "controller.html";
+        public string controllerFilename = "controllers/gamepad/controller.html";
 
         /// <summary>
         /// Name of game (shown if more than one game running on WiFi)
