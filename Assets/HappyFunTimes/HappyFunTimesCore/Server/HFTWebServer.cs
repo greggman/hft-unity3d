@@ -140,9 +140,20 @@ namespace HappyFunTimes
                 {
                     path += "index.html";
                 }
+                //Debug.Log("HFTWebServer: " + uri.ToString() + " ========================");
+                //Debug.Log("remote ip: " + req.RemoteEndPoint.Address.ToString());
+                //Debug.Log("Num Headers: " + req.Headers.Count);
+                //foreach(string key in req.Headers.AllKeys)
+                //{
+                //    string value = req.Headers.Get(key);
+                //    Debug.Log("Header: " + key + " = " + value);
+                //}
 
                 m_log.Info(path);
-                m_getRouter.Route(path, req, res);
+                if (!m_getRouter.Route(path, req, res))
+                {
+                    throw new System.InvalidOperationException("no route for request: " + path);
+                }
             };
 
             server.OnOptions += (sender, e) =>
@@ -186,7 +197,13 @@ namespace HappyFunTimes
                 // run the game the browser reconnects but the system
                 // isn't fully ready yet.
                 PostCmd cmd = deserializer_.Deserialize<PostCmd>(result);
-                if (cmd.cmd == "happyFunTimesPingForGame")
+                if (cmd == null || cmd.cmd == null)
+                {
+                    res.ContentType = "application/json";
+                    res.StatusCode = (int)HttpStatusCode.BadRequest;
+                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"bad command data: " + cmd.cmd + "\"}"));
+                }
+                else if (cmd.cmd == "happyFunTimesPingForGame")
                 {
                     m_webServerUtils.SendJsonBytes(res, m_ping);
                 }
@@ -208,8 +225,8 @@ namespace HappyFunTimes
                 else
                 {
                     res.ContentType = "application/json";
-                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"unknown cmd: " + cmd.cmd + "\"}"));
                     res.StatusCode = (int)HttpStatusCode.BadRequest;
+                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"unknown cmd: " + cmd.cmd + "\"}"));
                 }
                 // TODO: use router
             };
@@ -320,8 +337,8 @@ namespace HappyFunTimes
         bool HandleNotFound(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
             res.ContentType = "text/text";
-            res.WriteContent(System.Text.Encoding.UTF8.GetBytes("unknown path: " + path + "\n"));
             res.StatusCode = (int)HttpStatusCode.NotFound;
+            res.WriteContent(System.Text.Encoding.UTF8.GetBytes("unknown path: " + path + "\n"));
             return true;
         }
 

@@ -35,6 +35,7 @@ namespace HappyFunTimes {
             {
                 res.ContentEncoding = System.Text.Encoding.UTF8;
             }
+            res.StatusCode = (int)HttpStatusCode.OK;
             res.AddHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
             res.AddHeader("Pragma",        "no-cache");                            // HTTP 1.0.
             res.AddHeader("Expires",       "0");                                   // Proxies.
