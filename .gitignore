@@ -4,6 +4,10 @@ bower_components
 Temp
 Library
 .DS_Store
+test.app
+test.exe
+test.log
+test_Data
 *~
 *.swp
 *.bat
