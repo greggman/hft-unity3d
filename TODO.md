@@ -15,10 +15,8 @@
 *   refactor for standalone
     *   check controllers work on windows
     *   check controller path with / and \
-    *   send URL not raw IP because IP6
     *   Check if port busy
         *   inc port
-    *   move HFTDialog out of HFTDnsRunner or at least detach them.
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
 *   link all samples to online docs
@@ -53,6 +51,8 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   move HFTDialog out of HFTDnsRunner or at least detach them.
+    *   send URL not raw IP because IP6
     *   don't print Checking for HFT unless try > 1
     *   don't print connected to HFT unless debug
     *   remove disconnect from HFTGamepad and add to BirdScript and others
