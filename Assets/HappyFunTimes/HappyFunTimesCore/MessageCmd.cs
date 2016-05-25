@@ -252,18 +252,6 @@ namespace HappyFunTimes
         public object data;
     }
 
-    [CmdName("instructions")]
-    public class MessageInstructions : MessageCmdData
-    {
-        public MessageInstructions(string _msg, bool _bottom)
-        {
-            msg = _msg;
-            bottom = _bottom;
-        }
-        public string msg = "";
-        public bool bottom = false;
-    }
-
     public class MessageLog
     {
         public MessageLog(string _type, string _msg)

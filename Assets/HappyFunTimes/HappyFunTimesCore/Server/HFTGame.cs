@@ -318,16 +318,6 @@ namespace HappyFunTimes
             SendSystemCmd("exit", null);
         }
 
-        void SendInstructions(string msg, bool bottom)
-        {
-            //if (!this.runtimeInfo)
-            //{
-            //    return;
-            //}
-            //pos = pos || this.runtimeInfo.info.happyFunTimes.instructionsPosition;
-            SendSystemCmd("instructions", new MessageInstructions(msg, bottom));
-        }
-
         public void SendGameDisconnect(HFTGame otherGame)
         {
             if (client_ != null)  // this check is needed because in GameGroup.assignClient the new game has been added to games but not yet assigned a client
