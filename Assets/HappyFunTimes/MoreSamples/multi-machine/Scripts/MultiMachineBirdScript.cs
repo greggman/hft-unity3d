@@ -74,7 +74,7 @@ public class MultiMachineBirdScript : MonoBehaviour {
     }
 
     // Message to send when sending a player to another game
-    private class MessageSwitchGame
+    private class HFTMessageSwitchGame
     {
         public Vector2 pos;
         public Vector2 vel;
@@ -119,7 +119,7 @@ public class MultiMachineBirdScript : MonoBehaviour {
 
             // Turn the data back into our structure
             DeJson.Deserializer deserializer = new DeJson.Deserializer();
-            MessageSwitchGame data = deserializer.Deserialize<MessageSwitchGame>(spawnInfo.data);
+            HFTMessageSwitchGame data = deserializer.Deserialize<HFTMessageSwitchGame>(spawnInfo.data);
 
             // Choose a starting position based on the old position
             float x = (data.pos.x < MultiMachineLevelSettings.settings.leftEdgeOfLevel.position.x)
@@ -248,7 +248,7 @@ public class MultiMachineBirdScript : MonoBehaviour {
 
     void SwitchGame(int dir)
     {
-        MessageSwitchGame data = new MessageSwitchGame();
+        HFTMessageSwitchGame data = new HFTMessageSwitchGame();
         data.pos = transform.position;
         data.vel = m_rigidbody2d.velocity;
         data.name = m_playerName;

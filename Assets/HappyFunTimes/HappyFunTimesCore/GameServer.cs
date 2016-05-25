@@ -73,7 +73,7 @@ namespace HappyFunTimes
                 Dictionary<string, object> data = (Dictionary<string, object>)dict;
                 server.QueueEvent(() =>
                 {
-                    // dict is the MessageCmd. We want dict for the MessageCmdData inside the MessageCmd
+                    // dict is the HFTMessageCmd. We want dict for the MessageCmdData inside the HFTMessageCmd
                     // It might not exist
                     m_handler(data, id);
                 });
@@ -185,7 +185,7 @@ namespace HappyFunTimes
         /// <param name="callback">Typed callback</param>
         public void RegisterCmdHandler<T>(TypedCmdEventHandler<T> callback) where T : MessageCmdData
         {
-            string name = MessageCmdDataNameDB.GetCmdName(typeof(T));
+            string name = HFTMessageCmdDataNameDB.GetCmdName(typeof(T));
             if (name == null)
             {
                 throw new System.InvalidOperationException("no CmdNameAttribute on " + typeof(T).Name);
@@ -522,7 +522,7 @@ namespace HappyFunTimes
 
         private void StartGame(MessageToClient msg)
         {
-            MessageGameStart data = m_deserializer.Deserialize<MessageGameStart>(msg.data);
+            HFTMessageGameStart data = m_deserializer.Deserialize<HFTMessageGameStart>(msg.data);
             m_id = data.id;
             QueueEvent(() =>
             {
@@ -550,7 +550,7 @@ namespace HappyFunTimes
         {
             try
             {
-                MessageCmd cmd = m_deserializer.Deserialize<MessageCmd>(msg.data);
+                HFTMessageCmd cmd = m_deserializer.Deserialize<HFTMessageCmd>(msg.data);
                 CmdEventHandler handler;
                 if (!m_handlers.TryGetValue(cmd.cmd, out handler))
                 {
@@ -614,14 +614,14 @@ namespace HappyFunTimes
         // Only NetPlayer should call this.
         public void SendCmd(string cmd, string name, object data, string id = "-1")
         {
-            MessageCmd msgCmd = new MessageCmd(name, data);
+            HFTMessageCmd msgCmd = new HFTMessageCmd(name, data);
             SendSysCmd(cmd, id, msgCmd);
         }
 
         // Only NetPlayer should call this.
         public void SendCmd(string cmd, MessageCmdData data, string id = "-1")
         {
-            string name = MessageCmdDataNameDB.GetCmdName(data.GetType());
+            string name = HFTMessageCmdDataNameDB.GetCmdName(data.GetType());
             SendCmd(cmd, name, data, id);
         }
 

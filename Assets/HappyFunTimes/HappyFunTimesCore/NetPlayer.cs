@@ -112,7 +112,7 @@ public abstract class NetPlayer
     /// </example>
     /// <param name="callback">Typed callback</param>
     public void RegisterCmdHandler<T>(TypedCmdEventHandler<T> callback) where T : MessageCmdData {
-        string name = MessageCmdDataNameDB.GetCmdName(typeof(T));
+        string name = HFTMessageCmdDataNameDB.GetCmdName(typeof(T));
         if (name == null) {
             throw new System.InvalidOperationException("no CmdNameAttribute on " + typeof(T).Name);
         }
@@ -197,7 +197,7 @@ public abstract class NetPlayer
     /// </summary>
     /// <returns>true if there was a command handler, false if not</returns>
     public bool UnregisterCmdHandler<T>() where T : MessageCmdData {
-        string name = MessageCmdDataNameDB.GetCmdName(typeof(T));
+        string name = HFTMessageCmdDataNameDB.GetCmdName(typeof(T));
         return UnregisterCmdHandler(name);
     }
 
@@ -219,7 +219,7 @@ public abstract class NetPlayer
     }
 
     void AddHandlers() {
-        RegisterInternalCmdHandler<MessageLog>("_hft_log_", HandleLogMsg);
+        RegisterInternalCmdHandler<HFTMessageLog>("_hft_log_", HandleLogMsg);
     }
 
     /// <summary>
@@ -289,7 +289,7 @@ public abstract class NetPlayer
         }
 
         try {
-            MessageCmd cmd = m_deserializer.Deserialize<MessageCmd>(data);
+            HFTMessageCmd cmd = m_deserializer.Deserialize<HFTMessageCmd>(data);
             CmdEventHandler handler;
             if (!m_handlers.TryGetValue(cmd.cmd, out handler)) {
                 if (!m_internalHandlers.TryGetValue(cmd.cmd, out handler)) {
@@ -304,7 +304,7 @@ public abstract class NetPlayer
     }
 
     private string errorStr = @"error";
-    void HandleLogMsg(MessageLog data) {
+    void HandleLogMsg(HFTMessageLog data) {
         if (errorStr.Equals(data.type, StringComparison.Ordinal)) {
             m_log.Error(data.msg);
         } else {

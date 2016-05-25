@@ -180,12 +180,12 @@ namespace HappyFunTimes
 
             RegisterCmdHandler<object>("client", SendMessageToPlayer);
             RegisterCmdHandler<object>("broadcast", Broadcast);
-            RegisterCmdHandler<MessageSwitchGame>("switchGame", SwitchGame);
+            RegisterCmdHandler<HFTMessageSwitchGame>("switchGame", SwitchGame);
             RegisterCmdHandler<object>("peer", SendMessageToGame);
             RegisterCmdHandler<object>("bcastToGames", BroadcastToGames);
 
             // Tell the game it's id
-            var gs = new MessageGameStart();
+            var gs = new HFTMessageGameStart();
             gs.id = id_;
             gs.gameId = ""; //FIX!
             client.Send(new HFTRelayToGameMessage("gamestart", "", gs));
@@ -229,7 +229,7 @@ namespace HappyFunTimes
             }
         }
 
-        public void SwitchGame(string playerId, MessageSwitchGame data)  // ?????????????????????????????????????????
+        public void SwitchGame(string playerId, HFTMessageSwitchGame data)  // ?????????????????????????????????????????
         {
             HFTPlayer player = null;
             if (!players_.TryGetValue(playerId, out player))
@@ -304,7 +304,7 @@ namespace HappyFunTimes
         {
             if (client_ != null)
             {
-                client_.Send(new MessageCmd("log", new MessageLog("error", msg)));
+                client_.Send(new HFTMessageCmd("log", new HFTMessageLog("error", msg)));
             }
         }
 
@@ -326,7 +326,7 @@ namespace HappyFunTimes
                     new HFTRelayToGameMessage(
                         "upgame",
                         otherGame.id,
-                        new MessageCmd("gamedisconnect",
+                        new HFTMessageCmd("gamedisconnect",
                                        new HFTMessageGameDisconnect(otherGame.id))));
             }
         }

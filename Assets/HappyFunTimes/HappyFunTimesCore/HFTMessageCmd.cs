@@ -36,15 +36,15 @@ using DeJson;
 namespace HappyFunTimes
 {
 
-    public class MessageCmd
+    public class HFTMessageCmd
     {
-        public MessageCmd()
+        public HFTMessageCmd()
         {
             cmd = "";
             data = null;
         }
 
-        public MessageCmd(string _cmd, object _data)
+        public HFTMessageCmd(string _cmd, object _data)
         {
             cmd = _cmd;
             data = _data;
@@ -94,7 +94,7 @@ namespace HappyFunTimes
 
 // This is just to cache the command names since iterating over fields seems like it
 // would be slow. Probably a pre-mature optimization.
-    public class MessageCmdDataNameDB
+    public class HFTMessageCmdDataNameDB
     {
 
         public static string GetCmdName(System.Type type)
@@ -127,13 +127,13 @@ namespace HappyFunTimes
         }
     }
 
-    public class MessageSwitchGame
+    public class HFTMessageSwitchGame
     {
         public string gameId;
         public object data;
 
-        public MessageSwitchGame() { } // for deserialization
-        public MessageSwitchGame(string id, object d)
+        public HFTMessageSwitchGame() { } // for deserialization
+        public HFTMessageSwitchGame(string id, object d)
         {
             gameId = id;
             data = d;
@@ -150,7 +150,7 @@ namespace HappyFunTimes
         }
     }
 
-    public class MessageGameStart
+    public class HFTMessageGameStart
     {
         public string id = "";
         public string gameId = "";
@@ -170,9 +170,9 @@ namespace HappyFunTimes
         public object data;
     }
 
-    public class MessageLog
+    public class HFTMessageLog
     {
-        public MessageLog(string _type, string _msg)
+        public HFTMessageLog(string _type, string _msg)
         {
             type = _type;
             msg = _msg;
@@ -181,7 +181,7 @@ namespace HappyFunTimes
         public string msg = "";
     }
 
-    public class MessageAssignAsClientForGame
+    public class HFTMessageAssignAsClientForGame
     {
         public string gameId;
     }

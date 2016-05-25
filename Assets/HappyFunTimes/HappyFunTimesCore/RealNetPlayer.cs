@@ -88,7 +88,7 @@ public class RealNetPlayer : NetPlayer {
     {
         if (Connected)
         {
-            Server.SendSysCmd("switchGame", m_id, new MessageSwitchGame(gameId, data));
+            Server.SendSysCmd("switchGame", m_id, new HFTMessageSwitchGame(gameId, data));
             Disconnect();
         }
     }

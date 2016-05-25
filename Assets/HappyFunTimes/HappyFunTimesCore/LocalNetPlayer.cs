@@ -112,7 +112,7 @@ public class LocalNetPlayer : NetPlayer {
     /// </example>
     /// <param name="callback">Typed callback</param>
     public void RegisterGameCmdHandler<T>(TypedGameCmdEventHandler<T> callback) where T : MessageCmdData {
-        string name = MessageCmdDataNameDB.GetCmdName(typeof(T));
+        string name = HFTMessageCmdDataNameDB.GetCmdName(typeof(T));
         if (name == null) {
             throw new System.InvalidOperationException("no CmdNameAttribute on " + typeof(T).Name);
         }
@@ -199,7 +199,7 @@ public class LocalNetPlayer : NetPlayer {
     /// </code>
     /// </example>
     public override void SendCmd(MessageCmdData data) {
-        string cmd = MessageCmdDataNameDB.GetCmdName(data.GetType());
+        string cmd = HFTMessageCmdDataNameDB.GetCmdName(data.GetType());
         SendCmd(cmd, data);
     }
 
@@ -229,13 +229,13 @@ public class LocalNetPlayer : NetPlayer {
 
     public void SendEvent(MessageCmdData data)
     {
-        string cmd = MessageCmdDataNameDB.GetCmdName(data.GetType());
+        string cmd = HFTMessageCmdDataNameDB.GetCmdName(data.GetType());
         SendEvent(cmd, data);
     }
 
     public void SendEvent(string cmd, object data)
     {
-        MessageCmd msgCmd = new MessageCmd(cmd, data);
+        HFTMessageCmd msgCmd = new HFTMessageCmd(cmd, data);
         string json = Serializer.Serialize(msgCmd);
         Dictionary<string, object>dict = base.Deserializer.Deserialize<Dictionary<string, object> >(json);
         SendUnparsedEvent(dict);
