@@ -10,6 +10,7 @@ namespace HappyFunTimes {
 
         public HFTCaptivePortalHandler(HFTWebServerUtils utils)
         {
+            Debug.Log("Fix hard coded url");
             m_webServerUtils = utils;
             m_appleResponseContent = System.Text.Encoding.UTF8.GetBytes("<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
         }
@@ -23,7 +24,7 @@ namespace HappyFunTimes {
         {
             m_log.Info("path = " + path);
             string sessionId = System.Uri.EscapeUriString(req.RemoteEndPoint.Address.ToString()) + "_" + System.IO.Path.GetExtension(path);
-            m_log.Info(return "remote ip: " + sessionId);
+            m_log.Info("sessionId: " + sessionId);
             bool isCheckingForApple = req.UserAgent.StartsWith("CaptiveNetworkSupport");
             bool isLoginURL = path.Equals("/game-login.html", StringComparison.Ordinal);
             bool isIndexURL = path.Equals("/index.html", StringComparison.Ordinal) ||
@@ -43,9 +44,8 @@ namespace HappyFunTimes {
                 m_log.Info("found prev session:" + sessionId);
                 if (isLoginURL)
                 {
-                    m_log.Info("send game-login");
                     session.loggedIn = true;
-                    SendCaptivePortalHTML(req, res, sessionId, "game-login.html");
+                    SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/game-login.html");
                     return true;
                 }
 
@@ -59,25 +59,24 @@ namespace HappyFunTimes {
                         return true;
                     }
                 }
-                m_log.Info("send captive-portal");
-                SendCaptivePortalHTML(req, res, sessionId);
+                SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/captive-portal.html");
                 return true;
             }
 
             if (!isCheckingForApple)
             {
-                m_log.Info("not checking for apple.");
+                m_log.Info("not checking for apple so just fall through");
                 return false;
             }
 
-            m_log.Info("snd captive-protal with new session: " + sessionId);
+            m_log.Info("send captive-portal.html with new session: " + sessionId);
             // We are checking for apple for the first time so remember the path
             m_sessions[sessionId] = new Session();
-            SendCaptivePortalHTML(req, res, sessionId);
+            SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/captive-portal.html");
             return true;
         }
 
-        void SendCaptivePortalHTML(HttpListenerRequest req, HttpListenerResponse res, string sessionId, string path = "captive-portal.html")
+        void SendCaptivePortalHTML(HttpListenerRequest req, HttpListenerResponse res, string sessionId, string path)
         {
             //var fullPath = path.normalize(path.join(this.options.baseDir, opt_path));
             byte[] content = null;
@@ -90,7 +89,6 @@ namespace HappyFunTimes {
             string str = System.Text.Encoding.UTF8.GetString(content);
             Dictionary<string, string> subs = new Dictionary<string, string>();
             subs["startUrl"] = m_url + m_firstPath + "?sessionId=" + sessionId;
-            // %(localhost)s%(firstPath)s?sessionId=%(sessionId)s
             str = HFTUtil.ReplaceParamsFlat(str, subs);
             m_log.Info("SCPH: Sending " + path);
             m_webServerUtils.SendContent(res, path, str);
