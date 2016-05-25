@@ -102,11 +102,6 @@ namespace HappyFunTimes
 
         void StartGameServer(object sender, System.EventArgs e)
         {
-            m_server = new GameServer(m_options, gameObject);
-
-            m_server.OnConnect += Connected;
-            m_server.OnDisconnect += Disconnected;
-
             m_server.Init();
 
             if (maxPlayers > 0)
@@ -152,9 +147,16 @@ namespace HappyFunTimes
             }
         }
 
-        void Start()
+        void Awake()
         {
             m_options = new HFTRuntimeOptions(happyfuntimesOptions);
+            m_server = new GameServer(m_options, gameObject);
+            m_server.OnConnect += Connected;
+            m_server.OnDisconnect += Disconnected;
+        }
+
+        void Start()
+        {
             StartConnection();
         }
 

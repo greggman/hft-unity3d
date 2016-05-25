@@ -91,19 +91,21 @@ public class PlayerConnector : MonoBehaviour
 
     void StartGameServer(object sender, System.EventArgs e)
     {
-        m_server = new GameServer(m_options, gameObject);
-
-        m_server.OnConnect += Connected;
-        m_server.OnDisconnect += Disconnected;
-
         m_server.Init();
 
         m_playerManager = new PlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
     }
 
-    void Start ()
+    void Awake()
     {
         m_options = new HFTRuntimeOptions(happyfuntimesOptions);
+        m_server = new GameServer(m_options, gameObject);
+        m_server.OnConnect += Connected;
+        m_server.OnDisconnect += Disconnected;
+    }
+
+    void Start()
+    {
         StartConnection();
     }
 
