@@ -294,7 +294,7 @@ namespace HappyFunTimes
         bool HandleMissingRoute(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
             if (path.EndsWith(".html")) {
-                if (m_webServerUtils.SendFile("/missing.html", req, res)) {
+                if (m_webServerUtils.SendFile("/hft/missing.html", req, res)) {
                     return true;
                 }
             }
