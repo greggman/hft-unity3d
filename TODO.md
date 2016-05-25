@@ -13,6 +13,10 @@
 *   test ios
 *   Add Start/Stop for server
 *   refactor for standalone
+    *   fix readme at build
+    *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
+    *   check arguments so we can print errors? Except we can't print errors :(
+    *   make game-login/captive-portal buttons enter button, not just A
     *   check controllers work on windows
     *   check controller path with / and \
     *   Check if port busy
