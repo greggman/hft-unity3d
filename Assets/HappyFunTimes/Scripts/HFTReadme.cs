@@ -9,7 +9,8 @@ namespace HappyFunTimes {
 
         [TextArea(10, 30)]
         public string message = "";
-        public bool richText = false;
+        public bool richText = true;
+        public bool markdownish = true;
 
         #if UNITY_EDITOR
         void Awake() {
@@ -24,7 +25,7 @@ namespace HappyFunTimes {
         {
             if (message != null)
             {
-                HFTReadmeUtils.ShowReadme("**README**", message, richText, this, force);
+                HFTReadmeUtils.ShowReadme("**README**", message, richText, markdownish, this, force);
             }
         }
         #endif

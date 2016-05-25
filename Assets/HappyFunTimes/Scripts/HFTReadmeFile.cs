@@ -8,7 +8,8 @@ namespace HappyFunTimes {
     public class HFTReadmeFile : MonoBehaviour {
 
         public TextAsset file;
-        public bool richText = false;
+        public bool richText = true;
+        public bool markdownish = true;
 
         #if UNITY_EDITOR
         void Awake() {
@@ -23,7 +24,7 @@ namespace HappyFunTimes {
         {
             if (file != null)
             {
-                HFTReadmeUtils.ShowReadme(file.name, file.text, richText, this, force);
+                HFTReadmeUtils.ShowReadme(file.name, file.text, richText, markdownish, this, force);
             }
         }
         #endif

@@ -262,7 +262,7 @@ namespace HappyFunTimes {
             return true;
         }
 
-        static public void ShowReadme(string name, string text, bool richText, Component component, bool force)
+        static public void ShowReadme(string name, string text, bool richText, bool markdownish, Component component, bool force)
         {
             if (!force && !ShouldShowReadme())
             {
@@ -275,7 +275,7 @@ namespace HappyFunTimes {
                 UnityEditor.EditorWindow w = t.GetMethod("GetInstance").Invoke(null, null) as UnityEditor.EditorWindow;
                 if (w != null)
                 {
-                    t.GetMethod("SetContent").Invoke(w, new object[]{ name, text, richText, component });
+                    t.GetMethod("SetContent").Invoke(w, new object[]{ name, text, richText, markdownish, component });
                     w.ShowUtility();
                 }
             }

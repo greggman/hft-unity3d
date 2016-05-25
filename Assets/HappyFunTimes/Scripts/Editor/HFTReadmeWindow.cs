@@ -80,11 +80,16 @@ namespace HappyFunTimesEditor
             }
         }
 
-        public void SetContent(string title, string text, bool richText, Component component) {
+        public void SetContent(string title, string text, bool richText, bool useMarkdownish, Component component) {
             titleContent = new GUIContent(title);
-            var markdownish = HFTReadmeUtils.MarkdownishToRichText(text);
-            m_links = markdownish.links;
-            m_text = markdownish.richText;
+            if (useMarkdownish) {
+                var markdownish = HFTReadmeUtils.MarkdownishToRichText(text);
+                m_links = markdownish.links;
+                m_text = markdownish.richText;
+            } else {
+                m_text = text;
+                m_links = null;
+            }
             m_content = new GUIContent(m_text);
             m_richText = richText;
             m_component = component;
@@ -119,16 +124,30 @@ namespace HappyFunTimesEditor
 
         void OnGUI()
         {
+            bool haveLinks = m_links != null && m_links.Length > 0;
+
             GUIStyle style = GetStyle(0, 0);
+            GUIStyle linkbarStyle = GUI.skin.GetStyle("horizontalSlider");
+
             EditorGUILayout.BeginVertical();
             m_scrollPos = EditorGUILayout.BeginScrollView(m_scrollPos, GUILayout.Width(EditorGUIUtility.currentViewWidth), GUILayout.Height(position.height));
-            m_showLinks = EditorGUILayout.Foldout(m_showLinks, "*** Links ***");
-            EditorGUILayout.Separator();
-            if (m_showLinks)
+            if (haveLinks)
             {
-                DrawLinks();
+                m_showLinks = EditorGUILayout.Foldout(m_showLinks, "*** Links ***");
+                if (m_showLinks)
+                {
+                    DrawLinks();
+                }
+                GUILayout.Box("", linkbarStyle);
             }
             EditorGUILayout.SelectableLabel(m_text, style, GUILayout.Height(style.CalcHeight(m_content, EditorGUIUtility.currentViewWidth)));
+
+            if (haveLinks)
+            {
+                GUILayout.Box("", linkbarStyle);
+                DrawLinks();
+            }
+
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
         }
