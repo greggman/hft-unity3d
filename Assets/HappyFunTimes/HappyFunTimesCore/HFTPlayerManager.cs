@@ -36,11 +36,11 @@ using HappyFunTimes;
 
 namespace HappyFunTimes {
 
-public class PlayerManager
+public class HFTPlayerManager
 {
     public delegate GameObject GetGameObject(int ndx);
 
-    public PlayerManager(GameServer server, GameObject gameObject, int maxPlayers, int timeoutForDisconnectedPlayerToReconnect, GetGameObject getGameObjectFn) {
+    public HFTPlayerManager(GameServer server, GameObject gameObject, int maxPlayers, int timeoutForDisconnectedPlayerToReconnect, GetGameObject getGameObjectFn) {
         m_log = new HFTLog("PlayerManager");
         m_maxPlayers = maxPlayers;
         m_gameObject = gameObject;

@@ -107,7 +107,7 @@ namespace HappyFunTimes
             if (maxPlayers > 0)
             {
                 int timeoutForDisconnectedPlayerToReconnect = 0;
-                m_playerManager = new PlayerManager(m_server, gameObject, maxPlayers, timeoutForDisconnectedPlayerToReconnect, GetPrefab);
+                m_playerManager = new HFTPlayerManager(m_server, gameObject, maxPlayers, timeoutForDisconnectedPlayerToReconnect, GetPrefab);
             }
             else
             {
@@ -210,7 +210,7 @@ namespace HappyFunTimes
         }
 
         private GameServer m_server;
-        private PlayerManager m_playerManager;
+        private HFTPlayerManager m_playerManager;
         private HFTManager m_hftManager;
         private HFTLog m_log = new HFTLog("PlayerSpawner");
         private HFTRuntimeOptions m_options;

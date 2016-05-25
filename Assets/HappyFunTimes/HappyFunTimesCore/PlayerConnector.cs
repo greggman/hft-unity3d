@@ -93,7 +93,7 @@ public class PlayerConnector : MonoBehaviour
     {
         m_server.Init();
 
-        m_playerManager = new PlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
+        m_playerManager = new HFTPlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
     }
 
     void Awake()
@@ -149,7 +149,7 @@ public class PlayerConnector : MonoBehaviour
         Cleanup();
     }
 
-    private PlayerManager m_playerManager;
+    private HFTPlayerManager m_playerManager;
     private GameServer m_server;
     private HFTManager m_hftManager;
     private HFTLog m_log;
