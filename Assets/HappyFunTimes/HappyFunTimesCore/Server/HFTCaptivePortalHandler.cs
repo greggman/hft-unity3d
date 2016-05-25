@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using WebSocketSharp.Net;
-
 
 namespace HappyFunTimes {
 
@@ -11,19 +11,19 @@ namespace HappyFunTimes {
         public HFTCaptivePortalHandler(HFTWebServerUtils utils)
         {
             m_webServerUtils = utils;
+            m_appleResponseContent = System.Text.Encoding.UTF8.GetBytes("<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
         }
 
         public bool HandleRequest(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
-            if (!Check(path, req, res)) {
-                return false;
-            }
-            return false;
+            return Check(path, req, res);
         }
 
         bool Check(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
-            string sessionId = path;
+            m_log.Info("path = " + path);
+            string sessionId = System.Uri.EscapeUriString(req.RemoteEndPoint.Address.ToString()) + "_" + System.IO.Path.GetExtension(path);
+            m_log.Info(return "remote ip: " + sessionId);
             bool isCheckingForApple = req.UserAgent.StartsWith("CaptiveNetworkSupport");
             bool isLoginURL = path.Equals("/game-login.html", StringComparison.Ordinal);
             bool isIndexURL = path.Equals("/index.html", StringComparison.Ordinal) ||
@@ -32,24 +32,18 @@ namespace HappyFunTimes {
 
             if (isIndexURL)
             {
-                sessionId = req.QueryString.Get("sessionId");
-                if (sessionId != null)
-                {
-                    m_sessions.Remove(sessionId);
-                }
+                m_log.Info("remove session: " + sessionId);
+                m_sessions.Remove(sessionId);
                 return false;
-            }
-
-            if (isLoginURL && req.UrlReferrer != null)
-            {
-                sessionId = req.UrlReferrer.AbsolutePath;
             }
 
             Session session = null;
             if (m_sessions.TryGetValue(sessionId, out session))
             {
+                m_log.Info("found prev session:" + sessionId);
                 if (isLoginURL)
                 {
+                    m_log.Info("send game-login");
                     session.loggedIn = true;
                     SendCaptivePortalHTML(req, res, sessionId, "game-login.html");
                     return true;
@@ -60,19 +54,23 @@ namespace HappyFunTimes {
                 {
                     if (session.loggedIn)
                     {
-                        //                  res.status(200).send("<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
+                        m_log.Info("send apple response");
+                        m_webServerUtils.SendContent(res, path, m_appleResponseContent);
                         return true;
                     }
                 }
+                m_log.Info("send captive-portal");
                 SendCaptivePortalHTML(req, res, sessionId);
                 return true;
             }
 
             if (!isCheckingForApple)
             {
+                m_log.Info("not checking for apple.");
                 return false;
             }
 
+            m_log.Info("snd captive-protal with new session: " + sessionId);
             // We are checking for apple for the first time so remember the path
             m_sessions[sessionId] = new Session();
             SendCaptivePortalHTML(req, res, sessionId);
@@ -91,10 +89,10 @@ namespace HappyFunTimes {
 
             string str = System.Text.Encoding.UTF8.GetString(content);
             Dictionary<string, string> subs = new Dictionary<string, string>();
-            subs["sessionId"] = sessionId;
-            subs["locahost"] = m_url; // was this.options.address + ":" + this.options.port
-            subs["firstPath"] = m_firstPath;
+            subs["startUrl"] = m_url + m_firstPath + "?sessionId=" + sessionId;
+            // %(localhost)s%(firstPath)s?sessionId=%(sessionId)s
             str = HFTUtil.ReplaceParamsFlat(str, subs);
+            m_log.Info("SCPH: Sending " + path);
             m_webServerUtils.SendContent(res, path, str);
         }
 
@@ -103,7 +101,9 @@ namespace HappyFunTimes {
             public bool loggedIn = false;
         }
 
+        private HFTLog m_log = new HFTLog("HFTCaptivePortalHandler");
         private HFTWebServerUtils m_webServerUtils;
+        private byte[] m_appleResponseContent;
         private string m_url = "http://192.168.2.9:18679";   // FIX           // localaddress:port ?
         private string m_firstPath = "/enter-name.html";     // where to go first after captive portal
         private Dictionary<string, Session> m_sessions = new Dictionary<string, Session>();
