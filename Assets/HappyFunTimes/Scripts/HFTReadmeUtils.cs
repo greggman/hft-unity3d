@@ -13,6 +13,7 @@ namespace HappyFunTimes {
         #if UNITY_EDITOR
         static Regex m_tickRE = new Regex("`(.*?)`", RegexOptions.CultureInvariant | RegexOptions.Singleline);
         static Regex m_tripleTickRE = new Regex("```(.*?)```", RegexOptions.CultureInvariant | RegexOptions.Singleline);
+        static Regex m_tripleTickPlaceholderRE = new Regex(@"%%TRIPLETICK%%", RegexOptions.CultureInvariant | RegexOptions.Singleline);
         static Regex m_boldRE = new Regex(@"\*\*(.+?)\*\*", RegexOptions.CultureInvariant | RegexOptions.Singleline);
         static Regex m_1HashRE = new Regex(@"^\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
         static Regex m_2HashRE = new Regex(@"^\#\# *(.+?)$", RegexOptions.CultureInvariant | RegexOptions.Multiline);
@@ -67,7 +68,7 @@ namespace HappyFunTimes {
         static bool isDarkTheme()
         {
             Color c = UnityEditor.EditorStyles.label.normal.textColor;
-            return c.r > 0.5f || c.g > 0.5f || c.b > 0.5f;
+            return c.r > 0.5f || c.g > 0.5f || c.b > 0.50f;
         }
 
         static void SetCurrentTheme()
@@ -111,11 +112,6 @@ namespace HappyFunTimes {
             }
         }
 
-        static string ReplaceTripleTick(Match m)
-        {
-            return s_currentTheme.startTripleTick + m.Groups[1].Value + s_currentTheme.endTripleTick;
-        }
-
         static string ReplaceTick(Match m)
         {
             return s_currentTheme.startTick + m.Groups[1].Value + s_currentTheme.endTick;
@@ -156,9 +152,21 @@ namespace HappyFunTimes {
         {
             SetCurrentTheme();
             List<Link> links = new List<Link>();
+            List<string> tripleTicks = new List<string>();
 
-            string s = markdownish.Replace("\n\n", "--EOL--").Replace("\n", " ").Replace("--EOL--", "\n\n");
-            s = m_tripleTickRE.Replace(s, ReplaceTripleTick);
+            // Pull out triple tick areas
+            string s = m_tripleTickRE.Replace(markdownish, (Match m) => {
+                tripleTicks.Add(m.Groups[1].Value);
+                return "%%TRIPLETICK%%";
+            });
+            // change single \n to space
+            s = s.Replace("\n\n", "%%EOL%%").Replace("\n", " ").Replace("%%EOL%%", "\n\n");
+            // Put the triple ticks back
+            s = m_tripleTickPlaceholderRE.Replace(s, (Match m) => {
+                string replacement = s_currentTheme.startTripleTick + tripleTicks[0] + s_currentTheme.endTripleTick;
+                tripleTicks.RemoveAt(0);
+                return replacement;
+            });
             s = m_tickRE.Replace(s, ReplaceTick);
             s = m_boldRE.Replace(s, ReplaceBold);
             s = m_5HashRE.Replace(s, Replace5Hash);
