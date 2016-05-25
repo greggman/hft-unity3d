@@ -90,6 +90,7 @@ namespace HappyFunTimes
         public GameServer(HFTRuntimeOptions options, GameObject gameObject)
         {
             m_options = options;
+            HFTLog.debug = options.debug;
             m_gameObject = gameObject;
             m_players = new Dictionary<string, NetPlayer>();
             m_sendQueue = new List<String>();
