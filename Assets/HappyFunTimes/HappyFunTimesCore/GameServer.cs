@@ -506,7 +506,8 @@ namespace HappyFunTimes
 
         private void DoSysCommand(MessageToClient msg)
         {
-            // FIX (remove DoSysCommand)            m_gameSystem.HandleUnparsedCommand(msg.data);
+            // Sys commands don't currently exist in 2.0+ version of HappyFunTimes for Unity
+            // m_gameSystem.HandleUnparsedCommand(msg.data);
         }
 
         private void UpdatePlayer(MessageToClient msg)

@@ -82,7 +82,6 @@ namespace HappyFunTimes
 
         HttpServer StartServer(string addressAndOptionalPort)
         {
-            // FIX: deal with ip6
 //            string host = "http://" + addressAndOptionalPort;
 //            var addressUri = new System.Uri(addressAndOptionalPort);
 //            int port = addressUri.Port;

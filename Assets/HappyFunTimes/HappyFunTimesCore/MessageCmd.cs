@@ -55,6 +55,13 @@ namespace HappyFunTimes
     };
 
 /// <summary>
+/// Deprecated?
+///
+/// The only plus to this class is you define the command name
+/// once and then when you register it no need to specify the
+/// cmd name and if you send it no need to specify the command
+/// so in that sense it's a D.R.Y. thing
+///
 /// Base class for all message data. Be sure to set the CmdName attribute
 /// </summary>
 /// <example>
