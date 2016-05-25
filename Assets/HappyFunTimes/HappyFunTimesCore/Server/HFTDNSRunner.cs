@@ -62,7 +62,8 @@ namespace HappyFunTimes {
             try
             {
                 log_.Info("DNS DoWork -start-");
-                dnsServer_ = new HFTDnsServer("5.6.7.10");
+                log_.Tell("FIX: hard coded dns");
+                dnsServer_ = new HFTDnsServer("192.168.2.9");
                 dnsServer_.Listen(port);
                 log_.Info("DNS DoWork -end-");
             }
