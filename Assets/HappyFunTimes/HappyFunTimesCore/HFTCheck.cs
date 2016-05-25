@@ -51,7 +51,8 @@ namespace HappyFunTimes
 
         public void Init(string url, Action onConnect, Action onFail)
         {
-            m_url = "http" + url.Substring(2); // FIX!
+            System.Uri uri = new System.Uri(url);
+            m_url = "http://" + uri.Host + ":" + uri.Port;
             m_connectFunc = onConnect;
             m_failFunc = onFail;
 //            m_gameServer.OnConnectFailure += Run;
