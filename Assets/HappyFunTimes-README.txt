@@ -16,24 +16,24 @@ or at http://docs.happyfuntimes.net/docs/unity
 ```
 Assets
 ├── HappyFunTimes
-│   ├── HappyFunTimesCore
-│   ├── MoreSamples                 (just samples - deletable)
-│   ├── Resources                   (required)
-│   ├── Samples                     (deletable)
-│   ├── Scripts                     (HFTGamepad etc.. see below)
-│   ├── Shaders                     (deletable)
-│   └── Tests                       (deletable)
-├── Plugins                         (required)
+│   ├── HappyFunTimesCore           required
+│   ├── MoreSamples                 just samples - deletable
+│   ├── Resources                   required
+│   ├── Samples                     deletable
+│   ├── Scripts                     HFTGamepad etc.. see below
+│   ├── Shaders                     deletable
+│   └── Tests                       deletable
+├── Plugins                         required
 └── WebPlayerTemplates
     └── HappyFunTimes
-        ├── 3rdparty                (see below)
+        ├── 3rdparty                see below
         ├── controllers
-        │   ├── character-select    (deletable)
-        │   ├── gamepad
-        │   ├── multi-machine       (deletable)
-        │   └── simple              (deletable)
-        ├── hft                     (required)
-        └── sample-ui               (see below)
+        │   ├── character-select    deletable
+        │   ├── gamepad             see below
+        │   ├── multi-machine       deletable
+        │   └── simple              deletable
+        ├── hft                     required
+        └── sample-ui               see below
 ```
 
 ## Stuff marked as See Below
@@ -47,7 +47,7 @@ a bunch of different modes. See docs at http://docs.happyfuntimes.net/docs/unity
 To use the HFTGamepad controller in your own projects keep everything about that says "see below".
 If you are not using the HFTGamepad but are making your own custom controller then you may
 delete `HappyFunTimes/Scripts` except for `HFTPlayerNameManager.cs`. You can also delete
-all of `WebPlayerTemplates/HappyFunTimes/3rdparty & controllers`
+all of `WebPlayerTemplates/HappyFunTimes/3rdparty, gamepad, controllers`
 
 The samples also include a sample-ui. This code tries to manage the phone, trying to take it fullscreen
 if possible. Trying to set the orientation if possible. Displaying a message to the user to rotate the
