@@ -55,7 +55,6 @@ namespace HappyFunTimes
             m_url = "http://" + uri.Host + ":" + uri.Port;
             m_connectFunc = onConnect;
             m_failFunc = onFail;
-//            m_gameServer.OnConnectFailure += Run;
             m_tries = 0;
             m_found = false;
             StartCoroutine(CheckForHFT());
@@ -111,16 +110,6 @@ namespace HappyFunTimes
             {
                 m_log.Tell("error: " + err + ", result:" + result);
             }
-        }
-
-        public void HFTNeedNewHFT(GameServer gs)
-        {
-            #if UNITY_EDITOR
-            UnityEditor.EditorUtility.DisplayDialog(
-                "HappyFunTimes",
-                "This game needs a newer version of HappyFunTimes",
-                "Ok");
-            #endif
         }
     }
 
