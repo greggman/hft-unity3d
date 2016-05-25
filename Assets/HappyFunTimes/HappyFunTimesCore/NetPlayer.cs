@@ -49,7 +49,7 @@ public abstract class NetPlayer
 
         public void Callback(Deserializer deserializer, GameServer server, object dict) {
             T data = deserializer.Deserialize<T>(dict);
-            server.QueueEvent(delegate() {
+            server.QueueEvent(() => {
                 m_handler((T)data);
             });
         }
@@ -64,7 +64,7 @@ public abstract class NetPlayer
 
         public void Callback(Deserializer deserializer, GameServer server, object dict) {
             Dictionary<string, object> data = (Dictionary<string, object>)dict;
-            server.QueueEvent(delegate() {
+            server.QueueEvent(() => {
                 m_handler(data);
             });
         }
@@ -282,7 +282,7 @@ public abstract class NetPlayer
         // command later. It's the same queue that will birth the object that needs the
         // message.
         if (!m_haveHandlers) {
-            m_server.QueueEvent(delegate() {
+            m_server.QueueEvent(() => {
                 SendUnparsedEvent(data);
             });
             return;

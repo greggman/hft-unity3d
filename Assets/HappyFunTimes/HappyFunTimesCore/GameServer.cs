@@ -52,7 +52,7 @@ namespace HappyFunTimes
             public void Callback(Deserializer deserializer, GameServer server, object dict, string id)
             {
                 T data = deserializer.Deserialize<T>(dict);
-                server.QueueEvent(delegate()
+                server.QueueEvent(() =>
                 {
                     m_handler(data, id);
                 });
@@ -71,7 +71,7 @@ namespace HappyFunTimes
             public void Callback(Deserializer deserializer, GameServer server, object dict, string id)
             {
                 Dictionary<string, object> data = (Dictionary<string, object>)dict;
-                server.QueueEvent(delegate()
+                server.QueueEvent(() =>
                 {
                     // dict is the MessageCmd. We want dict for the MessageCmdData inside the MessageCmd
                     // It might not exist
@@ -427,7 +427,7 @@ namespace HappyFunTimes
             {
                 m_log.Tell("Could not connect to HappyFunTimes. Is it running?");
                 Close();
-                QueueEvent(delegate()
+                QueueEvent(() =>
                 {
                     if (OnConnectFailure != null)
                     {
@@ -450,7 +450,7 @@ namespace HappyFunTimes
 
             if (wasConnected)
             {
-                QueueEvent(delegate()
+                QueueEvent(() =>
                 {
                     if (OnDisconnect != null)
                     {
@@ -493,7 +493,7 @@ namespace HappyFunTimes
 
             NetPlayer player = new RealNetPlayer(this, msg.id, name, options);
             m_players[msg.id] = player;
-            QueueEvent(delegate()
+            QueueEvent(() =>
             {
                 // UGH! This is not thread safe because someone might add handler to OnPlayerConnect
                 // Odds are low though?
@@ -523,7 +523,7 @@ namespace HappyFunTimes
         {
             MessageGameStart data = m_deserializer.Deserialize<MessageGameStart>(msg.data);
             m_id = data.id;
-            QueueEvent(delegate()
+            QueueEvent(() =>
             {
                 if (OnConnect != null)
                 {
@@ -576,7 +576,7 @@ namespace HappyFunTimes
             {
                 return;
             }
-            QueueEvent(delegate()
+            QueueEvent(() =>
             {
                 player.Disconnect();
             });

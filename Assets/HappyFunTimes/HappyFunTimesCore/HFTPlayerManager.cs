@@ -84,13 +84,13 @@ public class HFTPlayerManager
     }
 
     NetPlayerState GetActiveNetPlayerState(NetPlayer netPlayer) {
-        return m_activePlayers.Find(delegate(NetPlayerState otherNetPlayerState) {
+        return m_activePlayers.Find((NetPlayerState otherNetPlayerState) => {
             return otherNetPlayerState.netPlayer == netPlayer;
         });
     }
 
     NetPlayerState GetWaitingNetPlayerState(NetPlayer netPlayer) {
-        return m_waitingPlayers.Find(delegate(NetPlayerState otherNetPlayerState) {
+        return m_waitingPlayers.Find((NetPlayerState otherNetPlayerState) => {
             return otherNetPlayerState.netPlayer == netPlayer;
         });
     }
