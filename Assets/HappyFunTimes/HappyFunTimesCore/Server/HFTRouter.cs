@@ -11,7 +11,9 @@ namespace HappyFunTimes
         public bool Route(string path, HttpListenerRequest req, HttpListenerResponse res) {
             for (int i = 0; i < handlers_.Count; ++i)
             {
-                if (handlers_[i](path, req, res))
+                RouteHandler handler = handlers_[i];
+                //UnityEngine.Debug.Log("Route Checking: " + handler.Method.Name + " path: " + path);
+                if (handler(path, req, res))
                 {
                     return true;
                 }
