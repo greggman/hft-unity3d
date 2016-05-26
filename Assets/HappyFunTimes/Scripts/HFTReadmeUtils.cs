@@ -9,6 +9,7 @@ namespace HappyFunTimes {
     public class HFTReadmeUtils {
 
         const string kLastScene = "happyFunTimesReadmeSceneHash";
+        const string kWasNotEditor = "happyFunTimesReadmeWasNotEditor";
 
         #if UNITY_EDITOR
         static Regex m_tickRE = new Regex("`(.*?)`", RegexOptions.CultureInvariant | RegexOptions.Singleline);
@@ -253,11 +254,25 @@ namespace HappyFunTimes {
             PlayerPrefs.SetString(kLastScene, GetSceneHash());
         }
 
-        static bool ShouldShowReadme()
+        static bool ShouldShowReadme(bool force)
         {
-            if (Application.isPlaying)
+            bool wasEditor = PlayerPrefs.GetInt(kWasNotEditor, 0) > 0;
+            bool badState =
+                UnityEditor.BuildPipeline.isBuildingPlayer ||
+                Application.isPlaying ||
+                UnityEditor.EditorApplication.isPlaying ||
+                UnityEditor.EditorApplication.isUpdating ||
+                UnityEditor.EditorApplication.isCompiling ||
+                UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode;
+            if (wasEditor || badState)
             {
+                PlayerPrefs.SetInt(kWasNotEditor, badState ? 1 : 0);
                 return false;
+            }
+
+            if (force)
+            {
+                return true;
             }
 
             bool isSameScene = IsSameSceneAsLastTime();
@@ -272,7 +287,7 @@ namespace HappyFunTimes {
 
         static public void ShowReadme(string name, string text, bool richText, bool markdownish, Component component, bool force)
         {
-            if (!force && !ShouldShowReadme())
+            if (!ShouldShowReadme(force))
             {
                 return;
             }
