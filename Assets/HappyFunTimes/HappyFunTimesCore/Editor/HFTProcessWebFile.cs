@@ -286,34 +286,6 @@ namespace HappyFunTimesEditor
             }
         }
 
-//        static void SendToDB(string srcPath)
-//        {
-//            string[] names = new string[]
-//            {
-//                "HappyFunTimes.HFTWebFileDB",
-//                "HappyFunTimes.HFTWebFileDB, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
-//                "HappyFunTimes.HFTWebFileDB, Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
-//                "HFTWebFileDB",
-//            };
-//            foreach (string name in names)
-//            {
-//                System.Type t = System.Type.GetType(name);
-//                if (t != null)
-//                {
-//                    object o = UnityEngine.Object.FindObjectOfType(t);
-//                    if (o != null)
-//                    {
-//                        MonoBehaviour mb = (MonoBehaviour)o;
-//                        string path = srcPath.Substring(HFT_SRC_PATH.Length);
-//                        byte[] content = System.IO.File.ReadAllBytes(srcPath);
-//                        mb.gameObject.SendMessage("AddFilePair", new KeyValuePair<string, byte[]>(path, content));
-//                    }
-//                }
-//            }
-//
-////            HFTWebFileDB.GetInstance().AddFile("foo", new bytes[10]());
-//        }
-
         private static Regex s_ignoreExtensionsRE = new Regex(@"(\.meta|\.DS_Store|__dir__\.txt)$");
     }
 
