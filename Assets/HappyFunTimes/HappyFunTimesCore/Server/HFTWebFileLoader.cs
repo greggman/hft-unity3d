@@ -14,7 +14,7 @@ namespace HappyFunTimes
 
         static public void LoadFiles(HFTWebFileDB db)
         {
-            TextAsset dirTxt = Resources.Load(HFT_WEB_DIR, typeof(TextAsset)) as TextAsset;
+            TextAsset dirTxt = Resources.Load<TextAsset>(HFT_WEB_DIR);
             if (dirTxt == null)
             {
                 Debug.LogError("could not load: " + HFT_WEB_DIR);
