@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+using DeJson;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -97,6 +98,91 @@ namespace HappyFunTimes
             }
         }
 
+        #if UNITY_STANDALONE_OSX
+        bool FileExistsAndSame(string filename, string shaFilename, string sha256)
+        {
+            if (System.IO.File.Exists(filename))
+            {
+                if (System.IO.File.Exists(shaFilename))
+                {
+                    string oldSha = HFTUtil.ReadText(shaFilename);
+                    return sha256.Equals(oldSha);
+                }
+            }
+            return false;
+        }
+
+        TextAsset LoadTextAsset(string name)
+        {
+            TextAsset asset = Resources.Load<TextAsset>(name);
+            if (asset == null)
+            {
+                Debug.LogError("missing resource: " + name + ".bytes");
+            }
+            return asset;
+        }
+
+        void StartExternalServer(bool admin)
+        {
+            TextAsset serverData = LoadTextAsset("HFTOSXServer");
+            TextAsset shaData = LoadTextAsset("HFTOSXServer.sha256");
+            if (serverData == null || shaData == null)
+            {
+                return;
+            }
+
+            string serverPath = Application.persistentDataPath + "/hft-server";
+            string shaPath = Application.persistentDataPath + "/hft-server.sha";
+
+            if (!FileExistsAndSame(serverPath, shaPath, shaData.text))
+            {
+                HFTUtil.WriteBytes(serverPath, serverData.bytes);
+                HFTUtil.WriteText(shaPath, shaData.text);
+                Debug.Log("wrote new webserver: " + serverPath + ", size: " + serverData.bytes.Length);
+            }
+
+string cmdString = @"-e '
+set myFile to quoted form of ""%(serverPath)s""
+do shell script ""chmod -R 770 "" & myFile
+do shell script myFile %(admin)s
+'";
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            dict["serverPath"] = serverPath;
+            dict["admin"] = admin ? "with administrator privileges" : "";
+            string script = HFTUtil.ReplaceParamsFlat(cmdString, dict);
+
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo psi = p.StartInfo;
+            psi.EnvironmentVariables.Add("HFT_ARGS", Serializer.Serialize(m_options));
+            psi.UseShellExecute = false;
+            psi.FileName = "/usr/bin/osascript";
+            psi.Arguments = script;
+            psi.RedirectStandardError = true;
+            psi.RedirectStandardOutput = true;
+            p.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler((sender, e) => {
+                if (!String.IsNullOrEmpty(e.Data))
+                {
+                    Debug.Log("webserver: stderr: " + e.Data);
+                }
+            });
+            p.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler((sender, e) => {
+                if (!String.IsNullOrEmpty(e.Data))
+                {
+                    Debug.Log("webserver: stdout: " + e.Data);
+                }
+            });
+            Debug.Log("start--------------------");
+            p.Start();
+            p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
+            if (p.WaitForExit(2000)) {
+                // If it exited there was an error
+                Debug.Log("error starting webserver: exit code = " + p.ExitCode);
+            }
+            m_webServerProcess = p;
+        }
+        #endif
+
         public void StartServer()
         {
             // Where should this be checked?
@@ -107,6 +193,14 @@ namespace HappyFunTimes
                     "\"Assets/WebPlayerTemplates/HappyFunTimes" + controllerPath + "\" does not exist. Did you forget to set \"controllerFilename\" in your \"PlayerSpawner\" or \"PlayerConnector\"?");
             }
 
+            #if UNITY_STANDALONE_OSX
+            // TODO make 2 classes, one for running internal server, one for external?
+            if (m_options.dns || m_options.installationMode)
+            {
+                StartExternalServer(true);
+                return;
+            }
+            #endif
 
             List<string> addresses = new List<string>();
             addresses.Add("http://[::0]:18679");
@@ -164,5 +258,6 @@ namespace HappyFunTimes
         HFTCheck m_check;
         HFTWebServer m_webServer;
         HFTDnsRunner m_dnsRunner;
+        System.Diagnostics.Process m_webServerProcess;
     }
 }  // namaspace HappyFunTimes
