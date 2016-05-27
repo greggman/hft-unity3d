@@ -97,6 +97,44 @@ namespace HappyFunTimes
             return output;
         }
 
+        public static string ReadText(string filename)
+        {
+            return System.Text.Encoding.UTF8.GetString(ReadBytes(filename));
+        }
+
+        public static byte[] ReadBytes(string filename)
+        {
+            byte[] bytes;
+            using(System.IO.FileStream fileStream = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                int length = (int)fileStream.Length;  // get file length
+                bytes = new byte[length];            // create buffer
+                int count;                            // actual number of bytes read
+                int sum = 0;                          // total number of bytes read
+
+                // read until Read method returns 0 (end of the stream has been reached)
+                while ((count = fileStream.Read(bytes, sum, length - sum)) > 0)
+                {
+                  sum += count;  // sum is a buffer offset for next reading
+                }
+            }
+            return bytes;
+        }
+
+        public static bool WriteBytes(string filename, byte[] bytes)
+        {
+            using (System.IO.BinaryWriter writer = new System.IO.BinaryWriter(System.IO.File.Open(filename, System.IO.FileMode.Create)))
+            {
+                writer.Write(bytes);
+            }
+            return true;
+        }
+
+        public static bool WriteText(string filename, string text)
+        {
+            return WriteBytes(filename, System.Text.Encoding.UTF8.GetBytes(text));
+        }
+
     }
 
 }  // namespace HappyFunTimes
