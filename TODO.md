@@ -14,6 +14,7 @@
 *   Add Start/Stop for server
 *   refactor for standalone
     *   fix readme at build
+    *   chec all args
     *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
     *   check arguments so we can print errors? Except we can't print errors :(
     *   make game-login/captive-portal buttons enter button, not just A
@@ -23,6 +24,8 @@
         *   inc port
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
+    *   add dnsAddress and --hft-dns-address ?
+    *   make separate program for webserver?
 *   link all samples to online docs
 *   make hft.net keep trying
 *   ../
