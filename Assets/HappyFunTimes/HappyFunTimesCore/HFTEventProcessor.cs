@@ -74,10 +74,6 @@ public class HFTEventProcessor : MonoBehaviour {
         }
     }
 
-    void OnApplicationExit() {
-//        m_server.Close();
-    }
-
     private void MoveQueuedEventsToExecuting() {
         lock(m_queueLock) {
             if (m_executingEvents != null) {
@@ -93,7 +89,6 @@ public class HFTEventProcessor : MonoBehaviour {
     private System.Object m_queueLock = new System.Object();
     private List<Action> m_queuedEvents = new List<Action>();
     private List<Action> m_executingEvents = new List<Action>();
-    private GameServer m_server;
     private HFTLog m_log;
 }
 
