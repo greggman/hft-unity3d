@@ -32,7 +32,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using UnityEngine;
 
 namespace HappyFunTimes
 {
@@ -61,7 +60,7 @@ namespace HappyFunTimes
                     object v = null;
                     if (dict == null || !dict.TryGetValue(key, out v))
                     {
-                        Debug.Log("unknown key: " + fullKey);
+                        HFTLog.Global.Tell("unknown key: " + fullKey);
                         return "%(" + fullKey + ")s";
                     }
                     else
@@ -90,22 +89,12 @@ namespace HappyFunTimes
                 string v = null;
                 if (!subs.TryGetValue(fullKey, out v))
                 {
-                    Debug.Log("unknown key: " + fullKey);
+                    HFTLog.Global.Tell("unknown key: " + fullKey);
                     return "%(" + fullKey + ")s";
                 }
                 return v;
             });
             return output;
-        }
-
-        public static Texture2D MakeColor(Color color)
-        {
-            Color[] pix = new Color[1];
-            pix[0] = color;
-            Texture2D tex = new Texture2D(1, 1);
-            tex.SetPixels(pix);
-            tex.Apply();
-            return tex;
         }
 
     }
