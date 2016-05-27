@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{CE66FF2A-5018-4590-8FCF-A5FAFD74438B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>hftserver</RootNamespace>
+    <AssemblyName>hft-server</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="DeJson">
+      <HintPath>..\..\Assets\Plugins\DeJson.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>..\..\Assets\Plugins\websocket-sharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\ClientRequest.cs">
+      <Link>DNS\Client\ClientRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\ClientResponse.cs">
+      <Link>DNS\Client\ClientResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\DnsClient.cs">
+      <Link>DNS\Client\DnsClient.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\ResponseException.cs">
+      <Link>DNS\Client\ResponseException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\RequestResolver\IRequestResolver.cs">
+      <Link>DNS\Client\RequestResolver\IRequestResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\RequestResolver\NullRequestResolver.cs">
+      <Link>DNS\Client\RequestResolver\NullRequestResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\RequestResolver\TcpRequestResolver.cs">
+      <Link>DNS\Client\RequestResolver\TcpRequestResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Client\RequestResolver\UdpRequestResolver.cs">
+      <Link>DNS\Client\RequestResolver\UdpRequestResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Domain.cs">
+      <Link>DNS\Protocol\Domain.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Header.cs">
+      <Link>DNS\Protocol\Header.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\IMessage.cs">
+      <Link>DNS\Protocol\IMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\IMessageEntry.cs">
+      <Link>DNS\Protocol\IMessageEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\IRequest.cs">
+      <Link>DNS\Protocol\IRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\IResponse.cs">
+      <Link>DNS\Protocol\IResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\OperationCode.cs">
+      <Link>DNS\Protocol\OperationCode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Question.cs">
+      <Link>DNS\Protocol\Question.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\RecordClass.cs">
+      <Link>DNS\Protocol\RecordClass.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\RecordType.cs">
+      <Link>DNS\Protocol\RecordType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Request.cs">
+      <Link>DNS\Protocol\Request.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Response.cs">
+      <Link>DNS\Protocol\Response.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResponseCode.cs">
+      <Link>DNS\Protocol\ResponseCode.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Marshalling\EndianAttribute.cs">
+      <Link>DNS\Protocol\Marshalling\EndianAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Marshalling\Endianness.cs">
+      <Link>DNS\Protocol\Marshalling\Endianness.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Marshalling\Struct.cs">
+      <Link>DNS\Protocol\Marshalling\Struct.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\BaseResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\BaseResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\CanonicalNameResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\CanonicalNameResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\IPAddressResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\IPAddressResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\IResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\IResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\MailExchangeResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\MailExchangeResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\NameServerResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\NameServerResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\PointerResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\PointerResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\ResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\ResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\ResourceRecordFactory.cs">
+      <Link>DNS\Protocol\ResourceRecords\ResourceRecordFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\ResourceRecords\StartOfAuthorityResourceRecord.cs">
+      <Link>DNS\Protocol\ResourceRecords\StartOfAuthorityResourceRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Utils\ByteExtensions.cs">
+      <Link>DNS\Protocol\Utils\ByteExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Utils\ByteStream.cs">
+      <Link>DNS\Protocol\Utils\ByteStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Protocol\Utils\ObjectStringifier.cs">
+      <Link>DNS\Protocol\Utils\ObjectStringifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Server\DnsServer.cs">
+      <Link>DNS\Server\DnsServer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Server\IQuestionAnswerer.cs">
+      <Link>DNS\Server\IQuestionAnswerer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Server\MasterFile.cs">
+      <Link>DNS\Server\MasterFile.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTCaptivePortalHandler.cs">
+      <Link>HappyFunTimesCore\Server\HFTCaptivePortalHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTDnsUtils.cs">
+      <Link>HappyFunTimesCore\Server\HFTDnsUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTGame.cs">
+      <Link>HappyFunTimesCore\Server\HFTGame.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTGameGroup.cs">
+      <Link>HappyFunTimesCore\Server\HFTGameGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTGameManager.cs">
+      <Link>HappyFunTimesCore\Server\HFTGameManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTHttpRequest.cs">
+      <Link>HappyFunTimesCore\Server\HFTHttpRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTPlayer.cs">
+      <Link>HappyFunTimesCore\Server\HFTPlayer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTRelayMsgs.cs">
+      <Link>HappyFunTimesCore\Server\HFTRelayMsgs.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTRouter.cs">
+      <Link>HappyFunTimesCore\Server\HFTRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTSocket.cs">
+      <Link>HappyFunTimesCore\Server\HFTSocket.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTWebFileDB.cs">
+      <Link>HappyFunTimesCore\Server\HFTWebFileDB.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTWebServer.cs">
+      <Link>HappyFunTimesCore\Server\HFTWebServer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTWebServerUtils.cs">
+      <Link>HappyFunTimesCore\Server\HFTWebServerUtils.cs</Link>
+    </Compile>
+    <Compile Include="HFTWebFileLoader.cs" />
+    <Compile Include="HFTLog.cs" />
+    <Compile Include="HFTRuntimeOptions.cs" />
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTMessageCmd.cs">
+      <Link>HappyFunTimesCore\HFTMessageCmd.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTUtil.cs">
+      <Link>HappyFunTimesCore\HFTUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTMimeType.cs">
+      <Link>HappyFunTimesCore\Server\HFTMimeType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTPostMessages.cs">
+      <Link>HappyFunTimesCore\HFTPostMessages.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTDNSServer.cs">
+      <Link>HappyFunTimesCore\Server\HFTDNSServer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTArgParser.cs">
+      <Link>HappyFunTimesCore\HFTArgParser.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTArgs.cs">
+      <Link>HappyFunTimesCore\HFTArgs.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="HappyFunTimesCore\" />
+    <Folder Include="HappyFunTimesCore\Server\" />
+    <Folder Include="Server\" />
+  </ItemGroup>
+</Project>
