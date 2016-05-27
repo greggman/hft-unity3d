@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using WebSocketSharp.Net;
 
 namespace HappyFunTimes {
@@ -10,7 +9,7 @@ namespace HappyFunTimes {
 
         public HFTCaptivePortalHandler(HFTWebServerUtils utils)
         {
-            Debug.Log("Fix hard coded url");
+            m_log.Tell("Fix hard coded url");
             m_webServerUtils = utils;
             m_appleResponseContent = System.Text.Encoding.UTF8.GetBytes("<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
         }

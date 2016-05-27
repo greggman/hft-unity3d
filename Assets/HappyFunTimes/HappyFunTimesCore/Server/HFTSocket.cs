@@ -1,5 +1,4 @@
 ﻿using DeJson;
-using UnityEngine;
 using System;
 using System.Collections;
 using WebSocketSharp;

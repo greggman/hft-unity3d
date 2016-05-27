@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
-using UnityEngine;
 
 namespace HappyFunTimes
 {
     public class HFTWebFileDB
     {
-        static private string HFT_SRC_PATH = "WebPlayerTemplates/HappyFunTimes";
         static HFTWebFileDB s_instance;
 
         HFTWebFileDB()
@@ -93,8 +91,20 @@ namespace HappyFunTimes
 
         void Init()
         {
-            isEditor_ = Application.isEditor;
-            dataPath_ = Path.Combine(Application.dataPath, HFT_SRC_PATH);
+            #if UNITY_EDITOR
+            string HFT_SRC_PATH = "WebPlayerTemplates/HappyFunTimes";
+            isEditor_ = UnityEngine.Application.isEditor;
+            dataPath_ = Path.Combine(UnityEngine.Application.dataPath, HFT_SRC_PATH);
+            #endif
+        }
+
+        public string DataPath
+        {
+            set
+            {
+                dataPath_ = value;
+                isEditor_ = true;
+            }
         }
 
         bool isEditor_;
