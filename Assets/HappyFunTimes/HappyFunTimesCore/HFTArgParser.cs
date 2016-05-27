@@ -142,10 +142,11 @@ public class HFTArgParser {
         string v = null;
         if (TryGet<string>(id, ref v))
         {
-            value = true;
+            value = !v.ToLowerInvariant().Equals("false");
             return true;
         }
-        if (TryGet<string>("--no" + id, ref v))
+
+        if (TryGet<string>("no-" + id, ref v))
         {
             value = false;
             return true;

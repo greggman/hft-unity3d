@@ -50,38 +50,49 @@ namespace HappyFunTimes {
         }
     }
 
-    // Is this a good thing? No idea. It's D.R.Y. It's also auto-completeable in the
-    // editor where as using a dict or somethig is not. And it checks for bad arguments so uses
-    // could possibly get help.
-    public class HFTArgsBase {
-        public HFTArgsBase(string prefix)
+    public class HFTArgChecker
+    {
+        public HFTArgChecker(HFTLog log, string prefix)
         {
+            log_ = log;
             prefix_ = prefix + "-";
             dashPrefix_ = "--" + prefix;
-            HFTLog log = new HFTLog("HFTArgs");
-            HashSet<string> validArgs = new HashSet<string>();
+            noPrefix_ = "--no-" + prefix;
+        }
 
-            HFTArgParser p = new HFTArgParser();
-            System.Reflection.FieldInfo[] fields = this.GetType().GetFields();
-            foreach (System.Reflection.FieldInfo info in fields) {
-                object field = System.Activator.CreateInstance(info.FieldType);
-                string dashName = GetHFTDashName(info.Name);
-                validArgs.Add(dashName);
-                info.FieldType.GetMethod("Init").Invoke(field, new object[]{ dashName, p });
-                info.SetValue(this, field);
-            }
+        public void AddArg(string arg)
+        {
+            validArgs_.Add(arg);
+        }
 
+        public bool CheckArgs()
+        {
+            bool good = true;
             #if (!UNITY_IOS)
             string[] args = System.Environment.GetCommandLineArgs();
             foreach (string arg in args)
             {
                 if (arg.StartsWith(dashPrefix_))
                 {
-                    if (!validArgs.Contains(arg.Substring(dashPrefix_.Length)))
+                    int equalsNdx = arg.IndexOf('=');
+                    string checkArg = equalsNdx >= 0 ? arg.Substring(0, equalsNdx) : arg;
+                    if (!validArgs_.Contains(checkArg.Substring(2)))
                     {
-                        log.Warn("unknown option: " + arg);
+                        good = false;
+                        log_.Warn("unknown option: " + arg);
                     }
                 }
+                else if (arg.StartsWith(noPrefix_))
+                {
+                    int equalsNdx = arg.IndexOf('=');
+                    string checkArg = equalsNdx >= 0 ? arg.Substring(0, equalsNdx) : arg;
+                    if (!validArgs_.Contains(checkArg.Substring(5)))
+                    {
+                        good = false;
+                        log_.Warn("unknown option: " + arg);
+                    }
+                }
+
             }
             #endif
 
@@ -90,12 +101,14 @@ namespace HappyFunTimes {
                 string opt = evar.ToLowerInvariant().Replace("_", "-");
                 if (opt.StartsWith(prefix_))
                 {
-                    if (!validArgs.Contains(opt))
+                    if (!validArgs_.Contains(opt))
                     {
-                        log.Warn("unknown environment variable: " + evar);
+                        good = false;
+                        log_.Warn("unknown environment variable: " + evar);
                     }
                 }
             }
+            return good;
         }
 
         public string GetHFTDashName(string camelCase)
@@ -103,10 +116,37 @@ namespace HappyFunTimes {
             return prefix_ + s_camelRE.Replace(camelCase, s_camelReplace).ToLower();
         }
 
+        HFTLog log_;
         string prefix_;
         string dashPrefix_;
+        string noPrefix_;
+        HashSet<string> validArgs_ = new HashSet<string>();
+
         static string s_camelReplace = @"-$1$2";
         static Regex s_camelRE = new Regex(@"([A-Z])([a-z0-9])", RegexOptions.Singleline);
+    }
+
+    // Is this a good thing? No idea. It's D.R.Y. It's also auto-completeable in the
+    // editor where as using a dict or somethig is not. And it checks for bad arguments so uses
+    // could possibly get help.
+    public class HFTArgsBase {
+        public HFTArgsBase(string prefix)
+        {
+            HFTLog log = new HFTLog("HFTArgs");
+            HFTArgChecker checker = new HFTArgChecker(log, prefix);
+
+            HFTArgParser p = new HFTArgParser();
+            System.Reflection.FieldInfo[] fields = this.GetType().GetFields();
+            foreach (System.Reflection.FieldInfo info in fields) {
+                object field = System.Activator.CreateInstance(info.FieldType);
+                string dashName = checker.GetHFTDashName(info.Name);
+                checker.AddArg(dashName);
+                info.FieldType.GetMethod("Init").Invoke(field, new object[]{ dashName, p });
+                info.SetValue(this, field);
+            }
+
+            checker.CheckArgs();
+        }
     }
 
     public class HFTArgs : HFTArgsBase
@@ -117,7 +157,7 @@ namespace HappyFunTimes {
         public HFTArg<string> id;
         public HFTArg<string> rendezvousUrl;
         public HFTArg<string> serverPort;
-        public HFTArg<int> numGames;
+        public HFTArg<int> numGames;   // REMOVE THIS?
         public HFTArgBool installationMode;
         public HFTArgBool master;
         public HFTArgBool showMessages;
@@ -127,4 +167,67 @@ namespace HappyFunTimes {
         public HFTArgBool bottom;
     }
 
+    // This class fills in the args directly from public fields of
+    // sub classes. Where as HFTArgsBase above gets the fields
+    // but also records if they were set or not. Not sure that's a good thing
+    public class HFTArgsDirect {
+        public HFTArgsDirect(string prefix)
+        {
+            prefix_ = prefix;
+        }
+
+        public bool ParseArgs()
+        {
+            HFTLog log = new HFTLog("HFTArgsDirect");
+            HFTArgChecker checker = new HFTArgChecker(log, prefix_);
+
+            HFTArgParser p = new HFTArgParser();
+            System.Reflection.FieldInfo[] fields = this.GetType().GetFields();
+            foreach (System.Reflection.FieldInfo info in fields) {
+                //object field = System.Activator.CreateInstance(info.FieldType);
+                object value = null;
+                System.Type fieldType = info.FieldType;
+                string dashName = checker.GetHFTDashName(info.Name);
+                checker.AddArg(dashName);
+                // Should do this with reflection but ...
+                if (fieldType == typeof(string))
+                {
+                    string strValue = "";
+                    if (p.TryGet<string>(dashName, ref strValue))
+                    {
+                        value = strValue;
+                    }
+                }
+                else if (fieldType == typeof(int))
+                {
+                    int intValue = 0;
+                    if (p.TryGet<int>(dashName, ref intValue))
+                    {
+                        value = intValue;
+                    }
+                }
+                else if (fieldType == typeof(bool))
+                {
+                    bool boolValue = false;
+                    if (p.TryGetBool(dashName, ref boolValue))
+                    {
+                        value = boolValue;
+                    }
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("no support for type: " + fieldType.Name);
+                }
+
+                if (value != null)
+                {
+                    info.SetValue(this, value);
+                }
+            }
+
+            return checker.CheckArgs();
+        }
+
+        string prefix_;
+    }
 }
