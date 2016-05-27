@@ -47,7 +47,7 @@ namespace HappyFunTimes
         int m_tries;
         bool m_found;
         WWW m_www;
-        const int s_maxTries = 5;
+        const int s_maxTries = 500;
 
         public void Init(string url, Action onConnect, Action onFail)
         {
