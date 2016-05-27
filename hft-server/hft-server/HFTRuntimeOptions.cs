@@ -2,12 +2,8 @@
 
 namespace HappyFunTimes
 {
-    public class HFTRuntimeOptions : HFTArgsDirect
+    public class HFTRuntimeOptions
     {
-        public HFTRuntimeOptions(string prefix) : base(prefix)
-        {
-        }
-
         public string dataPath = "";
         public string url = "";
         public string id = "";
@@ -25,6 +21,8 @@ namespace HappyFunTimes
         public bool captivePortal;
         public string serverPort = "";
         public string rendezvousUrl;
+
+        public string args;
     }
 }
 
