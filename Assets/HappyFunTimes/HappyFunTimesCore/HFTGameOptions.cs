@@ -107,6 +107,9 @@ namespace HappyFunTimes
         /// </summary>
         public string serverPort = "";
 
+        /// <summary>
+
+
         public HFTUserOptions()
         {
         }
@@ -136,18 +139,17 @@ namespace HappyFunTimes
             }
             controllerFilename = controllerFilename.Replace("\\", "/");
 
-            // Prefix all HFT arguments with "hft-" so user can filter them out
-            HFTArgParser p = new HFTArgParser();
+            HFTArgs args = new HFTArgs();
 
-            p.TryGetBool("hft-installation-mode", ref installationMode);
-            p.TryGetBool("hft-master", ref master);
-            p.TryGetBool("hft-showMessages", ref showMessages);
-            p.TryGetBool("hft-debug", ref debug);
+            args.installationMode.GetIfSet(ref installationMode);
+            args.master.GetIfSet(ref master);
+            args.showMessages.GetIfSet(ref showMessages);
+            args.debug.GetIfSet(ref debug);
 
-            p.TryGet<string>("hft-url", ref url);
-            p.TryGet<string>("hft-id", ref id);
-            p.TryGet<string>("hft-rendezvous-url", ref rendezvousUrl);
-            p.TryGet<string>("hft-server-port", ref serverPort);
+            args.url.GetIfSet(ref url);
+            args.id.GetIfSet(ref id);
+            args.rendezvousUrl.GetIfSet(ref rendezvousUrl);
+            args.serverPort.GetIfSet(ref serverPort);
 
             if (String.IsNullOrEmpty(url))
             {
