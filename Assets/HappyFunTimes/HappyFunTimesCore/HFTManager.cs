@@ -99,6 +99,15 @@ namespace HappyFunTimes
 
         public void StartServer()
         {
+            // Where should this be checked?
+            string controllerPath = "/" + m_options.controllerFilename;
+            if (!HFTWebFileDB.GetInstance().FileExists(controllerPath))
+            {
+                throw new System.ArgumentException(
+                    "\"Assets/WebPlayerTemplates/HappyFunTimes" + controllerPath + "\" does not exist. Did you forget to set \"controllerFilename\" in your \"PlayerSpawner\" or \"PlayerConnector\"?");
+            }
+
+
             List<string> addresses = new List<string>();
             addresses.Add("http://[::0]:18679");
 //            addresses.Add("http://0.0.0.0:18679");
