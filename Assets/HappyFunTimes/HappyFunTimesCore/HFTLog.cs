@@ -166,12 +166,21 @@ namespace HappyFunTimes
             s_out.WriteLine(msg);
         }
 
+        static public HFTLog Global
+        {
+            get
+            {
+                return s_global;
+            }
+        }
+
         string prefix_;
         bool debug_;
         bool console_;
 
         static System.IO.StreamWriter s_out = null;
         static bool s_debug = false;
+        static HFTLog s_global = new HFTLog("global");
     }
 
 }  // namespace HappyFunTimes
