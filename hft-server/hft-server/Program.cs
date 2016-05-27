@@ -61,6 +61,9 @@ namespace HappyFunTimes
                 dnsRunner.Start();
             }
 
+            // There's no HFTSite because were in installationMode which means there's no internet
+
+
             System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
 
             return 0;
