@@ -278,7 +278,7 @@ namespace HappyFunTimesEditor
                 string[] files = GetFileTreeList(Path.Combine(Path.GetDirectoryName(Application.dataPath), HFT_DST_PATH));
                 files = files.Select(x => x.Substring(0, x.Length - 6)).ToArray();
                 string s = Serializer.Serialize(files);
-                File.WriteAllText(HFT_DIR_PATH, s);
+                HappyFunTimes.HFTUtil.WriteText(HFT_DIR_PATH, s);
 
                 AssetDatabase.Refresh();
 

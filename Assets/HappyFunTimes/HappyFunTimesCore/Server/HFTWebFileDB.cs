@@ -43,7 +43,7 @@ namespace HappyFunTimes
                 string livePath = Path.Combine(dataPath_, path);
                 try
                 {
-                    content = System.IO.File.ReadAllBytes(livePath);
+                    content = HFTUtil.ReadBytes(livePath);
                     return true;
                 }
                 catch (System.Exception)
