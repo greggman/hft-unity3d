@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{1DBCB4BF-7889-A388-ED89-67DB298857EF}") = "hft-unity-gamepad", "Assembly-CSharp.csproj", "{142D5251-12C8-7CF0-C557-15F301E3D477}"
+EndProject
+Project("{1DBCB4BF-7889-A388-ED89-67DB298857EF}") = "hft-unity-gamepad", "Assembly-CSharp-Editor.csproj", "{41AF9D25-5480-7980-0BA1-73C20895E7CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{142D5251-12C8-7CF0-C557-15F301E3D477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142D5251-12C8-7CF0-C557-15F301E3D477}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142D5251-12C8-7CF0-C557-15F301E3D477}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142D5251-12C8-7CF0-C557-15F301E3D477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41AF9D25-5480-7980-0BA1-73C20895E7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41AF9D25-5480-7980-0BA1-73C20895E7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41AF9D25-5480-7980-0BA1-73C20895E7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41AF9D25-5480-7980-0BA1-73C20895E7CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
