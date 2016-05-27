@@ -112,33 +112,5 @@ namespace HappyFunTimes
             }
         }
     }
-
-    public class HFTPing
-    {
-        public HFTPing(string _serverName, string _id = "")
-        {
-            serverName = _serverName;
-            id = _id;
-        }
-        public HFTPing()
-        {
-        }
-        public string version = "0.0.0";
-        public string id = "";
-        public string serverName;
-    }
-
-    public class PostCmd
-    {
-        public PostCmd()
-        {
-        }
-        public PostCmd(string _cmd)
-        {
-            cmd = _cmd;
-        }
-        public string cmd = null;
-    }
-
 }
 
