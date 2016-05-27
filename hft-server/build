@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+pushd `dirname $0` > /dev/null
+script_dir=`pwd`
+popd > /dev/null
+cd "$script_dir"
+xbuild /target:hft-server /p:Configuration=Release  hft-server.sln
+cd "$script_dir/hft-server/bin/Release"
+export AS="as -arch i386"
+export CC="cc -arch i386 -framework CoreFoundation -lobjc -liconv"
+export PKG_CONFIG_PATH=/Library/Frameworks/Mono.framework/Versions/4.2.4/lib/pkgconfig
+mkbundle -z --static --deps -o hft-server.osx hft-server.exe DeJson.dll websocket-sharp.dll
+cp hft-server.osx ../../../../Assets/HappyFunTimes/HappyFunTimesCore/Server/Resources/HFTOSXServer.bytes
+shasum -b 256 hft-server.osx > ../../../../Assets/HappyFunTimes/HappyFunTimesCore/Server/Resources/HFTOSXServer.sha256.bytes
+
+
