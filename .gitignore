@@ -1,3 +1,5 @@
+Assembly-CSharp-Editor.csproj
+Assembly-CSharp.csproj
 bin
 node_modules
 bower_components
