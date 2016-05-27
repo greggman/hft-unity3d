@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeJson;
+using System;
 using System.Collections.Generic;
 using HappyFunTimes;
 
@@ -8,15 +9,29 @@ namespace HappyFunTimes
     {
         public static int Main (string[] args)
         {
-            HFTRuntimeOptions m_options = new HFTRuntimeOptions("hft");
-            if (!m_options.ParseArgs())
+            HFTRuntimeOptions m_options;
+            HFTArgParser p = new HFTArgParser();
+            string argStr = "";
+            if (p.TryGet<string> ("hft-args", ref argStr))
             {
-                System.Console.WriteLine("");
+                Deserializer d = new Deserializer();
+                m_options = d.Deserialize<HFTRuntimeOptions>(argStr);
+            }
+            else
+            {
+                m_options = new HFTRuntimeOptions ();
+            }
+            if (!HFTArgsToFields.Apply("hft", m_options))
+            {
+                System.Console.WriteLine("bad args!");
                 return 1;
             }
 
-            var u = new System.Uri ("http://[::0]:18679");
-            Console.WriteLine (u.ToString ());
+            //using (System.IO.StreamWriter writer = new System.IO.StreamWriter(System.IO.File.Open("/Users/gregg/temp/hft-server.log", System.IO.FileMode.Create)))
+            //{
+            //    writer.WriteLine(System.DateTime.Now.ToString());
+            //    writer.WriteLine(Serializer.Serialize(m_options, false, true));
+            //}
 
             List<string> addresses = new List<string>();
             addresses.Add("http://[::0]:18679");
@@ -45,6 +60,8 @@ namespace HappyFunTimes
                 HFTDnsRunner dnsRunner = new HFTDnsRunner();
                 dnsRunner.Start();
             }
+
+            System.Threading.Thread.Sleep(System.Threading.Timeout.Infinite);
 
             return 0;
         }
