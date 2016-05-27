@@ -80,7 +80,7 @@ artifacts/
 *_p.c
 *_i.h
 *.ilk
-*.meta
+# *.meta  UNITY NEEDS THIS
 *.obj
 *.pch
 *.pdb
