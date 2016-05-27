@@ -6,7 +6,6 @@ using System.Configuration;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using UnityEngine;
 using WebSocketSharp;
 using WebSocketSharp.Net;
 using WebSocketSharp.Server;
@@ -22,6 +21,11 @@ namespace HappyFunTimes
             m_gamePath = "/";
             m_webServerUtils = new HFTWebServerUtils(m_gamePath);
 
+            // Touch the HFTWebFileDB
+            // We do this be because we want it to get the list
+            // of files BEFORE run the server. The server will
+            // run in a different thread and HFTWebFileDB will
+            // not be able to populate its database from that thread.
             HFTWebFileDB.GetInstance();
 
             // FIX: sysname and gamename
@@ -30,23 +34,13 @@ namespace HappyFunTimes
             {
                 sysName = sysName.Substring(0, sysName.Length - 6);
             }
-            string gameName = String.IsNullOrEmpty(m_options.name) ? Application.productName : m_options.name;
+            string gameName = m_options.name;
             string ping = Serializer.Serialize(new HFTPing(sysName + ": " + gameName, "HappyFunTimes"));
             m_ping = System.Text.Encoding.UTF8.GetBytes(ping);
             m_log.Info("Ping: " + ping);
 
             m_liveSettingsStr = "define([], function() { return " + Serializer.Serialize(new LiveSettings()) + "; })\n";
             m_liveSettings = System.Text.Encoding.UTF8.GetBytes(m_liveSettingsStr);
-
-            string controllerPath = m_gamePath + m_options.controllerFilename;
-            if (!HFTWebFileDB.GetInstance().FileExists(controllerPath))
-            {
-                throw new System.ArgumentException(
-                    "\"Assets/WebPlayerTemplates/HappyFunTimes" + controllerPath + "\" does not exist. Did you forget to set \"controllerFilename\" in your \"PlayerSpawner\" or \"PlayerConnector\"?");
-            }
-
-            string redirStr = Serializer.Serialize(new Redir(controllerPath));
-            m_redir = System.Text.Encoding.UTF8.GetBytes(redirStr);
 
             if (options.captivePortal || options.installationMode)
             {
@@ -220,6 +214,9 @@ namespace HappyFunTimes
                 }
                 else if (cmd.cmd == "happyFunTimesRedir")
                 {
+                    string controllerPath = m_gamePath + m_options.controllerFilename;
+                    string redirStr = Serializer.Serialize(new Redir(controllerPath));
+                    m_redir = System.Text.Encoding.UTF8.GetBytes(redirStr);
                     m_webServerUtils.SendJsonBytes(res, m_redir);
                 }
                 else
