@@ -190,7 +190,15 @@ namespace HappyFunTimes
                 // The browser is now trying to reconnect. The moment you
                 // run the game the browser reconnects but the system
                 // isn't fully ready yet.
-                PostCmd cmd = deserializer_.Deserialize<PostCmd>(result);
+                PostCmd cmd = null;
+                try
+                {
+                    cmd = deserializer_.Deserialize<PostCmd>(result);
+                }
+                catch (System.Exception)
+                {
+                    m_log.Warn("could't deseralize PostCmd:" + result);
+                }
                 if (cmd == null || cmd.cmd == null)
                 {
                     res.ContentType = "application/json";
@@ -200,6 +208,7 @@ namespace HappyFunTimes
                 else if (cmd.cmd == "happyFunTimesPingForGame")
                 {
                     m_webServerUtils.SendJsonBytes(res, m_ping);
+                    return;
                 }
                 else if (cmd.cmd == "happyFunTimesPing")
                 {
@@ -211,6 +220,7 @@ namespace HappyFunTimes
                     }
 
                     m_webServerUtils.SendJsonBytes(res, m_ping);
+                    return;
                 }
                 else if (cmd.cmd == "happyFunTimesRedir")
                 {
@@ -218,6 +228,7 @@ namespace HappyFunTimes
                     string redirStr = Serializer.Serialize(new Redir(controllerPath));
                     m_redir = System.Text.Encoding.UTF8.GetBytes(redirStr);
                     m_webServerUtils.SendJsonBytes(res, m_redir);
+                    return;
                 }
                 else
                 {
