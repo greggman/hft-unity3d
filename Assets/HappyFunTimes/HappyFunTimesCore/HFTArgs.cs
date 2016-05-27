@@ -170,19 +170,14 @@ namespace HappyFunTimes {
     // This class fills in the args directly from public fields of
     // sub classes. Where as HFTArgsBase above gets the fields
     // but also records if they were set or not. Not sure that's a good thing
-    public class HFTArgsDirect {
-        public HFTArgsDirect(string prefix)
-        {
-            prefix_ = prefix;
-        }
-
-        public bool ParseArgs()
+    public class HFTArgsToFields {
+        public static bool Apply(string prefix, object obj)
         {
             HFTLog log = new HFTLog("HFTArgsDirect");
-            HFTArgChecker checker = new HFTArgChecker(log, prefix_);
+            HFTArgChecker checker = new HFTArgChecker(log, prefix);
 
             HFTArgParser p = new HFTArgParser();
-            System.Reflection.FieldInfo[] fields = this.GetType().GetFields();
+            System.Reflection.FieldInfo[] fields = obj.GetType().GetFields();
             foreach (System.Reflection.FieldInfo info in fields) {
                 //object field = System.Activator.CreateInstance(info.FieldType);
                 object value = null;
@@ -221,13 +216,11 @@ namespace HappyFunTimes {
 
                 if (value != null)
                 {
-                    info.SetValue(this, value);
+                    info.SetValue(obj, value);
                 }
             }
 
             return checker.CheckArgs();
         }
-
-        string prefix_;
     }
 }
