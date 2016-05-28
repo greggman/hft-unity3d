@@ -10,7 +10,6 @@ namespace HappyFunTimes
         public HFTLog(string prefix = "")
         {
             prefix_ = prefix.Length > 0 ? (prefix + ": ") : "";
-            debug_ = s_debug;
         }
 
         public string prefix
@@ -90,7 +89,7 @@ namespace HappyFunTimes
         /// <param name="fn">function to generaete message</param>
         public void Info(PrintFunc fn)
         {
-            if (debug_)
+            if (s_debug)
             {
                 Info(fn());
             }
@@ -101,7 +100,7 @@ namespace HappyFunTimes
         /// <param name="msg">message</param>
         public void Info(string msg)
         {
-            if (debug_)
+            if (s_debug)
             {
                 WriteLine(prefix_ + msg);
             }
@@ -146,7 +145,6 @@ namespace HappyFunTimes
         }
 
         string prefix_;
-        bool debug_;
 
         static bool s_debug = false;
         static HFTLog s_global = new HFTLog("global");
