@@ -50,8 +50,7 @@ namespace HappyFunTimes
             m_options = options;
             m_gameObject = gameObject;
 
-            string hftUrl = System.Environment.GetEnvironmentVariable("HFT_URL");
-            if (hftUrl == null && options.startServer)
+            if (String.IsNullOrEmpty(options.url) && options.startServer)
             {
                 StartServer();
             }
@@ -117,7 +116,7 @@ namespace HappyFunTimes
             TextAsset asset = Resources.Load<TextAsset>(name);
             if (asset == null)
             {
-                Debug.LogError("missing resource: " + name + ".bytes");
+                m_log.Tell("missing resource: " + name + ".bytes");
             }
             return asset;
         }
@@ -138,7 +137,7 @@ namespace HappyFunTimes
             {
                 HFTUtil.WriteBytes(serverPath, serverData.bytes);
                 HFTUtil.WriteText(shaPath, shaData.text);
-                Debug.Log("wrote new webserver: " + serverPath + ", size: " + serverData.bytes.Length);
+                m_log.Info("wrote new webserver: " + serverPath + ", size: " + serverData.bytes.Length);
             }
 
 string cmdString = @"-e '
@@ -162,22 +161,21 @@ do shell script myFile %(admin)s
             p.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler((sender, e) => {
                 if (!String.IsNullOrEmpty(e.Data))
                 {
-                    Debug.Log("webserver: stderr: " + e.Data);
+                    m_log.Tell("webserver: stderr: " + e.Data);
                 }
             });
             p.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler((sender, e) => {
                 if (!String.IsNullOrEmpty(e.Data))
                 {
-                    Debug.Log("webserver: stdout: " + e.Data);
+                    m_log.Info("webserver: stdout: " + e.Data);
                 }
             });
-            Debug.Log("start--------------------");
             p.Start();
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
             if (p.WaitForExit(2000)) {
                 // If it exited there was an error
-                Debug.Log("error starting webserver: exit code = " + p.ExitCode);
+                m_log.Tell("error starting webserver: exit code = " + p.ExitCode);
             }
             m_webServerProcess = p;
         }
@@ -234,6 +232,10 @@ do shell script myFile %(admin)s
         public void StopServer()
         {
             CleanupCheck();
+            if (m_webServerProcess != null)
+            {
+                m_webServerProcess.Kill();
+            }
             if (m_hftSite != null)
             {
                 m_hftSite.Stop();
@@ -252,6 +254,7 @@ do shell script myFile %(admin)s
             }
         }
 
+        HFTLog m_log = new HFTLog("HFTManager");
         HFTRuntimeOptions m_options;
         GameObject m_gameObject;
         HFTSite m_hftSite;

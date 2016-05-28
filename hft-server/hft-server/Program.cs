@@ -10,7 +10,7 @@ namespace HappyFunTimes
         public static int Main (string[] args)
         {
             HFTRuntimeOptions m_options;
-            HFTArgParser p = new HFTArgParser();
+            HFTArgParser p = HFTArgParser.GetInstance();
             string argStr = "";
             if (p.TryGet<string> ("hft-args", ref argStr))
             {

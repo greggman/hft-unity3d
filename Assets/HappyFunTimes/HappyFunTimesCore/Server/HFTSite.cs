@@ -19,16 +19,7 @@ namespace HappyFunTimes
     {
         public class Options
         {
-            public Options()
-            {
-                rendezvousUrl = System.Environment.GetEnvironmentVariable("HFT_RENDEZVOUS_URL");
-                if (rendezvousUrl == null)
-                {
-                    rendezvousUrl = "http://happyfuntimes.net/api/inform2";
-                }
-            }
-
-            public string rendezvousUrl;
+            public string rendezvousUrl = "http://happyfuntimes.net/api/inform2";
             public string port = "18679";
         }
 

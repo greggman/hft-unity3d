@@ -135,7 +135,7 @@ namespace HappyFunTimes {
             HFTLog log = new HFTLog("HFTArgs");
             HFTArgChecker checker = new HFTArgChecker(log, prefix);
 
-            HFTArgParser p = new HFTArgParser();
+            HFTArgParser p = HFTArgParser.GetInstance();
             System.Reflection.FieldInfo[] fields = this.GetType().GetFields();
             foreach (System.Reflection.FieldInfo info in fields) {
                 object field = System.Activator.CreateInstance(info.FieldType);
@@ -176,7 +176,7 @@ namespace HappyFunTimes {
             HFTLog log = new HFTLog("HFTArgsDirect");
             HFTArgChecker checker = new HFTArgChecker(log, prefix);
 
-            HFTArgParser p = new HFTArgParser();
+            HFTArgParser p = HFTArgParser.GetInstance();
             System.Reflection.FieldInfo[] fields = obj.GetType().GetFields();
             foreach (System.Reflection.FieldInfo info in fields) {
                 //object field = System.Activator.CreateInstance(info.FieldType);

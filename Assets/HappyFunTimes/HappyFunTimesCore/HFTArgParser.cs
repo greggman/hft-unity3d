@@ -78,7 +78,7 @@ public class HFTArgParser {
     /// <summary>
     /// Constructor for HFTArgParser that parses command line arguments
     /// </summary>
-    public HFTArgParser()
+    HFTArgParser()
     {
         #if (!UNITY_IOS)
             Init(System.Environment.GetCommandLineArgs());
@@ -174,6 +174,16 @@ public class HFTArgParser {
         }
     }
 
+    static public HFTArgParser GetInstance()
+    {
+        if (s_parser == null)
+        {
+            s_parser = new HFTArgParser();
+        }
+        return s_parser;
+    }
+
+    static private HFTArgParser s_parser;
     private Dictionary<string, string> m_switches;
 };
 

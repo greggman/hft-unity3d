@@ -12,7 +12,9 @@ namespace HappyFunTimes
         public HFTLog(string prefix = "")
         {
             prefix_ = prefix.Length > 0 ? (prefix + ": ") : "";
-            console_ = System.Environment.GetEnvironmentVariable("HFT_LOG") != null;
+            HFTArgParser p = HFTArgParser.GetInstance();
+            console_ = false;
+            p.TryGetBool("hft-log", ref console_);
             debug_ = s_debug || console_;
             if (console_ && s_out == null)
             {
