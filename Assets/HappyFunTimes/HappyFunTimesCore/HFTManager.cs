@@ -50,7 +50,7 @@ namespace HappyFunTimes
             m_options = options;
             m_gameObject = gameObject;
 
-            if (String.IsNullOrEmpty(options.url) && options.startServer)
+            if (options.startServer)
             {
                 StartServer();
             }
@@ -183,6 +183,7 @@ do shell script myFile %(admin)s
 
         public void StartServer()
         {
+            m_log.Info("Start Server");
             // Where should this be checked?
             string controllerPath = "/" + m_options.controllerFilename;
             if (!HFTWebFileDB.GetInstance().FileExists(controllerPath))

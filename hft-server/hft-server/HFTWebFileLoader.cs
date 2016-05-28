@@ -2,16 +2,13 @@
 
 namespace HappyFunTimes
 {
-	public class HFTWebFileLoader
-	{
-		public HFTWebFileLoader ()
-		{
-           
-		}
+    public class HFTWebFileLoader
+    {
+        public delegate void AddFunc(string filename, byte[] bytes);
 
-        public static void LoadFiles(HFTWebFileDB db)
+        static public void LoadFiles(AddFunc addFunc)
         {
         }
-	}
+    }
 }
 

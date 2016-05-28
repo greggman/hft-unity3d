@@ -11,7 +11,9 @@ namespace HappyFunTimes
 
         HFTWebFileDB()
         {
-            HFTWebFileLoader.LoadFiles(this);
+            HFTWebFileLoader.LoadFiles((filename, bytes) => {
+                AddFile(filename, bytes);
+            });
         }
 
         static public HFTWebFileDB GetInstance()
@@ -57,6 +59,7 @@ namespace HappyFunTimes
         {
             path = path.Replace('\\', '/');
             files_[path] = content;
+            log_.Info("Add File: " + path + ", size: " + content.Length);
         }
 
         public string[] GetFiles(string path, string glob)
@@ -107,6 +110,7 @@ namespace HappyFunTimes
             }
         }
 
+        HFTLog log_ = new HFTLog("HFTWebFileDB");
         bool isEditor_;
         string dataPath_;
         private Dictionary<string, byte[] > files_ = new Dictionary<string, byte[] >();

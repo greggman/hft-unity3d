@@ -182,6 +182,7 @@ namespace HappyFunTimes
             RegisterCmdHandler<HFTMessageSwitchGame>("switchGame", SwitchGame);
             RegisterCmdHandler<object>("peer", SendMessageToGame);
             RegisterCmdHandler<object>("bcastToGames", BroadcastToGames);
+            RegisterCmdHandler<HFTMessageAddFile>("addFile", AddFile);
 
             // Tell the game it's id
             var gs = new HFTMessageGameStart();
@@ -249,6 +250,14 @@ namespace HappyFunTimes
         public void BroadcastToGames(string id, object data)
         {
             this.gameGroup_.BroadcastMessageToGames(id_, id, data);
+        }
+
+        private void AddFile(string id, HFTMessageAddFile data)
+        {
+            string filename = data.filename;
+            byte[] bytes = System.Convert.FromBase64String(data.data);
+            log_.Info("Receive File: " + filename + ", size: " + bytes.Length);
+            HFTWebFileDB.GetInstance().AddFile(filename, bytes);
         }
 
         public void OnMessage(object sender, WebSocketSharp.MessageEventArgs message)

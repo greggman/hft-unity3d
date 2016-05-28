@@ -186,5 +186,18 @@ namespace HappyFunTimes
         public string gameId;
     }
 
+    public class HFTMessageAddFile
+    {
+        public HFTMessageAddFile() {}
+        public HFTMessageAddFile(string filename, string data)
+        {
+            this.filename = filename;
+            this.data = data;
+        }
+        public string filename;
+        public string data;
+    }
+
+
 
 }  // namespace HappyFunTimes

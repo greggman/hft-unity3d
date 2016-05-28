@@ -364,10 +364,18 @@ namespace HappyFunTimes
             }
             m_sendQueue.Clear();
 
-            // Inform the relayserver we're a server
             try
             {
+                // Inform the relayserver we're a server
                 SendSysCmd("server", "-1", m_options);
+
+Debug.Log("FIX - only send if we're master / ???");
+                // Send the files
+                HFTWebFileLoader.LoadFiles((string filename, byte[] bytes) => {
+                    m_log.Info("Send File: " + filename + ", size: " + bytes.Length);
+                    SendSysCmd("addFile", "", new HFTMessageAddFile(filename, System.Convert.ToBase64String(bytes)));
+                });
+
             }
             catch (Exception ex)
             {
