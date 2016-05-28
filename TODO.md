@@ -15,7 +15,7 @@
 *   refactor for standalone
     *   check all refs to Deserialize, try/catch
     *   make web laucher launch a launcher or not quit so user doesn't have to enter stuff multiple times?
-    *   fix readme at build
+    *   test ipv6
     *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
     *   check controllers work on windows
     *   check controller path with / and \
@@ -57,6 +57,7 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   fix HFTReadme when building
     *   make separate program for webserver?
     *   check arguments so we can print errors to console? Except we can't print errors :(
     *   remove refs to GetEnvironmment
