@@ -14,12 +14,9 @@
 *   Add Start/Stop for server
 *   refactor for standalone
     *   check all refs to Deserialize, try/catch
-    *   remove refs to GetEnvironmment
+    *   make web laucher launch a launcher or not quit so user doesn't have to enter stuff multiple times?
     *   fix readme at build
-    *   check all args
     *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
-    *   check arguments so we can print errors? Except we can't print errors :(
-    *   make game-login/captive-portal buttons enter button, not just A
     *   check controllers work on windows
     *   check controller path with / and \
     *   Check if port busy
@@ -27,7 +24,7 @@
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
     *   add dnsAddress and --hft-dns-address ?
-    *   make separate program for webserver?
+    *   check DNS address?
 *   link all samples to online docs
 *   make hft.net keep trying
 *   ../
@@ -60,6 +57,11 @@ DONE
 *   Remove file uploader
 *   refactor for standlone
     *   change color to public field
+    *   make separate program for webserver?
+    *   check arguments so we can print errors to console? Except we can't print errors :(
+    *   remove refs to GetEnvironmment
+    *   make game-login/captive-portal buttons enter button, not just A
+    *   check all args
     *   move HFTDialog out of HFTDnsRunner or at least detach them.
     *   send URL not raw IP because IP6
     *   don't print Checking for HFT unless try > 1
