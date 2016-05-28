@@ -15,7 +15,6 @@ namespace HappyFunTimes
             HFTArgParser p = HFTArgParser.GetInstance();
             console_ = false;
             p.TryGetBool("hft-log", ref console_);
-            debug_ = s_debug || console_;
             if (console_ && s_out == null)
             {
                 s_out = new System.IO.StreamWriter(System.Console.OpenStandardOutput());
@@ -105,7 +104,7 @@ namespace HappyFunTimes
         /// <param name="fn">function to generaete message</param>
         public void Info(PrintFunc fn)
         {
-            if (debug_)
+            if (s_debug)
             {
                 Info(fn());
             }
@@ -116,7 +115,7 @@ namespace HappyFunTimes
         /// <param name="msg">message</param>
         public void Info(string msg)
         {
-            if (debug_)
+            if (s_debug)
             {
                 Debug.Log(prefix_ + msg);
             }
@@ -177,7 +176,6 @@ namespace HappyFunTimes
         }
 
         string prefix_;
-        bool debug_;
         bool console_;
 
         static System.IO.StreamWriter s_out = null;
