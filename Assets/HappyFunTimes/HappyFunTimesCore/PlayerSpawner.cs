@@ -53,7 +53,7 @@ namespace HappyFunTimes
 
         [Space(10)]
         [Header("advanced")]
-        public HFTUserOptions happyfuntimesOptions = new HFTUserOptions();
+        public HFTGameOptions happyfuntimesOptions = new HFTGameOptions();
 
         public GameServer server
         {

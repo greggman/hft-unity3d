@@ -41,7 +41,7 @@ namespace HappyFunTimes
         {
         }
 
-        public HFTRuntimeOptions(HFTUserOptions userOptions)
+        public HFTRuntimeOptions(HFTGameOptions userOptions)
         {
             name = String.IsNullOrEmpty(userOptions.name) ? Application.productName : userOptions.name;
 

@@ -38,7 +38,7 @@ namespace HappyFunTimes
 {
 
     [Serializable]
-    public class HFTUserOptions
+    public class HFTGameOptions
     {
         [Tooltip("name of controller html file. Must be in 'WebPlayerTemplates/HappyFunTimes'")]
         public string controllerFilename = "controllers/gamepad/controller.html";
@@ -106,13 +106,6 @@ namespace HappyFunTimes
         /// Port to run server on
         /// </summary>
         public string serverPort = "";
-
-        /// <summary>
-
-
-        public HFTUserOptions()
-        {
-        }
     }
 
 }  // namespace HappyFunTimes
