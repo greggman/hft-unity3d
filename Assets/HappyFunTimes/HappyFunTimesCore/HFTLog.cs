@@ -11,7 +11,7 @@ namespace HappyFunTimes
 
         public HFTLog(string prefix = "")
         {
-            prefix_ = prefix.Length > 0 ? (prefix + ": ") : "";
+            prefix_ = prefix.Length > 0 ? (prefix + ": ") : "unprefixed: ";
             RemoveDeadLoggers();
             if (s_loggers != null)
             {
@@ -80,7 +80,8 @@ namespace HappyFunTimes
                 {
                     patterns[i] = patterns[i].Replace("*", ".*?");
                 }
-                s_debugRE = new Regex("^(" + String.Join("|", patterns) + ")$");
+                string pattern = "^(" + String.Join("|", patterns) + "): $";
+                s_debugRE = new Regex(pattern);
                 SetAllDebug();
             }
         }
