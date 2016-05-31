@@ -201,7 +201,6 @@
       <Link>HappyFunTimesCore\Server\HFTWebServerUtils.cs</Link>
     </Compile>
     <Compile Include="HFTWebFileLoader.cs" />
-    <Compile Include="HFTLog.cs" />
     <Compile Include="HFTRuntimeOptions.cs" />
     <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTMessageCmd.cs">
       <Link>HappyFunTimesCore\HFTMessageCmd.cs</Link>
@@ -224,6 +223,10 @@
     <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTArgs.cs">
       <Link>HappyFunTimesCore\HFTArgs.cs</Link>
     </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTLog.cs">
+      <Link>HappyFunTimesCore\HFTLog.cs</Link>
+    </Compile>
+    <Compile Include="HFTLogger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

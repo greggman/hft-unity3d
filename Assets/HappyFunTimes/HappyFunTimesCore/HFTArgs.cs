@@ -161,7 +161,7 @@ namespace HappyFunTimes {
         public HFTArgBool installationMode;
         public HFTArgBool master;
         public HFTArgBool showMessages;
-        public HFTArgBool debug;
+        public HFTArg<string> debug;
 
         public HFTArg<string> instructions;
         public HFTArgBool bottom;

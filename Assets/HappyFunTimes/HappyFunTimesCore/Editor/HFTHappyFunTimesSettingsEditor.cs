@@ -50,10 +50,11 @@ namespace HappyFunTimesEditor
             GUILayout.Space(5);
 
             bool showMessages = HFTHappyFunTimesSettings.showMessages;
-            bool debug = HFTHappyFunTimesSettings.debug;
+            string debug = HFTHappyFunTimesSettings.debug;
 
             bool newShowMessages = GUILayout.Toggle(showMessages, "show messages [game <-> controller]");
-            bool newDebug = GUILayout.Toggle(debug, "debug [log all the things!]");
+            GUILayout.Label("name,name,prefix*,name. '*' = all");
+            string newDebug = GUILayout.TextField(debug, "debug [log all the things!]");
 
             HFTHappyFunTimesSettings.showMessages = newShowMessages;
             HFTHappyFunTimesSettings.debug = newDebug;

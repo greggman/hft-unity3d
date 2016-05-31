@@ -15,7 +15,7 @@ namespace HappyFunTimes
         public bool master = false;
         public bool showInList = true;
         public bool showMessages;
-        public bool debug;
+        public string debug = "";
         public bool startServer;
         public bool dns;
         public bool captivePortal;

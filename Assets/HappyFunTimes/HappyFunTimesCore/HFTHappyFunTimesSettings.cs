@@ -56,15 +56,24 @@ namespace HappyFunTimes
             }
         }
 
-        static public bool debug
+        static public string debug
         {
             get
             {
-                return GetBool(kHappyFunTimesDebugKey);
+                return GetString(kHappyFunTimesDebugKey);
             }
             set
             {
                 UpdateIfChanged(value, kHappyFunTimesDebugKey);
+            }
+        }
+
+        static void UpdateIfChanged(string newValue, string key)
+        {
+            string oldValue = GetString(key);
+            if (newValue != oldValue)
+            {
+                PlayerPrefs.SetString(key, newValue);
             }
         }
 
@@ -81,6 +90,9 @@ namespace HappyFunTimes
             return Application.isEditor && PlayerPrefs.GetInt(key, 0) != 0;
         }
 
+        static string GetString(string key) {
+            return Application.isEditor ? PlayerPrefs.GetString(key, "") : "";
+        }
 
         public static HFTHappyFunTimesSettings GetInstance()
         {

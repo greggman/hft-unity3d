@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.IO;
-using UnityEngine;
 
 namespace HappyFunTimes
 {
@@ -12,13 +12,44 @@ namespace HappyFunTimes
         public HFTLog(string prefix = "")
         {
             prefix_ = prefix.Length > 0 ? (prefix + ": ") : "";
-            HFTArgParser p = HFTArgParser.GetInstance();
-            console_ = false;
-            p.TryGetBool("hft-log", ref console_);
-            if (console_ && s_out == null)
+            RemoveDeadLoggers();
+            if (s_loggers != null)
             {
-                s_out = new System.IO.StreamWriter(System.Console.OpenStandardOutput());
-                s_out.AutoFlush = true;
+                s_loggers.Add(new WeakReference(this));
+            }
+            SetDebug();
+        }
+
+        static private bool IsPrefixInDebugString(string prefix)
+        {
+            if (String.IsNullOrEmpty(s_debug) || s_debugRE == null)
+            {
+                return false;
+            }
+            return s_debugRE.IsMatch(prefix);
+        }
+
+        private void SetDebug()
+        {
+            debug_ = IsPrefixInDebugString(prefix_);
+        }
+
+        private static void RemoveDeadLoggers()
+        {
+            if (s_loggers != null)
+            {
+                s_loggers.RemoveAll(x => !x.IsAlive);
+            }
+        }
+
+        private static void SetAllDebug()
+        {
+            if (s_loggers != null)
+            {
+                RemoveDeadLoggers();
+                s_loggers.ForEach((w) => {
+                    (w.Target as HFTLog).SetDebug();
+                });
             }
         }
 
@@ -31,10 +62,11 @@ namespace HappyFunTimes
             set
             {
                 prefix_ = value;
+                SetDebug();
             }
         }
 
-        static public bool debug
+        static public string debug
         {
             get
             {
@@ -43,6 +75,13 @@ namespace HappyFunTimes
             set
             {
                 s_debug = value;
+                string[] patterns = s_debug.Split(',');
+                for (int i = 0; i < patterns.Length; ++i)
+                {
+                    patterns[i] = patterns[i].Replace("*", ".*?");
+                }
+                s_debugRE = new Regex("^(" + String.Join("|", patterns) + ")$");
+                SetAllDebug();
             }
         }
 
@@ -74,7 +113,7 @@ namespace HappyFunTimes
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             DumpDictImpl(sb, "  ", dict);
-            Debug.Log(sb.ToString());
+            HFTLogger.Log(sb.ToString());
         }
 
 
@@ -91,12 +130,7 @@ namespace HappyFunTimes
         /// <param name="msg">message</param>
         public void Tell(string msg)
         {
-            Debug.Log(prefix_ + msg);
-
-            if (console_)
-            {
-                WriteLine(prefix_ + msg);
-            }
+            HFTLogger.Log(prefix_ + msg);
         }
 
         /// <summary>Print message if debugging</summary>
@@ -104,7 +138,7 @@ namespace HappyFunTimes
         /// <param name="fn">function to generaete message</param>
         public void Info(PrintFunc fn)
         {
-            if (s_debug)
+            if (debug_)
             {
                 Info(fn());
             }
@@ -115,13 +149,9 @@ namespace HappyFunTimes
         /// <param name="msg">message</param>
         public void Info(string msg)
         {
-            if (s_debug)
+            if (debug_)
             {
-                Debug.Log(prefix_ + msg);
-            }
-            if (console_)
-            {
-                WriteLine(prefix_ + msg);
+                HFTLogger.Log(prefix_ + msg);
             }
         }
 
@@ -132,11 +162,7 @@ namespace HappyFunTimes
 
         public void Warn(string msg)
         {
-            Debug.Log(prefix_ + msg);
-            if (console_)
-            {
-                WriteLine(prefix_ + "WARNING: " + msg);
-            }
+            HFTLogger.Log(prefix_ + msg);
         }
 
         public void Error(PrintFunc fn)
@@ -146,25 +172,12 @@ namespace HappyFunTimes
 
         public void Error(string msg)
         {
-            Debug.LogError(prefix_ + msg);
-            if (console_)
-            {
-                WriteLine(prefix_ + "ERROR: " + msg);
-            }
+            HFTLogger.Error(prefix_ + msg);
         }
 
         public void Error(System.Exception ex)
         {
-            Debug.LogException(ex);
-            if (console_)
-            {
-                WriteLine(prefix_ + "ERROR: " + ex.ToString());
-            }
-        }
-
-        private void WriteLine(string msg)
-        {
-            s_out.WriteLine(msg);
+            HFTLogger.Error(ex);
         }
 
         static public HFTLog Global
@@ -175,12 +188,13 @@ namespace HappyFunTimes
             }
         }
 
+        bool debug_;
         string prefix_;
-        bool console_;
 
-        static System.IO.StreamWriter s_out = null;
-        static bool s_debug = false;
+        static string s_debug = "";
+        static Regex s_debugRE;
         static HFTLog s_global = new HFTLog("global");
+        static List<WeakReference> s_loggers = new List<WeakReference>();
     }
 
 }  // namespace HappyFunTimes
