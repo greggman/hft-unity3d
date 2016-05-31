@@ -44,17 +44,26 @@ namespace HappyFunTimesEditor
         // UnityEditor.EditorPrefs, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
         public override void OnInspectorGUI()
         {
-            GUIStyle style = new GUIStyle(GUI.skin.GetStyle("Label"));
-            style.wordWrap = true;
-            GUILayout.Label("These settings are used in editor only and only take effect when a game starts.", style);
+            GUIStyle labelStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
+            labelStyle.wordWrap = true;
+            GUIStyle textAreaStyle = new GUIStyle(GUI.skin.GetStyle("TextArea"));
+            textAreaStyle.wordWrap = true;
+
+            GUILayout.Label("These settings are used in editor only and only take effect when a game starts.", labelStyle);
             GUILayout.Space(5);
 
             bool showMessages = HFTHappyFunTimesSettings.showMessages;
             string debug = HFTHappyFunTimesSettings.debug;
 
             bool newShowMessages = GUILayout.Toggle(showMessages, "show messages [game <-> controller]");
-            GUILayout.Label("name,name,prefix*,name. '*' = all");
-            string newDebug = GUILayout.TextField(debug, "debug [log all the things!]");
+            GUILayout.Label(@"debug [log stuff] eg.
+name1
+name2
+prefix1*
+prefix2*
+
+'*' = all", labelStyle);
+            string newDebug = EditorGUILayout.TextArea(debug, textAreaStyle, GUILayout.Height(100));
 
             HFTHappyFunTimesSettings.showMessages = newShowMessages;
             HFTHappyFunTimesSettings.debug = newDebug;
