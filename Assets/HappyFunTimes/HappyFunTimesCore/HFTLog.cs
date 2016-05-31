@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Linq;
 
 namespace HappyFunTimes
 {
@@ -75,7 +76,7 @@ namespace HappyFunTimes
             set
             {
                 s_debug = value;
-                string[] patterns = s_debug.Split(',');
+                string[] patterns = s_debug.Replace("\n", ",").Split(',').Where(s => !String.IsNullOrEmpty(s)).ToArray();
                 for (int i = 0; i < patterns.Length; ++i)
                 {
                     patterns[i] = patterns[i].Replace("*", ".*?");
