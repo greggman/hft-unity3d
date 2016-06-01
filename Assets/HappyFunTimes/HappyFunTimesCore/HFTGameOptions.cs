@@ -99,13 +99,25 @@ namespace HappyFunTimes
         /// http://happyfuntimes.net/api/inform2. If you're running your
         /// own server you'd change this.
         /// </summary>
-        [Tooltip("default: happyfuntimes.net/api/inform2")]
+        [Tooltip("default: http://happyfuntimes.net/api/inform2")]
         public string rendezvousUrl;
 
         /// <summary>
         /// Port to run server on
         /// </summary>
         public string serverPort = "";
+
+        /// <summary>
+        /// address to report for DNS A queries
+        /// </summary>
+        [Tooltip("addres to report for DNS A queries")]
+        public string ipv4DnsAddress = "";
+
+        /// <summary>
+        /// address to report for DNS AAAA queries
+        /// </summary>
+        [Tooltip("addres to report for DNS AAAA queries")]
+        public string ipv6DnsAddress = "";
     }
 
 }  // namespace HappyFunTimes

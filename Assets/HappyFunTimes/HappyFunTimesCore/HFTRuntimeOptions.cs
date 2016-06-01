@@ -54,6 +54,8 @@ namespace HappyFunTimes
             captivePortal = userOptions.captivePortal;
             showMessages = HFTHappyFunTimesSettings.showMessages;
             debug = HFTHappyFunTimesSettings.debug;
+            ipv4DnsAddress = userOptions.ipv4DnsAddress;
+            ipv6DnsAddress = userOptions.ipv6DnsAddress;
             controllerFilename = userOptions.controllerFilename;
             if (String.IsNullOrEmpty(controllerFilename))
             {
