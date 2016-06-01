@@ -52,13 +52,16 @@ namespace HappyFunTimes
                 HFTWebFileDB.GetInstance().DataPath = m_options.dataPath;
             }
 
+            string ipv4Address = String.IsNullOrEmpty(m_options.ipv4DnsAddress) ? HFTIpUtils.GetLocalIPv4Address() : m_options.ipv4DnsAddress;
+            string ipv6Address = String.IsNullOrEmpty(m_options.ipv6DnsAddress) ? HFTIpUtils.GetLocalIPv6Address() : m_options.ipv6DnsAddress;
+
             HFTWebServer webServer = new HFTWebServer(m_options, addresses.ToArray());
             webServer.Start();
 
             if (m_options.dns || m_options.installationMode)
             {
                 HFTDnsRunner dnsRunner = new HFTDnsRunner();
-                dnsRunner.Start();
+                dnsRunner.Start(ipv4Address, ipv6Address, 53);
             }
 
             // There's no HFTSite because were in installationMode which means there's no internet
@@ -72,9 +75,9 @@ namespace HappyFunTimes
 
     public class HFTDnsRunner
     {
-        public void Start()
+        public void Start(string ipv4Address, string ipv6Address, int port)
         {
-            helper_ = new HFTDnsRunnerHelper();
+            helper_ = new HFTDnsRunnerHelper(ipv4Address, ipv6Address, port);
             dnsThread_ = new System.Threading.Thread(helper_.DoWork);
             dnsThread_.Start();
         }
@@ -91,26 +94,26 @@ namespace HappyFunTimes
 
     public class HFTDnsRunnerHelper
     {
-        public HFTDnsRunnerHelper()
+        public HFTDnsRunnerHelper(string ipv4Address, string ipv6Address, int port)
         {
+            ipv4Address_ = ipv4Address;
+            ipv6Address_ = ipv6Address;
+            port_ = port;
         }
 
         public void DoWork()
         {
-            int port = 53;
-
             try
             {
                 log_.Info("DNS DoWork -start-");
-                log_.Tell("FIX: hard coded dns");
-                dnsServer_ = new HFTDnsServer("192.168.2.9");
-                dnsServer_.Listen(port);
+                dnsServer_ = new HFTDnsServer(ipv4Address_, ipv6Address_);
+                dnsServer_.Listen(port_);
                 log_.Info("DNS DoWork -end-");
             }
             catch (System.Exception ex)
             {
                 log_.Error(
-                    "Could not start DNS Server on port:" + port + "\n" +
+                    "Could not start DNS Server on port:" + port_ + "\n" +
                     "Did you run from the command line with sudo?\n\n" + ex.ToString());
             }
         }
@@ -121,6 +124,9 @@ namespace HappyFunTimes
             log_.Info("DNS DoWork -close-");
         }
 
+        int port_;
+        string ipv4Address_;
+        string ipv6Address_;
         HFTDnsServer dnsServer_;
         HFTLog log_ = new HFTLog("HFTDnsRunnerHelper");
     }
