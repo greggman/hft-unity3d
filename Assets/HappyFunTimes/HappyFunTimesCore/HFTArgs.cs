@@ -149,24 +149,6 @@ namespace HappyFunTimes {
         }
     }
 
-    public class HFTArgs : HFTArgsBase
-    {
-        public HFTArgs() : base("hft") {
-        }
-        public HFTArg<string> url;
-        public HFTArg<string> id;
-        public HFTArg<string> rendezvousUrl;
-        public HFTArg<string> serverPort;
-        public HFTArg<int> numGames;   // REMOVE THIS?
-        public HFTArgBool installationMode;
-        public HFTArgBool master;
-        public HFTArgBool showMessages;
-        public HFTArg<string> debug;
-
-        public HFTArg<string> instructions;
-        public HFTArgBool bottom;
-    }
-
     // This class fills in the args directly from public fields of
     // sub classes. Where as HFTArgsBase above gets the fields
     // but also records if they were set or not. Not sure that's a good thing
