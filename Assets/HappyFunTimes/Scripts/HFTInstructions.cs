@@ -54,11 +54,11 @@ namespace HappyFunTimes {
         private bool m_msgFitsOnScreen = false;
 
         public void Awake() {
-            HFTArgs args = new HFTArgs();
+            HFTArgParser p = new HFTArgParser();
 
             bool found = false;
-            found |= args.instructions.GetIfSet(ref instructions);
-            found |= args.bottom.GetIfSet(ref bottom);
+            found |= p.TryGet<string>("hft-instructions", ref instructions);
+            found |= p.TryGetBool("hft-bottom", ref bottom);
             if (found)
             {
                 show = true;
