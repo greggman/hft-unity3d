@@ -13,6 +13,8 @@
 *   test ios
 *   Add Start/Stop for server
 *   refactor for standalone
+    *   test on XP, Win8, Win10
+    *   make DNS server serve both A and AAAA records
     *   check all refs to Deserialize, try/catch
     *   make web laucher launch a launcher or not quit so user doesn't have to enter stuff multiple times?
     *   test ipv6
