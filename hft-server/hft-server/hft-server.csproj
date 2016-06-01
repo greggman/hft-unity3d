@@ -220,13 +220,16 @@
     <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTArgParser.cs">
       <Link>HappyFunTimesCore\HFTArgParser.cs</Link>
     </Compile>
-    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTArgs.cs">
-      <Link>HappyFunTimesCore\HFTArgs.cs</Link>
-    </Compile>
     <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTLog.cs">
       <Link>HappyFunTimesCore\HFTLog.cs</Link>
     </Compile>
     <Compile Include="HFTLogger.cs" />
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTArgUtils.cs">
+      <Link>HappyFunTimesCore\HFTArgUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTIpUtils.cs">
+      <Link>HappyFunTimesCore\HFTIpUtils.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
