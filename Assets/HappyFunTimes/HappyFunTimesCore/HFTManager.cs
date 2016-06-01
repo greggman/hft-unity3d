@@ -220,8 +220,8 @@ do shell script myFile %(admin)s
                 m_hftSite.Init(hftOptions);
             }
 
-            string ipv4Address = HFTIpUtils.GetLocalIPv4Address();
-            string ipv6Address = HFTIpUtils.GetLocalIPv6Address();
+            string ipv4Address = String.IsNullOrEmpty(m_options.ipv4DnsAddress) ? HFTIpUtils.GetLocalIPv4Address() : m_options.ipv4DnsAddress;
+            string ipv6Address = String.IsNullOrEmpty(m_options.ipv6DnsAddress) ? HFTIpUtils.GetLocalIPv6Address() : m_options.ipv6DnsAddress;
 
             m_webServer = new HFTWebServer(m_options, addresses.ToArray());
             m_webServer.Start();
