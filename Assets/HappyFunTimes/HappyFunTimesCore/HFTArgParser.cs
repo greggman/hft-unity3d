@@ -78,7 +78,7 @@ public class HFTArgParser {
     /// <summary>
     /// Constructor for HFTArgParser that parses command line arguments
     /// </summary>
-    HFTArgParser()
+    public HFTArgParser()
     {
         #if (!UNITY_IOS)
             Init(System.Environment.GetCommandLineArgs());
