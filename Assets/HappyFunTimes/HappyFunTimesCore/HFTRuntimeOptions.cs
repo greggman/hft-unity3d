@@ -72,6 +72,8 @@ namespace HappyFunTimes
             args.id.GetIfSet(ref id);
             args.rendezvousUrl.GetIfSet(ref rendezvousUrl);
             args.serverPort.GetIfSet(ref serverPort);
+            args.ipv4DnsAddress.GetIfSet(ref ipv4DnsAddress);
+            args.ipv6DnsAddress.GetIfSet(ref ipv6DnsAddress);
 
             if (String.IsNullOrEmpty(url))
             {
@@ -98,6 +100,25 @@ namespace HappyFunTimes
         public bool captivePortal;
         public string serverPort = "";
         public string rendezvousUrl;
+        public string ipv4DnsAddress = "";
+        public string ipv6DnsAddress = "";
+
+        public class HFTArgs : HFTArgsBase
+        {
+            public HFTArgs() : base("hft") {
+            }
+            public HFTArg<string> url;
+            public HFTArg<string> id;
+            public HFTArg<string> rendezvousUrl;
+            public HFTArg<string> serverPort;
+            public HFTArgBool installationMode;
+            public HFTArgBool master;
+            public HFTArgBool showMessages;
+            public HFTArg<string> debug;
+            public HFTArg<string> ipv4DnsAddress;
+            public HFTArg<string> ipv6DnsAddress;
+        }
+
     }
 
 }  // namespace HappyFunTimes
