@@ -21,6 +21,8 @@ namespace HappyFunTimes
         public bool captivePortal;
         public string serverPort = "";
         public string rendezvousUrl;
+        public string ipv4DnsAddress = "";
+        public string ipv6DnsAddress = "";
 
         public string args;
     }
