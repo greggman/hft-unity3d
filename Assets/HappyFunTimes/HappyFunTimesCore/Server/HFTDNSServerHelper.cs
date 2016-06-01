@@ -9,27 +9,27 @@ namespace HappyFunTimes {
 
     public class HFTDnsRunnerHelper
     {
-        public HFTDnsRunnerHelper(HFTEventProcessor ep)
+        public HFTDnsRunnerHelper(HFTEventProcessor ep, string ipv4Address, string ipv6Address, int port)
         {
             eventProcessor_ = ep;
+            ipv4Address_ = ipv4Address;
+            ipv6Address_ = ipv6Address;
+            port_ = port;
         }
 
         public void DoWork()
         {
-            int port = 53;
-
             try
             {
-                log_.Info("DNS DoWork -start-");
-                log_.Tell("FIX: hard coded dns");
-                dnsServer_ = new HFTDnsServer("192.168.2.9");
-                dnsServer_.Listen(port);
+                log_.Info("DNS DoWork -start- port:" + port_);
+                dnsServer_ = new HFTDnsServer(ipv4Address_, ipv6Address_);
+                dnsServer_.Listen(port_);
                 log_.Info("DNS DoWork -end-");
             }
             catch (System.Exception ex)
             {
                 string msg =
-                    "Could not start DNS Server on port:" + port + "\n" +
+                    "Could not start DNS Server on port:" + port_ + "\n" +
                     "Did you run from the command line with sudo?\n\n" + ex.ToString();
 
                 if (!HFTGlobalEventEmitter.GetInstance().QueueEvent(HFTGlobalEventType.Error, msg))
@@ -44,10 +44,14 @@ namespace HappyFunTimes {
 
         public void Close()
         {
+            log_.Info("DNS DoWork -close-start");
             dnsServer_.Close();
-            log_.Info("DNS DoWork -close-");
+            log_.Info("DNS DoWork -close-end");
         }
 
+        int port_;
+        string ipv4Address_;
+        string ipv6Address_;
         HFTDnsServer dnsServer_;
         HFTEventProcessor eventProcessor_;
         HFTLog log_ = new HFTLog("HFTDnsRunnerHelper");

@@ -8,9 +8,12 @@ public class HFTDnsTest : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
+        HFTLog.debug = HFTHappyFunTimesSettings.debug;
         Debug.Log("HFTDnsTest - start");
+        string ipv4Address = HFTIpUtils.GetLocalIPv4Address();
+        string ipv6Address = HFTIpUtils.GetLocalIPv6Address();
         dnsRunner_ = new HFTDnsRunner();
-        dnsRunner_.Start();
+        dnsRunner_.Start(ipv4Address, ipv6Address, 4444);
     }
 
     // Update is called once per frame

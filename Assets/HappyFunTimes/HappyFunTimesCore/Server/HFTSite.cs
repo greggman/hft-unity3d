@@ -195,16 +195,40 @@ namespace HappyFunTimes
         {
             for (;;)
             {
-                string[] addresses = HFTIpUtils.GetLocalIPAddresses();
-                string newAddressesStr = String.Join(", ", addresses);
+                // I'm not sure what to do here. The original node.js version
+                // had advantages here. One is it's naturally multi-threaded
+                // so this takes zero time from the main thread.
+                //
+                // The other is the game wasn't running in node it was
+                // running in either the browser or unity so again no
+                // effect on the game.
+                //
+                // I could move this to another thread but the reason this
+                // exists is that students would move their machine to another
+                // network, stop and start unity but that wouldn't start and stop
+                // node.js so without this polling node.js would have kept on
+                // the old network.
+                //
+                // Now that this is in Unity it's more likely the user
+                // will start and stop Unity so no reason to poll.
+                //
+                // For now I'm just keeping this code in here but
+                // it only looks for new addresses once.
                 bool haveNewAddresses = false;
-                if (!newAddressesStr.Equals(oldAddressesStr_))
+
+                if (once_ || forever_)
                 {
-                    oldAddressesStr_ = newAddressesStr;
-                    var data = new InformData(addresses, options_.port);
-                    var json = Serializer.Serialize(data);
-                    addressBytes_ = System.Text.Encoding.UTF8.GetBytes(json);
-                    haveNewAddresses = true;
+                    once_ = false;
+                    string[] addresses = HFTIpUtils.GetLocalIPAddresses();
+                    string newAddressesStr = String.Join(", ", addresses);
+                    if (!newAddressesStr.Equals(oldAddressesStr_))
+                    {
+                        oldAddressesStr_ = newAddressesStr;
+                        var data = new InformData(addresses, options_.port);
+                        var json = Serializer.Serialize(data);
+                        addressBytes_ = System.Text.Encoding.UTF8.GetBytes(json);
+                        haveNewAddresses = true;
+                    }
                 }
 
                 foreach(Informer informer in informers_)
@@ -216,7 +240,8 @@ namespace HappyFunTimes
             }
         }
 
-
+        bool once_ = true;
+        bool forever_ = false;
         SharedState sharedState_ = new SharedState();
         IEnumerator checkCoroutine_;
         Informer[] informers_ = new Informer[2];

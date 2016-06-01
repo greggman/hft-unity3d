@@ -220,13 +220,16 @@ do shell script myFile %(admin)s
                 m_hftSite.Init(hftOptions);
             }
 
+            string ipv4Address = HFTIpUtils.GetLocalIPv4Address();
+            string ipv6Address = HFTIpUtils.GetLocalIPv6Address();
+
             m_webServer = new HFTWebServer(m_options, addresses.ToArray());
             m_webServer.Start();
 
             if (m_options.dns || m_options.installationMode)
             {
                 m_dnsRunner = new HFTDnsRunner();
-                m_dnsRunner.Start();
+                m_dnsRunner.Start(ipv4Address, ipv6Address, 53);
             }
         }
 
