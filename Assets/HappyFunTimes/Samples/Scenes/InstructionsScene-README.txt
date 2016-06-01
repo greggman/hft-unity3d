@@ -14,13 +14,13 @@ Instead if you export the game you can run it from the command line and pass in 
 ### On OSX, from a Terminal
 
 ```
-nameofgame.app/Contents/MacOS/nameofgame --hft-instructions="Connect To Wifi 'OurInstallation' then go to hft.net"
+nameofgame.app/Contents/MacOS/nameofgame --instructions="Connect To Wifi 'OurInstallation' then go to hft.net"
 ```
 
 ### On Windows
 
 ```
-nameofgame.exe --hft-instructions="Connect To Wifi 'OurInstallation' then go to hft.net"
+nameofgame.exe --instructions="Connect To Wifi 'OurInstallation' then go to hft.net"
 ```
 
 You can also do this by setting environment variables
@@ -28,15 +28,15 @@ You can also do this by setting environment variables
 ### On OSX, from a Terminal
 
 ```
-export HFT_INSTRUCTIONS "Connect To Wifi 'OurInstallation' then go to hft.net"
+export INSTRUCTIONS "Connect To Wifi 'OurInstallation' then go to hft.net"
 nameofgame.app/Contents/MacOS/nameofgame
 ```
 
 ### On Windows
 
 ```
-set HFT_INSTRUCTIONS="Connect To Wifi 'OurInstallation' then go to hft.net"
-nameofgame.exe --hft-instructions="Connect To Wifi 'OurInstallation' then go to hft.net"
+set INSTRUCTIONS="Connect To Wifi 'OurInstallation' then go to hft.net"
+nameofgame.exe
 ```
 
 The point is you can set the details at your location. Of course if you wanted to get fancy
