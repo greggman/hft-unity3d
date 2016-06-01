@@ -57,8 +57,8 @@ namespace HappyFunTimes {
             HFTArgParser p = new HFTArgParser();
 
             bool found = false;
-            found |= p.TryGet<string>("hft-instructions", ref instructions);
-            found |= p.TryGetBool("hft-bottom", ref bottom);
+            found |= p.TryGet<string>("instructions", ref instructions);
+            found |= p.TryGetBool("bottom", ref bottom);
             if (found)
             {
                 show = true;
