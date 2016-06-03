@@ -168,11 +168,6 @@ namespace HappyFunTimes
             return numPlayers;
         }
 
-        string GetControllerUrl(string baseUrl)
-        {
-            return masterGame_ != null ? masterGame_.GetControllerUrl(baseUrl) : "";
-        }
-
         void SendQuit()
         {
             foreach (var game in games_.Values)

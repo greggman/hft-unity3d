@@ -88,12 +88,6 @@ namespace HappyFunTimes
             log_.Info("created game");
         }
 
-        public string GetControllerUrl(string baseUrl)
-        {
-//            return runtimeInfo_ ? baseUrl + "/games/" + runtimeInfo_.info.happyFunTimes.gameId + "/index.html" : null;
-            return "fix this!";
-        }
-
         public void SetGameId()
         {
             //this.gameId = (this.runtimeInfo ? this.runtimeInfo.info.happyFunTimes.gameId : "") + " id=" + this.id;
