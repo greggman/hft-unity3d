@@ -163,6 +163,8 @@ namespace HappyFunTimes
             if (client_ != null)
             {
                 log_.Error("this game already has a client!");
+                client_.OnMessageEvent -= OnMessage;
+                client_.OnCloseEvent -= OnDisconnect;
                 client_.Close();
             }
 
@@ -279,6 +281,8 @@ namespace HappyFunTimes
             {
                 var client = client_;
                 client_ = null;
+                client.OnMessageEvent -= OnMessage;
+                client.OnCloseEvent -= OnDisconnect;
                 log_.Info("closing client:" + gameId_);
                 client.Close();
             }
