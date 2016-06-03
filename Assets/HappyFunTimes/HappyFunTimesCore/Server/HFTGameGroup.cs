@@ -32,22 +32,14 @@ namespace HappyFunTimes
 
         HFTGame GetAnyGame()
         {
-            IEnumerator<KeyValuePair<string, HFTGame>> it = games_.GetEnumerator();
-            if (it.MoveNext())
-            {
-                return it.Current.Value;
-            }
-            else
-            {
-                return null;
-            }
+            return games_.GetAnyValue();
         }
 
         public void RemoveGame(HFTGame game)
         {
             List<string> itemsToRemove = new List<string>();
 
-            foreach (var pair in games_)
+            foreach (var pair in games_.GetAll())
             {
                 if (pair.Value == game)
                 {
@@ -66,9 +58,9 @@ namespace HappyFunTimes
                 masterGame_ = GetAnyGame();
             }
 
-            foreach (KeyValuePair<string, HFTGame> entry in games_)
+            foreach (var otherGame in games_.Values)
             {
-                entry.Value.SendGameDisconnect(game);
+                otherGame.SendGameDisconnect(game);
             }
 
             log_.Info("remove game: num games = " + games_.Count);
@@ -169,9 +161,9 @@ namespace HappyFunTimes
         int GetNumPlayers()
         {
             int numPlayers = 0;
-            foreach (KeyValuePair<string, HFTGame> entry in games_)
+            foreach (var game in games_.Values)
             {
-                numPlayers += entry.Value.GetNumPlayers();
+                numPlayers += game.GetNumPlayers();
             }
             return numPlayers;
         }
@@ -183,17 +175,17 @@ namespace HappyFunTimes
 
         void SendQuit()
         {
-            foreach (KeyValuePair<string, HFTGame> entry in games_)
+            foreach (var game in games_.Values)
             {
-                entry.Value.SendQuit();
+                game.SendQuit();
             }
         }
 
         void DisconnectGames()
         {
-            foreach (KeyValuePair<string, HFTGame> entry in games_)
+            foreach (var game in games_.Values)
             {
-                entry.Value.Close();
+                game.Close();
             }
         }
 
@@ -213,9 +205,9 @@ namespace HappyFunTimes
 
         public void BroadcastMessageToGames(string senderId, string receiverId, object data)
         {
-            foreach (KeyValuePair<string, HFTGame> entry in games_)
+            foreach (var game in games_.Values)
             {
-                entry.Value.Send(null, new HFTRelayToGameMessage("upgame", senderId, data));
+                game.Send(null, new HFTRelayToGameMessage("upgame", senderId, data));
             }
         }
 
@@ -223,7 +215,7 @@ namespace HappyFunTimes
         string gameId_;
         HFTGame masterGame_;
         HFTGameManager relayServer_;
-        Dictionary<string, HFTGame> games_ = new Dictionary<string, HFTGame>();
+        HFTThreadSafeDictionary<string, HFTGame> games_ = new HFTThreadSafeDictionary<string, HFTGame>();
         int nextGameId_ = 0;
     }
 

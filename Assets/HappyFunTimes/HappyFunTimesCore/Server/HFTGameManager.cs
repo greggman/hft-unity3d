@@ -91,7 +91,7 @@ namespace HappyFunTimes
         int connectCount_ = 0;
         int gameCount_ = 0;
         HFTLog log_;
-        Dictionary<string, HFTGameGroup> gameGroups_ = new Dictionary<string, HFTGameGroup>();
+        HFTThreadSafeDictionary<string, HFTGameGroup> gameGroups_ = new HFTThreadSafeDictionary<string, HFTGameGroup>();
         static HFTGameManager s_instance;
     }
 

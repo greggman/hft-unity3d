@@ -191,9 +191,9 @@ namespace HappyFunTimes
             client.Send(new HFTRelayToGameMessage("gamestart", "", gs));
 
             // start each player
-            foreach (var pair in players_)
+            foreach (var player in players_.Values)
             {
-                client.Send(new HFTRelayToGameMessage("start", pair.Value.id, null));
+                client.Send(new HFTRelayToGameMessage("start", player.id, null));
             }
 
             // Not sure why I even have a sendQueue
@@ -201,7 +201,7 @@ namespace HappyFunTimes
             // joins but it seems to be useful for debugging
             // since contollers start and often immediately
             // send a name and color cmd.
-            foreach (var pair in sendQueue_)
+            foreach (var pair in sendQueue_.ToArray())
             {
                 client.Send(pair.Value);
             }
@@ -223,9 +223,9 @@ namespace HappyFunTimes
 
         public void Broadcast(string id, object message)  // ??????????????????????????????????????
         {
-            foreach (KeyValuePair<string, HFTPlayer>p in players_)
+            foreach (var p in players_.Values)
             {
-                p.Value.Send(message);
+                p.Send(message);
             }
         }
 
@@ -291,11 +291,9 @@ namespace HappyFunTimes
             gameGroup_.RemoveGame(this);
             if (options_.disconnectPlayersIfGameDisconnects)
             {
-                while (players_.Count > 0)
+                log_.Info("remove players from game");
+                foreach (var player in players_.Values)
                 {
-                    IEnumerator<KeyValuePair<string, HFTPlayer>> it = players_.GetEnumerator();
-                    it.MoveNext();
-                    HFTPlayer player = it.Current.Value;
                     RemovePlayer(player);
                     player.Disconnect();
                 }
@@ -345,11 +343,10 @@ namespace HappyFunTimes
         HFTGameGroup gameGroup_;
         HFTSocket client_;
         Dictionary<string, CmdEventHandler> messageHandlers_ = new Dictionary<string, CmdEventHandler>();
-        Dictionary<string, HFTPlayer> players_ = new Dictionary<string, HFTPlayer>();
+        HFTThreadSafeDictionary<string, HFTPlayer> players_ = new HFTThreadSafeDictionary<string, HFTPlayer>();
         HFTRuntimeOptions options_;
-        List<KeyValuePair<HFTPlayer, HFTRelayToGameMessage>> sendQueue_ = new List<KeyValuePair<HFTPlayer, HFTRelayToGameMessage>>();
+        HFTThreadSafeList<KeyValuePair<HFTPlayer, HFTRelayToGameMessage>> sendQueue_ = new HFTThreadSafeList<KeyValuePair<HFTPlayer, HFTRelayToGameMessage>>();
         HFTLog log_;
-
     }
 
 }  // namespace HappyFunTimes
