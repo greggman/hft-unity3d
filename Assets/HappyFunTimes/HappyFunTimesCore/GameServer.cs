@@ -146,12 +146,12 @@ namespace HappyFunTimes
         {
             if (m_socket != null)
             {
-                Cleanup();
-                m_socket.Close();
                 m_socket.OnOpen -= SocketOpened;
                 m_socket.OnMessage -= SocketMessage;
                 m_socket.OnClose -= SocketClosed;
                 m_socket.OnError -= SocketError;
+                Cleanup();
+                m_socket.Close();
                 m_socket = null;
             }
         }
