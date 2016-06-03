@@ -75,6 +75,16 @@ namespace HappyFunTimes {
             return true;
         }
 
+        string GetBaseUrl(HttpListenerRequest req)
+        {
+            System.Net.IPEndPoint localEndPoint = req.LocalEndPoint;
+            return (req.IsSecureConnection ? "https://" : "http://")
+                + (localEndPoint.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6
+                    ? ("[" + localEndPoint.Address.ToString() + "]")
+                    : localEndPoint.Address.ToString())
+                + ":" + localEndPoint.Port.ToString();
+        }
+
         void SendCaptivePortalHTML(HttpListenerRequest req, HttpListenerResponse res, string sessionId, string path)
         {
             //var fullPath = path.normalize(path.join(this.options.baseDir, opt_path));
@@ -87,7 +97,8 @@ namespace HappyFunTimes {
 
             string str = System.Text.Encoding.UTF8.GetString(content);
             Dictionary<string, string> subs = new Dictionary<string, string>();
-            subs["startUrl"] = m_url + m_firstPath + "?sessionId=" + sessionId;
+            subs["startUrl"] = GetBaseUrl(req) + m_firstPath + "?sessionId=" + sessionId;
+            subs["sessionId"] = sessionId;
             str = HFTUtil.ReplaceParamsFlat(str, subs);
             m_log.Info("SCPH: Sending " + path);
             m_webServerUtils.SendContent(res, path, str);
@@ -101,7 +112,6 @@ namespace HappyFunTimes {
         private HFTLog m_log = new HFTLog("HFTCaptivePortalHandler");
         private HFTWebServerUtils m_webServerUtils;
         private byte[] m_appleResponseContent;
-        private string m_url = "http://192.168.2.9:18679";   // FIX           // localaddress:port ?
         private string m_firstPath = "/enter-name.html";     // where to go first after captive portal
         private Dictionary<string, Session> m_sessions = new Dictionary<string, Session>();
     }
