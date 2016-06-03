@@ -189,6 +189,11 @@ namespace HappyFunTimes
             }
         }
 
+        public void Close()
+        {
+            DisconnectGames();
+        }
+
         public void SendMessageToGame(string senderId, string receiverId, object data)
         {
             // this is lame! should change to ids like player.

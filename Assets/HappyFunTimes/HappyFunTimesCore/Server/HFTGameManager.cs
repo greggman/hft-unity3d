@@ -47,7 +47,25 @@ namespace HappyFunTimes
         {
             if (!gameGroups_.Remove(gameId))
             {
-                log_.Error("no game group '" + gameId + "' to remove");
+                // This is a kind of hack I'm not sure how to deal with at the moment.
+                // The issue is if you call PlayerSpawner/PlayerConnector.Close it will
+                // first call GameServer.Close. That disconnects the game. Because the HFTWebServer
+                // and the GameServer are connected over websockets it will asynchronously disconnect
+                // the game. (GameServer closes socket, HFTGame notices disconnection, removes itself
+                // from HFTGameGroup, it's the last game so it removes itself from HFTGameManager.
+
+                // Also HFTManager.Close is called. This shuts down the HFTWebServer which calls
+                // HFTGameManager.Stop which deletes all the games groups. Sockets messges happen
+                // in different threads which means it's possible for this HFTManager.Close to
+                // get a list of games to close and in some other thread for that game to be
+                // removed from under it?
+
+                // Or maybe I don't understand the issue fully - nor the solution. In anycase
+                // I don't want ot print error messages if we're closing down
+                if (!closing_)
+                {
+                    log_.Error("no game group '" + gameId + "' to remove");
+                }
                 return;
             }
             else
@@ -88,6 +106,18 @@ namespace HappyFunTimes
             return gameCount_ > 0;
         }
 
+        public void Close()
+        {
+            closing_ = true;
+            log_.Info("Close");
+            foreach (var group in gameGroups_.Values.ToArray())
+            {
+                group.Close();
+            }
+            closing_ = false;
+        }
+
+        bool closing_ = false;
         int connectCount_ = 0;
         int gameCount_ = 0;
         HFTLog log_;

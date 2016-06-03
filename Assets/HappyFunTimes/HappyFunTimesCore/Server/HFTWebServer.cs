@@ -291,6 +291,10 @@ namespace HappyFunTimes
 
         public void Stop()
         {
+            // It's not clear to me where this belongs. Ideally I'd like to pass in the HFTGameManager
+            // but how to pass it to new connections I have no idea.
+            HFTGameManager.GetInstance().Close();
+
             while (m_servers.Count > 0)
             {
                 HttpServer server = m_servers[0];
