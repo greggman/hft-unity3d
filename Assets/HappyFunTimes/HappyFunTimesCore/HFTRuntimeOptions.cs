@@ -84,6 +84,26 @@ namespace HappyFunTimes
             } else {
                 startServer = false;
             }
+
+            #if UNITY_STANDALONE_OSX
+                // We only provide an external server for OSX at the moment
+                // That's because AFAIK on Windows we can get ports 80 and 53 without admin
+                // (might be prompted for network access)
+                // In Linux people can run with sudo (or submit a PR for a better way)
+                // On OSX we don't want to run as sudo because it makes root own unity's logs
+                if (dns || installationMode)
+                {
+                    startExternalServer = true;
+                }
+                if (startExternalServer)
+                {
+                    // is there any reason this wouldn't be true?
+                    // You're running as slave. Then you're not starting a server
+                    // You're running as master. You may or may not be starting a server
+                    sendFilesToServer = true;
+                }
+            #endif
+
         }
 
         public string url = "";
@@ -104,6 +124,11 @@ namespace HappyFunTimes
         public string rendezvousUrl;
         public string ipv4DnsAddress = "";
         public string ipv6DnsAddress = "";
+
+        #if UNITY_STANDALONE_OSX
+            public bool sendFilesToServer;
+            public bool startExternalServer;
+        #endif
 
         public class HFTArgs : HFTArgsBase
         {
