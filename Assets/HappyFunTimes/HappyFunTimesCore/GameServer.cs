@@ -32,6 +32,7 @@
 using UnityEngine;
 using DeJson;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using WebSocketSharp;
 
@@ -470,11 +471,9 @@ namespace HappyFunTimes
                 });
             }
 
-            while (m_players.Count > 0)
+            foreach(var id in m_players.Keys.ToArray())
             {
-                Dictionary<string, NetPlayer>.Enumerator i = m_players.GetEnumerator();
-                i.MoveNext();
-                RemovePlayer(i.Current.Key);
+                RemovePlayer(id);
             }
         }
 
