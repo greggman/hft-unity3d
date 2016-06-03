@@ -10,11 +10,11 @@ public class HFTInstructionsEditor : Editor {
         string help =
 @"You can set these from the command line with
 
---hft-instructions=""your instructions""
+--instructions=""your instructions""
 
 and
 
---hft-instuctions-bottom
+--bottom
 
 Leave 'show' unchecked except for testing.";
         EditorGUILayout.HelpBox(help, MessageType.Info);
