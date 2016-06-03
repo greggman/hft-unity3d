@@ -121,13 +121,14 @@ namespace HappyFunTimes
 
             player.SetGame(this);
             players_[player.id] = player;
+            log_.Info("num players:" + players_.Count);
             Send(null, new HFTRelayToGameMessage("start", player.id, data));
         }
 
         public void RemovePlayer(HFTPlayer player)
         {
-            log_.Info("remove player " + player.id);
             bool removed = players_.Remove(player.id);
+            log_.Info("remove player " + player.id + " players left: " + players_.Count);
             if (!removed)
             {
                 log_.Error("player " + player.id + " is not a member of game");
@@ -147,7 +148,8 @@ namespace HappyFunTimes
                 try
                 {
                     client_.Send(msg);
-                } catch (System.Exception ex)
+                }
+                catch (System.Exception ex)
                 {
                     log_.Warn("Attempt to send message to game failed: " + ex);
                 }
