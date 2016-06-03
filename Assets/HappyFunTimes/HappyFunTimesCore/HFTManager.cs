@@ -142,7 +142,7 @@ namespace HappyFunTimes
 
 string cmdString = @"-e '
 set myFile to quoted form of ""%(serverPath)s""
-do shell script ""chmod -R 770 "" & myFile
+do shell script ""chmod -R 700 "" & myFile
 do shell script myFile %(admin)s
 '";
             Dictionary<string, string> dict = new Dictionary<string, string>();
@@ -193,12 +193,12 @@ do shell script myFile %(admin)s
             }
 
             #if UNITY_STANDALONE_OSX
-            // TODO make 2 classes, one for running internal server, one for external?
-            if (m_options.dns || m_options.installationMode)
-            {
-                StartExternalServer(true);
-                return;
-            }
+                // TODO make 2 classes, one for running internal server, one for external?
+                if (m_options.startExternalServer)
+                {
+                    StartExternalServer(true);
+                    return;
+                }
             #endif
 
             List<string> addresses = new List<string>();
