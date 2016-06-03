@@ -56,21 +56,23 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
   void InitSounds()
   {
     s_sounds = new Sounds();
-    string baseFolder = Path.Combine(Path.Combine(Application.dataPath, "WebPlayerTemplates"), "HappyFunTimes");
-    string soundFolder = Path.Combine(baseFolder, "sounds");
-    if (Directory.Exists(soundFolder))
-    {
-      AddSoundFiles(baseFolder, Directory.GetFiles(soundFolder, "*.mp3"));
-      AddSoundFiles(baseFolder, Directory.GetFiles(soundFolder, "*.wav"));
-      AddJSFXSounds(Directory.GetFiles(soundFolder, "*.jsfx.txt"));
-    }
+    string soundFolder = "sounds";
+    HFTWebFileDB db = HFTWebFileDB.GetInstance();
+    AddSoundFiles(db.GetFiles(soundFolder, "*.mp3"));
+    AddSoundFiles(db.GetFiles(soundFolder, "*.wav"));
+    AddJSFXSounds(db.GetFiles(soundFolder, "*.jsfx.txt"));
   }
 
   void AddJSFXSounds(string[] filenames)
   {
     foreach(string filename in filenames)
     {
-      string content = System.IO.File.ReadAllText(filename);
+      byte[] bytes = null;
+      if (!HFTWebFileDB.GetInstance().GetFile(filename, out bytes))
+      {
+        Debug.LogError("no such file: " + filename);
+      }
+      string content = System.Text.Encoding.UTF8.GetString(bytes);
       string[] lines = content.Split(s_lineDelims, System.StringSplitOptions.None);
       int lineNo = 0;
       foreach (string lineStr in lines)
@@ -120,17 +122,16 @@ public class HFTGlobalSoundHelper : MonoBehaviour {
         {
           continue;
         }
-
         s_sounds[name] = new SoundJSFX(generator, parameters);
       }
     }
   }
 
-  void AddSoundFiles(string baseFolder, string[] filenames)
+  void AddSoundFiles(string[] filenames)
   {
     foreach(string filename in filenames)
     {
-      string filepath = filename.Substring(baseFolder.Length + 1).Replace("\\", "/");
+      string filepath = filename.Replace("\\", "/");
       s_sounds[Path.GetFileNameWithoutExtension(filename)] = new SoundFile(filepath);
     }
   }
