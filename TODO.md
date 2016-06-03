@@ -14,27 +14,19 @@
 *   Add Start/Stop for server
 *   refactor for standalone
     *   test on XP, Win8, Win10
-    *   make DNS server serve both A and AAAA records
     *   check all refs to Deserialize, try/catch
-    *   make web laucher launch a launcher or not quit so user doesn't have to enter stuff multiple times?
     *   test ipv6
-    *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
     *   check controllers work on windows
     *   check controller path with / and \
     *   Check if port busy
         *   inc port
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
-    *   add dnsAddress and --hft-dns-address ?
-    *   check DNS address?
 *   link all samples to online docs
 *   make hft.net keep trying
 *   ../
 *   make GameServer stop Server?
-*   Check lots of clients
-*   Add DNS server
-    *   Make it return 1 where it's currently returning 0
-*   Add captive portal support
+    *   Check lots of clients
 *   Make DNS server not on mobile?
 *   try to support Android captive portal
     *   monitor requests
@@ -42,6 +34,7 @@
 DONE
 ====
 
+*   Add captive portal support
 *   Put all samples in same package? (can't because one folder? Fix that shit!)
     *   Objects in scene
 *   make instructions work (do I need this?) Maybe this should move to game out of HFT
@@ -57,8 +50,18 @@ DONE
 *   test switching games
 *   Log to console (couldn't get this to work)
 *   Remove file uploader
+*   Add DNS server
+    *   Make it return 1 where it's currently returning 0
 *   refactor for standlone
     *   change color to public field
+    *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
+    *   add dnsAddress and --hft-dns-address ?
+    *   check DNS address?
+    *   make web laucher launch a launcher or not quit so user doesn't have to enter stuff multiple times?
+
+        going to hold off on this. It's only installation mode. Sucks but ....
+
+    *   make DNS server serve both A and AAAA records
     *   fix HFTReadme when building
     *   make separate program for webserver?
     *   check arguments so we can print errors to console? Except we can't print errors :(
