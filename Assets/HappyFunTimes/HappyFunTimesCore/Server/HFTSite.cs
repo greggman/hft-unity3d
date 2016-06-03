@@ -160,7 +160,7 @@ namespace HappyFunTimes
 
         public void Init(Options options)
         {
-            log_ = new HFTLog("hftsite");
+            log_ = new HFTLog("HFTSite");
             options_ = options;
             rendezvousUri_ = new System.Uri(options_.rendezvousUrl);
 

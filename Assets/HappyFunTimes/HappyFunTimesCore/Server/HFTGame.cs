@@ -84,7 +84,7 @@ namespace HappyFunTimes
 
             SetGameId();
 
-            log_ = new HFTLog("Game " + gameId_);
+            log_ = new HFTLog("HFTGame[" + gameId_ + "]");
             log_.Info("created game");
         }
 

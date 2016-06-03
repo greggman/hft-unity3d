@@ -17,7 +17,7 @@ namespace HappyFunTimes
          */
         public HFTGameGroup(string gameId, HFTGameManager relayServer)
         {
-            log_ = new HFTLog("group-" + gameId);
+            log_ = new HFTLog("HFTGameGroup[" + gameId + "]");
             gameId_ = gameId;
             //this.runtimeInfo = gameDB.getGameById(gameId);
             relayServer_ = relayServer;

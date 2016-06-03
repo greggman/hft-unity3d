@@ -16,7 +16,7 @@ namespace HappyFunTimes
     {
         public HFTWebServer(HFTRuntimeOptions options, string[] addresses)
         {
-            m_log = new HFTLog("WebServer");
+            m_log = new HFTLog("HFTWebServer");
             m_options = options;
             m_gamePath = "/";
             m_webServerUtils = new HFTWebServerUtils(m_gamePath);

@@ -70,7 +70,7 @@ namespace HappyFunTimes
             relayServer_ = server;
             id_ = id;
 
-            log_ = new HFTLog("player " + id);
+            log_ = new HFTLog("HFTPlayer[" + id + "]");
             log_.Info("start player");
 
             client.OnMessageEvent += HandleMessage;

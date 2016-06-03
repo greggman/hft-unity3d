@@ -14,7 +14,7 @@ namespace HappyFunTimes
         public HFTSocket()
         {
             base.IgnoreExtensions = true;
-            log_ = new HFTLog("hftsocket");
+            log_ = new HFTLog("HFTSocket");
         }
 
         protected override void OnOpen()
