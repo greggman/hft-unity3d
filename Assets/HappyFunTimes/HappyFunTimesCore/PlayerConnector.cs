@@ -76,12 +76,23 @@ public class PlayerConnector : MonoBehaviour
         m_playerManager.FlushCurrentPlayers();
     }
 
+    public void StartHappyFunTimes()
+    {
+        StartConnection();
+    }
+
+    public void StopHappyFunTimes()
+    {
+        Cleanup();
+    }
+
     void StartConnection()
     {
-        m_hftManager = new HFTManager();
-        m_hftManager.OnReady += StartGameServer;
-        m_hftManager.OnFail  += FailedToStart;
-        m_hftManager.Start(m_options, gameObject);
+        if (!m_started)
+        {
+            m_started = true;
+            m_hftManager.Start(m_options, gameObject);
+        }
     }
 
     void FailedToStart(object sender, System.EventArgs e)
@@ -92,21 +103,30 @@ public class PlayerConnector : MonoBehaviour
     void StartGameServer(object sender, System.EventArgs e)
     {
         m_server.Init();
-
-        m_playerManager = new HFTPlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
     }
 
     void Awake()
     {
+        m_connectToServerOnStart = enabled;
         m_options = new HFTRuntimeOptions(happyfuntimesOptions);
+
         m_server = new GameServer(m_options, gameObject);
         m_server.OnConnect += Connected;
         m_server.OnDisconnect += Disconnected;
+
+        m_hftManager = new HFTManager();
+        m_hftManager.OnReady += StartGameServer;
+        m_hftManager.OnFail  += FailedToStart;
+
+        m_playerManager = new HFTPlayerManager(m_server, gameObject, players.Length, timeoutForDisconnectedPlayersToReconnect, GetPlayer);
     }
 
     void Start()
     {
-        StartConnection();
+        if (m_connectToServerOnStart)
+        {
+            StartConnection();
+        }
     }
 
     void Update()
@@ -117,7 +137,8 @@ public class PlayerConnector : MonoBehaviour
         }
     }
 
-    GameObject GetPlayer(int ndx) {
+    GameObject GetPlayer(int ndx)
+    {
         return players[ndx];
     }
 
@@ -131,11 +152,19 @@ public class PlayerConnector : MonoBehaviour
 
     void Cleanup()
     {
-        if (m_server != null) {
-            m_server.Close();
-        }
-        if (m_hftManager != null) {
-            m_hftManager.Stop();
+        if (m_started)
+        {
+            m_started = false;
+
+            if (m_server != null)
+            {
+                m_server.Close();
+            }
+
+            if (m_hftManager != null)
+            {
+                m_hftManager.Stop();
+            }
         }
     }
 
@@ -149,6 +178,19 @@ public class PlayerConnector : MonoBehaviour
         Cleanup();
     }
 
+    public GameServer GameServer
+    {
+        get
+        {
+            return m_server;
+        }
+        private set
+        {
+        }
+    }
+
+    private bool m_started;
+    private bool m_connectToServerOnStart;
     private HFTPlayerManager m_playerManager;
     private GameServer m_server;
     private HFTManager m_hftManager;

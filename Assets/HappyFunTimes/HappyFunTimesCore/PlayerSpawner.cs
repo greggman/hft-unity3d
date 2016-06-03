@@ -87,12 +87,23 @@ namespace HappyFunTimes
             }
         }
 
+        public void StartHappyFunTimes()
+        {
+            StartConnection();
+        }
+
+        public void StopHappyFunTimes()
+        {
+            Cleanup();
+        }
+
         void StartConnection()
         {
-            m_hftManager = new HFTManager();
-            m_hftManager.OnReady += StartGameServer;
-            m_hftManager.OnFail += FailedToStart;
-            m_hftManager.Start(m_options, gameObject);
+            if (!m_started)
+            {
+                m_started = true;
+                m_hftManager.Start(m_options, gameObject);
+            }
         }
 
         void FailedToStart(object sender, System.EventArgs e)
@@ -103,20 +114,11 @@ namespace HappyFunTimes
         void StartGameServer(object sender, System.EventArgs e)
         {
             m_server.Init();
-
-            if (maxPlayers > 0)
-            {
-                int timeoutForDisconnectedPlayerToReconnect = 0;
-                m_playerManager = new HFTPlayerManager(m_server, gameObject, maxPlayers, timeoutForDisconnectedPlayerToReconnect, GetPrefab);
-            }
-            else
-            {
-                m_server.OnPlayerConnect += StartNewPlayer;
-            }
         }
 
         void StartPlayer(NetPlayer netPlayer, object data)
         {
+            m_log.Info("Spawn Player");
             GameObject gameObject = (GameObject)Instantiate(prefabToSpawnForPlayer);
 
             SpawnInfo spawnInfo = new SpawnInfo();
@@ -149,15 +151,34 @@ namespace HappyFunTimes
 
         void Awake()
         {
+            m_connectToServerOnStart = enabled;
             m_options = new HFTRuntimeOptions(happyfuntimesOptions);
+
             m_server = new GameServer(m_options, gameObject);
             m_server.OnConnect += Connected;
             m_server.OnDisconnect += Disconnected;
+
+            m_hftManager = new HFTManager();
+            m_hftManager.OnReady += StartGameServer;
+            m_hftManager.OnFail += FailedToStart;
+
+            if (maxPlayers > 0)
+            {
+                int timeoutForDisconnectedPlayerToReconnect = 0;
+                m_playerManager = new HFTPlayerManager(m_server, gameObject, maxPlayers, timeoutForDisconnectedPlayerToReconnect, GetPrefab);
+            }
+            else
+            {
+                m_server.OnPlayerConnect += StartNewPlayer;
+            }
         }
 
         void Start()
         {
-            StartConnection();
+            if (m_connectToServerOnStart)
+            {
+                StartConnection();
+            }
         }
 
         void Update()
@@ -178,13 +199,19 @@ namespace HappyFunTimes
 
         void Cleanup()
         {
-            if (m_server != null)
+            if (m_started)
             {
-                m_server.Close();
-            }
-            if (m_hftManager != null)
-            {
-                m_hftManager.Stop();
+                m_started = false;
+
+                if (m_server != null)
+                {
+                    m_server.Close();
+                }
+
+                if (m_hftManager != null)
+                {
+                    m_hftManager.Stop();
+                }
             }
         }
 
@@ -209,6 +236,8 @@ namespace HappyFunTimes
             }
         }
 
+        private bool m_started;
+        private bool m_connectToServerOnStart;
         private GameServer m_server;
         private HFTPlayerManager m_playerManager;
         private HFTManager m_hftManager;
