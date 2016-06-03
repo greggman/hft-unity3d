@@ -599,7 +599,7 @@ Debug.Log("FIX - only send if we're master / ???");
             {
                 if (m_options.showMessages)
                 {
-                    m_log.Tell("q[" + (m_queueCount++) + "] " + msg);
+                    m_log.Tell("s[" + (m_sendCount++) + "] " + msg);
                 }
                 m_socket.Send(msg);
             }
@@ -607,7 +607,7 @@ Debug.Log("FIX - only send if we're master / ???");
             {
                 if (m_options.showMessages)
                 {
-                    m_log.Tell("s[" + (m_sendCount++) + "] " + msg);
+                    m_log.Tell("q[" + (m_queueCount++) + "] " + msg);
                 }
                 m_sendQueue.Add(msg);
             }
