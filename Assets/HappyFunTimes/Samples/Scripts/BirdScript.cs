@@ -142,7 +142,7 @@ public class BirdScript : MonoBehaviour {
         Color playerColor = HFTColorUtils.HSVAToColor(hsva);
 
         // Tell the gamepad to change color
-        m_gamepad.Color = playerColor;
+        m_gamepad.color = playerColor;
 
         // Create a 1 pixel texture for the OnGUI code to draw the label
         Color[] pix = new Color[1];
