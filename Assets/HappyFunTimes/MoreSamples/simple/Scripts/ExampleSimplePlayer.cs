@@ -62,6 +62,13 @@ class ExampleSimplePlayer : MonoBehaviour {
     void Update() {
     }
 
+    void OnDestroy() {
+        if (m_playerNameManager != null) {
+          m_playerNameManager.Close();
+          m_playerNameManager = null;
+        }
+    }
+
     void OnGUI()
     {
         Vector2 size = m_guiStyle.CalcSize(m_guiName);
