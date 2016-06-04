@@ -76,7 +76,7 @@ namespace HappyFunTimes
             set
             {
                 s_debug = value;
-                string[] patterns = s_debug.Replace("\n", ",").Split(',').Where(s => !String.IsNullOrEmpty(s)).ToArray();
+                string[] patterns = s_debug.Replace("\n", ",").Replace(" ", ",").Split(',').Where(s => !String.IsNullOrEmpty(s)).ToArray();
                 for (int i = 0; i < patterns.Length; ++i)
                 {
                     patterns[i] = patterns[i].Replace("*", ".*?");
