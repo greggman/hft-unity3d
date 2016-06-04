@@ -1,5 +1,5 @@
-HappyFunTimes Unity Plugin and Example Scene
-============================================
+HappyFunTimes Unity Plugin and Example Scenes
+=============================================
 
 HappyFunTimes lets you use your phone as a controller
 to control a game. This lets you make unique controllers
@@ -10,6 +10,16 @@ hundreds of people.
 
 Docs and Videos are available from the menus at Window->HappyFunTimes->Docs
 or at http://docs.happyfuntimes.net/docs/unity
+
+## Samples
+
+There are samples in both `Assets/HappyFunTimes/Samples/Scenes` and `Assets/HappyFunTimes/MoreSamples`
+Be sure to check them all out.
+
+## Publishing
+
+Please see this page on certain things you should be aware of if you plan to publish a
+commercial game using this plugin.
 
 ## Plugin Structure
 
@@ -56,6 +66,34 @@ phone if not possible. It asks the user for a name. It manages the `gear` icon m
 
 ou are free to use that or delete it and write your own. If you write your own
 feel free to delete `WebPlayerTemplates/HappyFunTimes/sample-ui` and `HFTPlayerNameManager.cs`
+
+## Debugging
+
+If you are making custom controllers I hope I'd provided enough info to get started. For example
+if you send a message from the phone to the game and there is no handler assigned for that message
+you'll get an error in the console.
+
+That said, if you'd like to see every message passed between the phones and the game you can go to
+`Window->HappyFunTimes->Settings` and check `showMessages`. You'll see the raw JSON being passed
+for every message.
+
+There is also a `debug` setting. Putting `*` in there will show all kinds of info from various
+parts of happyfuntimes. To filter that you can also put specific class names. For example putting
+`HFTWebServer` will show only info from the webserer. Putting `HFTGame` will show only messages
+from the game. You may put more than one name (eg, `HFTGame HFTWebServer`). You may also put
+prefixes (eg. `HFTG*` which would match `HFTGame`, `HFTGameManager` etc...)
+
+## License
+
+HappyFunTimes is licensed under the MIT license.
+
+It also uses the `websocket-sharp` library (MIT)
+https://github.com/sta/websocket-sharp
+
+and the `DNS` library (MIT)
+https://github.com/kapetan/dns
+
+http://docs.happyfuntimes.net/docs/unity/running-your-own-happyfuntimes-net.html
 
 
 

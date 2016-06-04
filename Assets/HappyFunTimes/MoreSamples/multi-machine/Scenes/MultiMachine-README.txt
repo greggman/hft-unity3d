@@ -40,5 +40,26 @@ start /B nameofgame.exe --num-games=3 --hft-url=ws://localhost:18679 --hft-id=ga
 ```
 
 Make each game a window so you see all three games then connect a phone and you should be able to jump from one game to the next.
+It should even work if they are on different machines although you'd need to change `ws://localhost:18679` to `ws://ipaddressofmaster:18679`.
+(example: `--hft-url=ws://192.168.2.9:18679`)
+
+This particular game just runs a simple level and when you jump off the right side of the screen it transfers that player to the next game.
+In other words, if you are on `game1` and you go off the right side of the screen you'll be sent to `game2`. Conversely if you jump off the
+left side you'd be send to `game0`. `--num-games` determines when to wrap around so in the above example if you're on `game2` and go off the
+right you'll be sent to `game0`.
+
+Of course in your own game you could put up a dialog box or something and ask for an ID but
+most people running multiple machine games are probably doing so in a setting they want to
+automate and so using the command line seems like the best way.
+
+[There are some more detailed docs here](http://docs.happyfuntimes.net/docs/unity/multi-machine.html).
+
+## Tonde-Iko
+
+The point of this sample is to show running multiple games that pass players between each other.
+This allows you to make a game that spans multiple computers.
+
+To get an idea of what that means [see Tonde-Iko](http://greggman.github.io/hft-tonde-iko).
+Tonde-Iko is written in HTML5. This example shows how to achieve something simular using Unity.
 
 
