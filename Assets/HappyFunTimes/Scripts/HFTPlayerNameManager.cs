@@ -34,6 +34,10 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+// NOTE: The HFTPlayerNameManger is NOT part of "HappyFunTimes". It's part of
+// the sample-ui used in many of the samples. If you make your own controllers
+// based on the sample-ui you're free to use this class to help manage names.
+// Otherwise you're free to make your own messages and UI for dealing with names.
 public class HFTPlayerNameManager {
     public HFTPlayerNameManager(NetPlayer netPlayer)
     {
