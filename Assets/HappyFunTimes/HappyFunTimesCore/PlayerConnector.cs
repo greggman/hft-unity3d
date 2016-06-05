@@ -90,6 +90,7 @@ public class PlayerConnector : MonoBehaviour
     {
         if (!m_started)
         {
+            enabled = true;
             m_started = true;
             m_hftManager.Start(m_options, gameObject);
         }
@@ -155,6 +156,7 @@ public class PlayerConnector : MonoBehaviour
         if (m_started)
         {
             m_started = false;
+            enabled = false;
 
             if (m_server != null)
             {

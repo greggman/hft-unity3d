@@ -101,6 +101,7 @@ namespace HappyFunTimes
         {
             if (!m_started)
             {
+                enabled = true;
                 m_started = true;
                 m_hftManager.Start(m_options, gameObject);
             }
@@ -201,6 +202,7 @@ namespace HappyFunTimes
         {
             if (m_started)
             {
+                enabled = false;
                 m_started = false;
 
                 if (m_server != null)
