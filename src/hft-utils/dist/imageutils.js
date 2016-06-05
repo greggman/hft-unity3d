@@ -179,7 +179,7 @@ define([
     if (options.font        ) { ctx.font         = options.font;        }
     if (options.fillStyle   ) { ctx.fillStyle    = options.fillStyle;   }
     if (options.textAlign   ) { ctx.textAlign    = options.textAlign;   }
-    if (options.testBaseline) { ctx.textBaseline = options.textBaselne; }
+    if (options.textBaseline) { ctx.textBaseline = options.textBaselne; }
   };
 
   /**

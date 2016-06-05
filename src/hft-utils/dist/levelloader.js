@@ -35,13 +35,15 @@ define([
     'hft/misc/strings',
     '../../tdl/tdl/textures',
     './imageloader',
-    './tiledloader'
+    './tiledloader',
+    './uri',
   ], function(
     CSSParse,
     Strings,
     Textures,
     ImageLoader,
-    TiledLoader) {
+    TiledLoader,
+    Uri) {
 
   // note sure where to put these.
   // They must end in "-real.png" for now.
@@ -242,8 +244,9 @@ define([
 
       var images = {};
       var imageMappings = options.imageMappings || {};
+      var baseUrl = Uri.dirname(url);
       map.tilesets.forEach(function(ts) {
-        var imgUrl = "assets/" + ts.image;
+        var imgUrl = Uri.join(baseUrl, ts.image);
         imgUrl = imageMappings[imgUrl] || imgUrl;
         images[ts.image] = { url: imgUrl };
       });

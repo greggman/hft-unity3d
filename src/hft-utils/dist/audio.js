@@ -1,25 +1,138 @@
+/*
+ * Copyright 2014, Gregg Tavares.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer
+ * in the documentation and/or other materials provided with the
+ * distribution.
+ *     * Neither the name of Gregg Tavares. nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 "use strict";
 
 define([
     '../3rdparty/jsfx/jsfxlib',
+    './eventemitter'
   ], function(
-     jsfxlib) {
+     jsfxlib,
+     EventEmitter) {
 
   var webAudioAPI = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
 
-  // To play a sound, simply call audio.playSound(id), where id is
-  // one of the keys of the g_sound_files array, e.g. "damage".
+  /**
+   * @typedef {Object} AudioManager~Options
+   * @property {callback} startedOnTouchCallback: **DEPREICATED**
+   *       Use `mgr.on(`started`)
+   *
+   * @property {callback} callback: **DEPRECATED** use
+   *       mgr.on('loaded').
+   */
 
-  // options:
-  //   startedOnTouchCallback: on iOS no sounds can be played unless at least one is first initiated during
-  //       a use gesture. If a function is attached here it will be called when that user gesture has happened.
-  //       This is useful for situtations like jamjam where sounds 'should' start right from the beginning
-  //       even if the player as not touched the screen. In that case we put up a message, "touch the screen"
-  //       and remove that message when we get this callback
-  //
-  //   callback: called when all the sounds have loaded.
+  /**
+   * This can either be a path to a file OR jsfx data for sounds
+   * generated at runtime. Example:
+   *
+   *     var sounds = {
+   *       coin: { jsfx: ["square",0.0000,0.4000,0.0000,0.0240,0.4080,0.3480,20.0000,909.0000,2400.0000,0.0000,0.0000,0.0000,0.0100,0.0003,0.0000,0.2540,0.1090,0.0000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000], },
+   *       jump: { jsfx: ["square",0.0000,0.4000,0.0000,0.0960,0.0000,0.1720,20.0000,245.0000,2400.0000,0.3500,0.0000,0.0000,0.0100,0.0003,0.0000,0.0000,0.0000,0.5000,0.0000,0.0000,0.0000,0.0000,1.0000,0.0000,0.0000,0.0000,0.0000], },
+   *       fire: { filename: "assets/fire.ogg", samples: 8,  },
+   *       boom: { filename: "assets/explosion.ogg", samples: 8,  },
+   *     };
+   *
+   *
+   * Note Firefox doesn't support MP3s as far as I know so you'll need
+   * to supply .ogg files for it. Conversely, Safari doesn't support .ogg.
+   * The library handles loading .mp3 or .ogg files regardless of what you specify
+   * when you init the library. In other words if you put `filename: "foo.mp3"`
+   * the library will try to load `foo.mp3` or `foo.ogg` depending on if the
+   * browser supports one or the other.
+   *
+   * @typedef {Object} AudioManager~Sound
+   * @property {string?} filename path to the file to load
+   * @property {number?} samples How many of this sound can play
+   *           simultainously. Note: this is NOT needed when using
+   *           the Web Audio API. It is only needed for legacy
+   *           browsers like IE11 and below.
+   * @property {Array?} jsfx Data from jsfx. See http://egonelbre.com/project/jsfx/
+   */
+
+  /**
+   * To use this include it with
+   *
+   *     <script src="audio.js"></script>
+   *
+   * Then give it a list of sounds like this
+   *
+   *     var audioMgr = new AudioManager({
+   *       fire:      { filename: "assets/fire.ogg",      samples: 8, },
+   *       explosion: { filename: "assets/explosion.ogg", samples: 6, },
+   *       hitshield: { filename: "assets/hitshield.ogg", samples: 6, },
+   *       launch:    { filename: "assets/launch.ogg",    samples: 2, },
+   *       gameover:  { filename: "assets/gameover.ogg",  samples: 1, },
+   *       play:      { filename: "assets/play.ogg",      samples: 1, },
+   *     });
+   *
+   * After that you can play sounds with
+   *
+   *     audioMgr.playSound('explosion');
+   *     audioMgr.playSound('fire');
+   *
+   * The signature for `playSound` is
+   * `playSound(name, when, loop)` where when is the time to play
+   * the sound and loop is whether or not to play the sound
+   * continuously in a loop.
+   *
+   * Playsound returns an object you can use to control the sound
+   * though this part of the API is still in flux.
+   *
+   * `samples` is how may of that sound you want to be able to play at
+   * the same time. THIS IS NOT NEEDED for any browser that supports the
+   * Web Audio API. In other words it's only needed for IE.
+   *
+   * Also note Firefox doesn't support MP3s as far as I know so you'll need
+   * to supply .ogg files for it. Conversely, Safari doesn't support .ogg.
+   * The library handles loading .mp3 or .ogg files regardless of what you specify
+   * when you init the library. In other words if you put `filename: "foo.mp3"`
+   * the library will try to load `foo.mp3` or `foo.ogg` depending on if the
+   * browser supports one or the other.
+   *
+   * @constructor
+   * @param {Object(string:AudioManager~Sound}} sounds The sounds
+   *        to load
+   * @param {AudioManager~Options} options Options
+   * @fires AudioManager#loaded when all sounds have loaded
+   * @fires AudioManager#started when the first sound has played.
+   *       On iOS no sounds can be played unless at least one is
+   *       first initiated during a use gesture event. This event
+   *       is useful for situtations where sounds 'should' start
+   *       right from the beginning even if the player as not
+   *       touched the screen. For exampme we might put up a
+   *       message, "touch the screen" and remove that message
+   *       when we get this event
+   */
   var AudioManager = function(sounds, options) {
     options = options || {};
+    var g_eventEmitter = new EventEmitter();
     var g_context;
     var g_audioMgr;
     var g_soundBank = {};
@@ -43,6 +156,22 @@ define([
       };
     }());
 
+    this.on = g_eventEmitter.on.bind(g_eventEmitter);
+    this.addListener = this.on;
+    this.addEventListener = this.on;
+    this.removeListener = g_eventEmitter.removeListener.bind(g_eventEmitter);
+    this.removeEventListener = this.removeListener;
+
+    if (options.callback) {
+      console.warn("AudioManager: options.callback is deprecated. Use mgr.on('loaded', ...)");
+      this.on('loaded', options.callback);
+    }
+
+    if (options.startedOnTouchCallback) {
+      console.warn("AudioManager: options.startedOnTouchCallback is deprecated. Use mgr.on('started', ...)");
+      this.on('started', options.callback);
+    }
+
     var WebAudioBuffer = function() {
     };
 
@@ -56,9 +185,9 @@ define([
       src.loop = opt_loop || false;
       src.connect(g_context.destination);
       if (src.start) {
-        src.start(opt_when);
+        src.start(opt_when || 0);
       } else {
-        src.noteOn(opt_when);
+        src.noteOn(opt_when || 0);
       }
       return src;
     };
@@ -201,7 +330,7 @@ define([
         var eventNames = ['touchstart', 'mousedown'];
         var playSoundToStartAudio = function() {
           ++count;
-          if (count == 1) {
+          if (count < 3) {
             // just playing any sound does not seem to work.
             var source = g_context.createOscillator();
             var gain = g_context.createGain();
@@ -217,12 +346,12 @@ define([
             setTimeout(function() {
               source.disconnect();
             }, 100);
+          }
+          if (count == 3) {
             for (var ii = 0; ii < eventNames.length; ++ii) {
               elem.removeEventListener(eventNames[ii], playSoundToStartAudio, false);
             }
-            if (options.startedOnTouchCallback) {
-              options.startedOnTouchCallback();
-            }
+            g_eventEmitter.emit('started');
           }
         }
 
@@ -250,31 +379,6 @@ define([
       return s;
     }.bind(this);
 
-    this.loadSounds = function(sounds, opt_callback) {
-      var soundsPending = 1;
-      var soundsLoaded = function() {
-        --soundsPending;
-        if (soundsPending == 0 && opt_callback) {
-          opt_callback();
-        }
-      };
-
-      Object.keys(sounds).forEach(function(sound) {
-        var data = sounds[sound];
-        ++soundsPending;
-        if (data.jsfx) {
-          this.makeJSFXSound(sound, data.jsfx, data.samples, soundsLoaded);
-        } else {
-          this.loadSound(sound, data.filename, data.samples, soundsLoaded);
-        }
-      }.bind(this));
-
-      // so that we generate a callback even if there are no sounds.
-      // That way users don't have to restructure their code if they have no sounds or if they
-      // disable sounds by passing none in.
-      setTimeout(soundsLoaded, 0);
-    };
-
     this.init = function(sounds) {
       var a = new Audio()
       g_canPlayOgg = a.canPlayType("audio/ogg");
@@ -299,9 +403,30 @@ define([
         g_createFromJSFXFn = AudioTagJSFX;
       }
 
+      var soundsPending = 1;
+      var soundsLoaded = function() {
+        --soundsPending;
+        if (soundsPending == 0) {
+          g_eventEmitter.emit('loaded');
+        }
+      };
+
       if (sounds) {
-        this.loadSounds(sounds);
+        Object.keys(sounds).forEach(function(sound) {
+          var data = sounds[sound];
+          ++soundsPending;
+          if (data.jsfx) {
+            this.makeJSFXSound(sound, data.jsfx, data.samples, soundsLoaded);
+          } else {
+            this.loadSound(sound, data.filename, data.samples, soundsLoaded);
+          }
+        }.bind(this));
       }
+
+      // so that we generate a callback even if there are no sounds.
+      // That way users don't have to restructure their code if they have no sounds or if they
+      // disable sounds by passing none in.
+      setTimeout(soundsLoaded, 0);
 
       if (webAudioAPI) {
         setupGesture();
