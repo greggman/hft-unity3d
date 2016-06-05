@@ -182,7 +182,7 @@ public class ExampleSetCameraAcrossMachines : MonoBehaviour
     void HandleFovChange(FovMsg data, string otherGameId)
     {
         // If we're currently dragging the slider
-        // we don't want to muck with it's value
+        // we don't want to muck with its value
         if (otherGameId != m_gameServer.Id)
         {
             m_options.fieldOfView = data.fov;
@@ -201,6 +201,7 @@ public class ExampleSetCameraAcrossMachines : MonoBehaviour
         GUILayout.EndVertical();
         GUILayout.EndArea();
 
+        // Only send if it changed
         if (oldFieldOfView != m_options.fieldOfView)
         {
             // broadcast the new fov to all games
