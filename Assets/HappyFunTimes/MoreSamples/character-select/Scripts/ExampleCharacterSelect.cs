@@ -54,6 +54,7 @@ class ExampleCharacterSelect : MonoBehaviour {
 
         // Create the character
         GameObject newGameObject = (GameObject)Instantiate(characterPrefabs[ndx]);
+
         // Send the netplayer to the character. We use a message
         // because then every character can have a differnet script if we want.
         newGameObject.SendMessage("InitializeFromCharacterSelect", new StartInfo(m_netPlayer, m_playerNameManager));
