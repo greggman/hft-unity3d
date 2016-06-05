@@ -54,6 +54,11 @@ namespace HappyFunTimes
             m_getRouter.Add(HandleMissingRoute);
             m_getRouter.Add(HandleNotFound);
 
+            m_postCmdHandlers["happyFunTimesPingForGame"] = HandleCmdPingForGame;
+            m_postCmdHandlers["happyFunTimesPing"]        = HandleCmdPing;
+            m_postCmdHandlers["happyFunTimesRedir"]       = HandleCmdRedir;
+            m_postCmdHandlers["time"]                     = HandleCmdTime;
+
             m_addresses = addresses;
         }
 
@@ -203,40 +208,20 @@ namespace HappyFunTimes
                 {
                     res.ContentType = "application/json";
                     res.StatusCode = (int)HttpStatusCode.BadRequest;
-                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"bad command data: " + cmd.cmd + "\"}"));
+                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"bad command data:\"}"));
                 }
-                else if (cmd.cmd == "happyFunTimesPingForGame")
-                {
-                    m_webServerUtils.SendJsonBytes(res, m_ping);
-                    return;
-                }
-                else if (cmd.cmd == "happyFunTimesPing")
-                {
-                    // Yes reaching up this far is shit :(
-                    if (!HFTGameManager.GetInstance().HaveGame())
-                    {
-                        res.StatusCode = (int)HttpStatusCode.NotFound;
-                        return;
-                    }
 
-                    m_webServerUtils.SendJsonBytes(res, m_ping);
+                m_log.Info(cmd.cmd);
+                PostCmdHandler handler = null;
+                if (m_postCmdHandlers.TryGetValue(cmd.cmd, out handler))
+                {
+                    handler(req, res);
                     return;
                 }
-                else if (cmd.cmd == "happyFunTimesRedir")
-                {
-                    string controllerPath = m_gamePath + m_options.controllerFilename;
-                    string redirStr = Serializer.Serialize(new Redir(controllerPath));
-                    m_redir = System.Text.Encoding.UTF8.GetBytes(redirStr);
-                    m_webServerUtils.SendJsonBytes(res, m_redir);
-                    return;
-                }
-                else
-                {
-                    res.ContentType = "application/json";
-                    res.StatusCode = (int)HttpStatusCode.BadRequest;
-                    res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"unknown cmd: " + cmd.cmd + "\"}"));
-                }
-                // TODO: use router
+
+                res.ContentType = "application/json";
+                res.StatusCode = (int)HttpStatusCode.BadRequest;
+                res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"unknown cmd: " + cmd + "\"}"));
             };
 
             // Not to remove the inactive WebSocket sessions periodically.
@@ -354,6 +339,38 @@ namespace HappyFunTimes
             return true;
         }
 
+        void HandleCmdPingForGame(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            m_webServerUtils.SendJsonBytes(res, m_ping);
+        }
+
+        void HandleCmdPing(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            // Yes reaching up this far is shit :(
+            if (!HFTGameManager.GetInstance().HaveGame())
+            {
+                res.StatusCode = (int)HttpStatusCode.NotFound;
+            }
+
+            m_webServerUtils.SendJsonBytes(res, m_ping);
+        }
+
+        void HandleCmdRedir(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            string controllerPath = m_gamePath + m_options.controllerFilename;
+            string redirStr = Serializer.Serialize(new Redir(controllerPath));
+            byte[] redir = System.Text.Encoding.UTF8.GetBytes(redirStr);
+            m_webServerUtils.SendJsonBytes(res, redir);
+        }
+
+        void HandleCmdTime(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            double seconds = HFTUtil.GetJSTimeInSeconds();
+            string timeStr = Serializer.Serialize(new HFTTimePing(seconds));
+            byte[] time = System.Text.Encoding.UTF8.GetBytes(timeStr);
+            m_webServerUtils.SendJsonBytes(res, time);
+        }
+
         class SystemSettings
         {
             public bool checkForApp = false; // FIX?
@@ -371,19 +388,21 @@ namespace HappyFunTimes
             public string pathname;
         }
 
+        delegate void PostCmdHandler(HttpListenerRequest req, HttpListenerResponse res);
+
         Deserializer deserializer_ = new Deserializer();
         HFTRuntimeOptions m_options;
         string[] m_addresses;  // Addresses to listen in ip:port format?
         List<HttpServer> m_servers = new List<HttpServer>();
         HFTWebServerUtils m_webServerUtils;
         HFTRouter m_getRouter = new HFTRouter();
+        Dictionary<string, PostCmdHandler> m_postCmdHandlers = new Dictionary<string, PostCmdHandler>();
         HFTCaptivePortalHandler m_captivePortalHandler;
         HFTLog m_log;
         string m_gamePath;
         byte[] m_ping;
         string m_liveSettingsStr;
         byte[] m_liveSettings;
-        byte[] m_redir;
     }
 
 }  // namespace HappyFunTimes
