@@ -1,5 +1,4 @@
-StartStopTest
-=============
+# StartStopTest
 
 This example shows a script that starts and stops HappyFunTimes on demand.
 
@@ -21,4 +20,36 @@ that mode you'd stop HappyFunTimes
 
 Note: Because HappyFunTimes runs over the network many parts of it are asynchronous.
 There may be issues. Let's work through them together at http://github.com/greggman/hft-unity3d/issues
+
+One thing to notice is the `PlayerSpawner` component is disabled.
+This prevents HappyFunTimes from starting immediately. It is started
+and stopped in `HFTStartStopTest` with the following code
+
+```
+PlayerSpawner m_spawner;
+bool started = false;
+
+void Start ()
+{
+    m_spawner = GetComponent<PlayerSpawner>();
+}
+
+void OnGUI()
+{
+    if (GUI.Button(new Rect(10, 10, 150, 100), started ? "Stop HFT" : "Start HFT"))
+    {
+        if (started)
+        {
+            m_spawner.StopHappyFunTimes();
+        }
+        else
+        {
+            m_spawner.StartHappyFunTimes();
+        }
+        started = !started;
+    }
+}
+```
+
+
 
