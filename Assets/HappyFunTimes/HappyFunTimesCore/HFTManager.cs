@@ -259,7 +259,7 @@ do shell script myFile %(admin)s
         {
             CleanupCheck();
 
-            #if UNITY_OSX
+            #if UNITY_STANDALONE_OSX
             if (m_webServerProcess != null)
             {
                 m_webServerProcess.Kill();
@@ -293,7 +293,7 @@ do shell script myFile %(admin)s
         HFTWebServer m_webServer;
         HFTDnsRunner m_dnsRunner;
 
-        #if UNITY_OSX
+        #if UNITY_STANDALONE_OSX
         System.Diagnostics.Process m_webServerProcess;
         #endif
     }

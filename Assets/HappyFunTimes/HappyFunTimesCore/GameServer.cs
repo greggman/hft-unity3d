@@ -371,7 +371,7 @@ namespace HappyFunTimes
                 // Inform the relayserver we're a server
                 SendSysCmd("server", "-1", m_options);
 
-                #if UNITY_OSX
+                #if UNITY_STANDALONE_OSX
                 if (m_options.sendFilesToServer)
                 {
                     // Send the files
