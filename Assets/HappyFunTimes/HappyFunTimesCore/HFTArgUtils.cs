@@ -191,6 +191,14 @@ namespace HappyFunTimes {
                         value = boolValue;
                     }
                 }
+                else if (fieldType == typeof(float))
+                {
+                    float floatValue = 0;
+                    if (p.TryGet<float>(dashName, ref floatValue))
+                    {
+                        value = floatValue;
+                    }
+                }
                 else
                 {
                     throw new System.InvalidOperationException("no support for type: " + fieldType.Name);
