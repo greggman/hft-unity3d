@@ -34,4 +34,5 @@ runs on 8 machines using a synced clock. The fish all based their positions on
 the clock so as long as the clocks are in sync each machine can have its
 camera set to a particular view and it looks like more is going on than actually is.
 
+See [http://docs.happyfuntimes.net/unity/docs/talking-between-games.html](http://docs.happyfuntimes.net/unity/docs/talking-between-games.html) for more info.
 
