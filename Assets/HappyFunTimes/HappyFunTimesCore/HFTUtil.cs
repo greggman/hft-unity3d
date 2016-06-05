@@ -135,6 +135,38 @@ namespace HappyFunTimes
             return WriteBytes(filename, System.Text.Encoding.UTF8.GetBytes(text));
         }
 
+        ///<summary>
+        /// Returns the current JS time in Ticks. JS time starts at
+        /// Januray 1st 1970 where as C# / .NET time Starts at January
+        /// 1st 1900
+        ///</summary>
+        public static long GetJSTimeInTicks()
+        {
+            return System.DateTime.UtcNow.Ticks - s_javaScriptEpoch;
+        }
+
+        ///<summary>
+        /// Returns the current JS time in milliseconds. JS time starts
+        /// at Januray 1st 1970 where as C# / .NET time Starts at
+        /// January 1st 1900
+        ///</summary>
+        public static long GetJSTimeInMs()
+        {
+            return GetJSTimeInTicks() / System.TimeSpan.TicksPerMillisecond;
+        }
+
+        ///<summary>
+        /// Returns the current JS time in seconds. JS time starts at
+        /// Januray 1st 1970 where as C# / .NET time Starts at January
+        /// 1st 1900
+        ///</summary>
+        public static double GetJSTimeInSeconds()
+        {
+            return (double)GetJSTimeInMs() / 1000.0;
+        }
+
+        static long s_javaScriptEpoch = (new System.DateTime(1970, 1, 1)).Ticks;
+
     }
 
 }  // namespace HappyFunTimes
