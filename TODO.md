@@ -2,7 +2,6 @@
 ====
 
 *   fix audio in safari or at least wrap in try/catch
-*   fix sync
 *   make starup emit status messages
     *   make object that displays status
         *   checking for server
@@ -13,8 +12,6 @@
         *   disconnected
 *   test android
 *   test ios
-*   Add Start/Stop for server
-*   Add SyncedClock example
 *   refactor for standalone
     *   test on XP, Win8, Win10
     *   check all refs to Deserialize, try/catch
@@ -25,11 +22,8 @@
         *   inc port
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
-*   link all samples to online docs
-*   make hft.net keep trying
 *   ../
-*   make GameServer stop Server?
-    *   Check lots of clients
+*   Check lots of clients
 *   Make DNS server not on mobile?
 *   try to support Android captive portal
     *   monitor requests
@@ -37,6 +31,12 @@
 DONE
 ====
 
+*   make hft.net keep trying
+*   make GameServer stop Server?
+*   link all samples to online docs
+*   Add Start/Stop for server
+*   Add SyncedClock example
+*   fix sync
 *   Add captive portal support
 *   Put all samples in same package? (can't because one folder? Fix that shit!)
     *   Objects in scene
