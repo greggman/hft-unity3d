@@ -1,6 +1,8 @@
 ﻿TODO
 ====
 
+*   fix audio in safari or at least wrap in try/catch
+*   fix sync
 *   make starup emit status messages
     *   make object that displays status
         *   checking for server
@@ -12,6 +14,7 @@
 *   test android
 *   test ios
 *   Add Start/Stop for server
+*   Add SyncedClock example
 *   refactor for standalone
     *   test on XP, Win8, Win10
     *   check all refs to Deserialize, try/catch
