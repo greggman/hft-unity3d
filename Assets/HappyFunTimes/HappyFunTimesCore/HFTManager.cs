@@ -36,6 +36,8 @@ using System.Collections.Generic;
 
 namespace HappyFunTimes
 {
+    // Manages the server related parts of HappyFunTimes
+    // Starting the server and or checking that it's running
     public class HFTManager {
 
         public event EventHandler<EventArgs> OnReady;

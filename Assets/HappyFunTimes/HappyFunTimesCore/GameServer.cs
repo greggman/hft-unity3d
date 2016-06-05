@@ -38,6 +38,7 @@ using WebSocketSharp;
 
 namespace HappyFunTimes
 {
+    // This manages a happyfuntimes "game" and it's players
     public class GameServer
     {
         public delegate void UntypedCmdEventHandler(Dictionary<string, object> data, string id);
