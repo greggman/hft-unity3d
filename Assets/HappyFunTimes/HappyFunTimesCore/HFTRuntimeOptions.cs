@@ -120,6 +120,7 @@ namespace HappyFunTimes
         public bool startServer;
         public bool dns;
         public bool captivePortal;
+        public bool syncedClock = true;
         public string serverPort = "";
         public string rendezvousUrl;
         public string ipv4DnsAddress = "";
