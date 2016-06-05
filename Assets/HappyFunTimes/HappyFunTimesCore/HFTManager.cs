@@ -236,10 +236,14 @@ do shell script myFile %(admin)s
         public void StopServer()
         {
             CleanupCheck();
+
+            #if UNITY_OSX
             if (m_webServerProcess != null)
             {
                 m_webServerProcess.Kill();
             }
+            #endif
+
             if (m_hftSite != null)
             {
                 m_hftSite.Stop();
@@ -265,6 +269,9 @@ do shell script myFile %(admin)s
         HFTCheck m_check;
         HFTWebServer m_webServer;
         HFTDnsRunner m_dnsRunner;
+
+        #if UNITY_OSX
         System.Diagnostics.Process m_webServerProcess;
+        #endif
     }
 }  // namaspace HappyFunTimes
