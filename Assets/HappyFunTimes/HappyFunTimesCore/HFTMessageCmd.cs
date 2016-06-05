@@ -198,6 +198,14 @@ namespace HappyFunTimes
         public string data;
     }
 
-
+    public class HFTTimePing
+    {
+        public HFTTimePing() {}
+        public HFTTimePing(double currentTimeInSeconds)
+        {
+            this.time = currentTimeInSeconds;
+        }
+        public double time;
+    }
 
 }  // namespace HappyFunTimes
