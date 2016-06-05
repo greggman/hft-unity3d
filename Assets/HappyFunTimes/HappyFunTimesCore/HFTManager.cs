@@ -75,7 +75,7 @@ namespace HappyFunTimes
 
         void StartSyncedClock()
         {
-            if (!m_syncedClock)
+            if (m_options.syncedClock && !m_syncedClock)
             {
                 m_syncedClock = m_gameObject.AddComponent<HFTSyncedClock>();
                 m_syncedClock.StartClock(m_options.url);
