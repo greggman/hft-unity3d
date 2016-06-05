@@ -230,6 +230,9 @@
     <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTIpUtils.cs">
       <Link>HappyFunTimesCore\HFTIpUtils.cs</Link>
     </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\HFTThreadSafe.cs">
+      <Link>HappyFunTimesCore\HFTThreadSafe.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
