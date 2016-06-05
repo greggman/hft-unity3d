@@ -73,6 +73,25 @@ namespace HappyFunTimes
             }
         }
 
+        void StartSyncedClock()
+        {
+            if (!m_syncedClock)
+            {
+                m_syncedClock = m_gameObject.AddComponent<HFTSyncedClock>();
+                m_syncedClock.StartClock(m_options.url);
+            }
+        }
+
+        void StopSyncedClock()
+        {
+            if (m_syncedClock)
+            {
+                m_syncedClock.StopClock();
+                Component.Destroy(m_syncedClock);
+                m_syncedClock = null;
+            }
+        }
+
         public void Stop()
         {
             StopServer();
@@ -81,6 +100,7 @@ namespace HappyFunTimes
         void Ready()
         {
             CleanupCheck();
+            StartSyncedClock();
 
             EventHandler<EventArgs> handler = OnReady;
             if (handler != null) {
@@ -267,6 +287,7 @@ do shell script myFile %(admin)s
         GameObject m_gameObject;
         HFTSite m_hftSite;
         HFTCheck m_check;
+        HFTSyncedClock m_syncedClock;
         HFTWebServer m_webServer;
         HFTDnsRunner m_dnsRunner;
 
