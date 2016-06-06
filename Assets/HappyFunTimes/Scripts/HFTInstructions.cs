@@ -52,8 +52,40 @@ namespace HappyFunTimes {
         private float m_scrollOffset = 0;
         private float m_minScrollOffset = 0;
         private bool m_msgFitsOnScreen = false;
+        
+        string GetCurrentSSID() 
+        {
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo psi = p.StartInfo;
+            psi.UseShellExecute = false;
+            psi.FileName = "netsh";
+            psi.Arguments = "wlan show interfaces";
+            psi.RedirectStandardError = true;
+            psi.RedirectStandardOutput = true;
+            psi.CreateNoWindow = true;            
+            p.Start();
+            string result = p.StandardOutput.ReadToEnd();
+            result += p.StandardError.ReadToEnd();
+            Debug.Log("result: " + result);
+            if (p.ExitCode != 0)
+            {
+        Debug.Log("ExitCode: " + p.ExitCode);    
+                return "";
+            }
+
+
+            var re = new System.Text.RegularExpressions.Regex("^ *SSID *: (.*?)$", System.Text.RegularExpressions.RegexOptions.Multiline);
+            var m = re.Matches(result.Replace("\r",""));
+            if (m.Count == 0) 
+            {
+                return "";
+            }
+            return m[0].Groups[1].Value;
+        }
 
         public void Awake() {
+Debug.Log(GetCurrentSSID());
+        
             HFTArgParser p = new HFTArgParser();
 
             bool found = false;
