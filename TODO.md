@@ -20,6 +20,7 @@
     *   check controller path with / and \
     *   Check if port busy
         *   inc port
+    *   check passing port
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
 *   ../
