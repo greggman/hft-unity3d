@@ -155,8 +155,9 @@ namespace HappyFunTimes {
             List<Link> links = new List<Link>();
             List<string> tripleTicks = new List<string>();
 
+            string s = markdownish.Replace("\r", "");
             // Pull out triple tick areas
-            string s = m_tripleTickRE.Replace(markdownish, (Match m) => {
+            s = m_tripleTickRE.Replace(s, (Match m) => {
                 tripleTicks.Add(m.Groups[1].Value);
                 return "%%TRIPLETICK%%";
             });
