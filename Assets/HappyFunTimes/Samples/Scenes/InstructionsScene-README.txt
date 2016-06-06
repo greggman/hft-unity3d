@@ -42,6 +42,6 @@ nameofgame.exe
 The point is you can set the details at your location. Of course if you wanted to get fancy
 you might create GUI to set this stuff when your game starts but for many situations this
 is enough and/or possibly better. Make a script to launch the game at some installation
-or event and it will be read to go.
+or event and it will be ready to go.
 
 
