@@ -16,7 +16,9 @@ and
 
 --bottom
 
-Leave 'show' unchecked except for testing.";
+Leave 'show' unchecked except for testing.
+
+(WIFI) will be automatically changed to the local Wifi name";
         EditorGUILayout.HelpBox(help, MessageType.Info);
         GUILayout.Space(5);
         DrawDefaultInspector();
