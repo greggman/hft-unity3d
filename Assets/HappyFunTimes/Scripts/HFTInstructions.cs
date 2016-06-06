@@ -37,7 +37,7 @@ namespace HappyFunTimes {
     public class HFTInstructions : MonoBehaviour
     {
         [TextArea(10, 30)]
-        public string instructions = "connect to local wifi then go to happyfuntimes.net";
+        public string instructions = "connect to the <color=yellow>(WIFI)</color> wifi then go to <color=cyan>happyfuntimes.net</color>";
         public bool bottom = false;
         public bool show = false;
         public float scrollSpeed = 1.0f;
@@ -52,7 +52,8 @@ namespace HappyFunTimes {
         private float m_scrollOffset = 0;
         private float m_minScrollOffset = 0;
         private bool m_msgFitsOnScreen = false;
-
+        static string s_defaultWifiName = "local WiFi";
+        
         public void Awake() {
             HFTArgParser p = new HFTArgParser();
 
@@ -110,7 +111,7 @@ namespace HappyFunTimes {
 
             m_guiBackgroundStyle.normal.background = tex;
 
-            m_guiContent = new GUIContent(instructions.Replace("\n", " "));
+            m_guiContent = new GUIContent(instructions.Replace("\n", " ").Replace("(WIFI)", GetCurrentSSID()));
             m_guiSize = m_guiMsgStyle.CalcSize(m_guiContent);
             m_guiMsgRect.x = 0.0f;
             m_guiMsgRect.y = bottom ? Screen.height - m_guiSize.y : 0.0f;
@@ -128,6 +129,58 @@ namespace HappyFunTimes {
             {
                 m_scrollOffset = Screen.width * 0.5f - m_guiSize.x * 0.5f;
             }
+        }
+
+        string GetCurrentSSID()
+        {
+            #if UNITY_STANDALONE_OSX
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo psi = p.StartInfo;
+                psi.UseShellExecute = false;
+                psi.FileName = "/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport";
+                psi.Arguments = "-I";
+                psi.RedirectStandardError = true;
+                psi.RedirectStandardOutput = true;
+                p.Start();
+                string result = p.StandardOutput.ReadToEnd();
+                if (p.ExitCode == 0)
+                {
+                    var re = new System.Text.RegularExpressions.Regex("^  *SSID: (.+?)$", System.Text.RegularExpressions.RegexOptions.Multiline);
+                    var m = re.Match(result);
+                    if (m.Success)
+                    {
+                        return m.Groups[1].Value;
+                    }
+                }
+                else
+                {
+                    Debug.Log(p.StandardError.ReadToEnd());
+                }
+            #elif UNITY_STANDALONE_WIN
+                System.Diagnostics.Process p = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo psi = p.StartInfo;
+                psi.UseShellExecute = false;
+                psi.FileName = "netsh";
+                psi.Arguments = "wlan show interfaces";
+                psi.RedirectStandardError = true;
+                psi.RedirectStandardOutput = true;
+                psi.CreateNoWindow = true;
+                p.Start();
+                string result = p.StandardOutput.ReadToEnd();
+                if (p.ExitCode != 0)
+                {
+                    Debug.Log(p.StandardError.ReadToEnd());
+                    return s_defaultWifiName;
+                }
+
+                var re = new System.Text.RegularExpressions.Regex("^ *SSID *: (.+?)$", System.Text.RegularExpressions.RegexOptions.Multiline);
+                var m = re.Matches(result.Replace("\r",""));
+                if (m.Count > 0)
+                {
+                    return m[0].Groups[1].Value;
+                }
+            #endif
+            return s_defaultWifiName;
         }
     }
 }  // namespace HappyFunTimes
