@@ -1,6 +1,7 @@
 ﻿TODO
 ====
 
+*   fix installation mode on OSX
 *   Write docs for instructions on site
 *   Write docs for installation mode
 *   add installation mode to HFT settings dialog
