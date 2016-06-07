@@ -46,6 +46,7 @@ namespace HappyFunTimes
             name = String.IsNullOrEmpty(userOptions.name) ? Application.productName : userOptions.name;
 
             id = userOptions.id;
+            gameId = String.IsNullOrEmpty(Application.productName) ? "HFTUnityUnnamed" : HFTUtil.SafeName(Application.productName);
             serverPort = userOptions.serverPort;
             rendezvousUrl = userOptions.rendezvousUrl;
             master = userOptions.master;
@@ -114,7 +115,7 @@ namespace HappyFunTimes
         public string url = "";
         public string id = "";
         public string name = "";
-        public string gameId = "HFTUnity";  // this is kind of left over from when one server supported mutiple games
+        public string gameId = "HFTUnityUnnamed";
         public string controllerFilename = "";
         public bool disconnectPlayersIfGameDisconnects = true;
         public bool installationMode = false;
