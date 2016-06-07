@@ -135,6 +135,10 @@ namespace HappyFunTimes
             return WriteBytes(filename, System.Text.Encoding.UTF8.GetBytes(text));
         }
 
+        public static string SafeName(string s) {
+            return s_safeRE.Replace(s, "-");
+        }
+
         ///<summary>
         /// Returns the current JS time in Ticks. JS time starts at
         /// Januray 1st 1970 where as C# / .NET time Starts at January
@@ -166,7 +170,7 @@ namespace HappyFunTimes
         }
 
         static long s_javaScriptEpoch = (new System.DateTime(1970, 1, 1)).Ticks;
-
+        static System.Text.RegularExpressions.Regex s_safeRE = new System.Text.RegularExpressions.Regex("[^a-zA-Z0-9_]");
     }
 
 }  // namespace HappyFunTimes
