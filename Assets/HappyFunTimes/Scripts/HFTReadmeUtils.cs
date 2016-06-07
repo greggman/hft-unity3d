@@ -68,8 +68,7 @@ namespace HappyFunTimes {
 
         static bool isDarkTheme()
         {
-            Color c = UnityEditor.EditorStyles.label.normal.textColor;
-            return c.r > 0.5f || c.g > 0.5f || c.b > 0.50f;
+            return UnityEditor.EditorGUIUtility.isProSkin;
         }
 
         static void SetCurrentTheme()
