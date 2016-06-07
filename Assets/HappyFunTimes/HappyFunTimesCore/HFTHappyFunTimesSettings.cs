@@ -39,6 +39,7 @@ namespace HappyFunTimes
 {
     public class HFTHappyFunTimesSettings : ScriptableObject
     {
+        public const string kHappyFunTimesInstallationModeKey = "HappyFunTimes.InstallationMode";
         public const string kHappyFunTimesShowMessagesKey = "HappyFunTimes.ShowMessages";
         public const string kHappyFunTimesDebugKey = "HappyFunTimes.Debug";
 
@@ -53,6 +54,18 @@ namespace HappyFunTimes
             set
             {
                 UpdateIfChanged(value, kHappyFunTimesShowMessagesKey);
+            }
+        }
+
+        static public bool installationMode
+        {
+            get
+            {
+                return GetBool(kHappyFunTimesInstallationModeKey);
+            }
+            set
+            {
+                UpdateIfChanged(value, kHappyFunTimesInstallationModeKey);
             }
         }
 
