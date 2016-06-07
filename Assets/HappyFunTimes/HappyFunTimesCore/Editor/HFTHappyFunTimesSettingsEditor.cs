@@ -52,9 +52,11 @@ namespace HappyFunTimesEditor
             GUILayout.Label("These settings are used in editor only and only take effect when a game starts.", labelStyle);
             GUILayout.Space(5);
 
+            bool installationMode = HFTHappyFunTimesSettings.installationMode;
             bool showMessages = HFTHappyFunTimesSettings.showMessages;
             string debug = HFTHappyFunTimesSettings.debug;
 
+            bool newInstallationMode = GUILayout.Toggle(installationMode, "Installation Mode");
             bool newShowMessages = GUILayout.Toggle(showMessages, "show messages [game <-> controller]");
             GUILayout.Label(@"debug [log stuff] eg.
 name1
@@ -65,6 +67,7 @@ prefix2*
 '*' = all", labelStyle);
             string newDebug = EditorGUILayout.TextArea(debug, textAreaStyle, GUILayout.Height(100));
 
+            HFTHappyFunTimesSettings.installationMode = newInstallationMode;
             HFTHappyFunTimesSettings.showMessages = newShowMessages;
             HFTHappyFunTimesSettings.debug = newDebug;
         }
