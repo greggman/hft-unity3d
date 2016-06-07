@@ -27,6 +27,8 @@ namespace HappyFunTimes
                 return 1;
             }
 
+            HFTLog.debug = m_options.debug;
+
             //using (System.IO.StreamWriter writer = new System.IO.StreamWriter(System.IO.File.Open("/Users/gregg/temp/hft-server.log", System.IO.FileMode.Create)))
             //{
             //    writer.WriteLine(System.DateTime.Now.ToString());
