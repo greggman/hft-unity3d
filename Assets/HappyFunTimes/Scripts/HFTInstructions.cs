@@ -58,11 +58,21 @@ namespace HappyFunTimes {
             HFTArgParser p = new HFTArgParser();
 
             bool found = false;
+            found |= p.Contains("show-instructions");
             found |= p.TryGet<string>("instructions", ref instructions);
             found |= p.TryGetBool("bottom", ref bottom);
             if (found)
             {
                 show = true;
+            }
+        }
+
+        public void Start() {
+            show |= HFTHappyFunTimesSettings.showInstructions;
+            bottom |= HFTHappyFunTimesSettings.instructionsPosition;
+            if (!System.String.IsNullOrEmpty(HFTHappyFunTimesSettings.instructions))
+            {
+                instructions = HFTHappyFunTimesSettings.instructions;
             }
         }
 

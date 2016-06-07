@@ -3,21 +3,39 @@
 This is just a copy of the "TouchScene" scene except it has an `HFTInstructions`
 script component on the `Instructions` GameObject
 
-## How To Do it
+## How To Use it
 
-Clicking it and checking `show` then running the game will show instructions
+### Use Window->HappyFunTimes->Settings
 
-THAT'S NOT THE POINT. **Leave it unchecked!**. It's only for testing
+Pick `Window->HappyFunTimes->Settings` from the menu. Check the `show instructions` button. Run
 
-Instead if you export the game you can run it from the command line and pass in the instructions
+You should see the a message about how to use happyfuntimes come across the screen.
+
+The settings here are for running in the editor without effecting the scene file.
+
+### Use the command line
+
+If you export the game you can run it from the command line and pass in the instructions
 
 ### On OSX, from a Terminal
+
+```
+nameofgame.app/Contents/MacOS/nameofgame --show-instructions
+```
+
+or
 
 ```
 nameofgame.app/Contents/MacOS/nameofgame --instructions="Connect To Wifi 'OurInstallation' then go to hft.net"
 ```
 
 ### On Windows
+
+```
+nameofgame.exe --show-instructions
+```
+
+or
 
 ```
 nameofgame.exe --instructions="Connect To Wifi 'OurInstallation' then go to hft.net"
@@ -44,4 +62,11 @@ you might create GUI to set this stuff when your game starts but for many situat
 is enough and/or possibly better. Make a script to launch the game at some installation
 or event and it will be ready to go.
 
+## Command Line Arguments
+
+`--show-instuctions`    turn on the instructions as set in the scene
+
+`--instruction="msg"`   sets the instructions to "msg"
+
+`--bottom`     makes them appear at the bottom of the screen
 

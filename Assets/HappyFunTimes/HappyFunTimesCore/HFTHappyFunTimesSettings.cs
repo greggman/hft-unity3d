@@ -39,11 +39,50 @@ namespace HappyFunTimes
 {
     public class HFTHappyFunTimesSettings : ScriptableObject
     {
+        public const string kHappyFunTimesShowInstructionsKey = "HappyFunTimes.ShowInstructions";
+        public const string kHappyFunTimesInstructionsKey = "HappyFunTimes.Instructions";
+        public const string kHappyFunTimesInstructionsPositionKey = "HappyFunTimes.InstructionsPosition";
         public const string kHappyFunTimesInstallationModeKey = "HappyFunTimes.InstallationMode";
         public const string kHappyFunTimesShowMessagesKey = "HappyFunTimes.ShowMessages";
         public const string kHappyFunTimesDebugKey = "HappyFunTimes.Debug";
 
         static HFTHappyFunTimesSettings s_instance;
+
+        static public bool showInstructions
+        {
+            get
+            {
+                return GetBool(kHappyFunTimesShowInstructionsKey);
+            }
+            set
+            {
+                UpdateIfChanged(value, kHappyFunTimesShowInstructionsKey);
+            }
+        }
+
+        static public bool instructionsPosition
+        {
+            get
+            {
+                return GetBool(kHappyFunTimesInstructionsPositionKey);
+            }
+            set
+            {
+                UpdateIfChanged(value, kHappyFunTimesInstructionsPositionKey);
+            }
+        }
+
+        static public string instructions
+        {
+            get
+            {
+                return GetString(kHappyFunTimesInstructionsKey);
+            }
+            set
+            {
+                UpdateIfChanged(value, kHappyFunTimesInstructionsKey);
+            }
+        }
 
         static public bool showMessages
         {

@@ -16,6 +16,8 @@ and
 
 --bottom
 
+You can also set them from the Window->HappyFunTimes->Settings menu.
+
 Leave 'show' unchecked except for testing.
 
 (WIFI) will be automatically changed to the local Wifi name";

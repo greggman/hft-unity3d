@@ -46,27 +46,50 @@ namespace HappyFunTimesEditor
         {
             GUIStyle labelStyle = new GUIStyle(GUI.skin.GetStyle("Label"));
             labelStyle.wordWrap = true;
+            labelStyle.richText = true;
             GUIStyle textAreaStyle = new GUIStyle(GUI.skin.GetStyle("TextArea"));
             textAreaStyle.wordWrap = true;
 
             GUILayout.Label("These settings are used in editor only and only take effect when a game starts.", labelStyle);
             GUILayout.Space(5);
 
+            bool showInstructions = HFTHappyFunTimesSettings.showInstructions;
+            bool instructionsPosition = HFTHappyFunTimesSettings.instructionsPosition;
+            string instructions = HFTHappyFunTimesSettings.instructions;
             bool installationMode = HFTHappyFunTimesSettings.installationMode;
             bool showMessages = HFTHappyFunTimesSettings.showMessages;
             string debug = HFTHappyFunTimesSettings.debug;
 
+            bool newShowInstructions = GUILayout.Toggle(showInstructions, "Show Instructions");
+            bool newInstructionsPosition = GUILayout.Toggle(instructionsPosition, "Instructions on bottom");
+
+            GUILayout.Label("Instructions:");
+            string newInstructions = EditorGUILayout.TextArea(instructions, textAreaStyle, GUILayout.Height(100));
+            GUILayout.Label(@"example:
+
+connect to (WIFI) and go to happyfuntimes.net
+
+* (WIFI) will be replaced by local wifi.
+* rich text codes allowed
+  eg: < color=red >msg< /color >
+
+<b>NOTE: you must have an HFTInstructions component in your scene</b>", labelStyle);
+            GUILayout.Space(20);
             bool newInstallationMode = GUILayout.Toggle(installationMode, "Installation Mode");
             bool newShowMessages = GUILayout.Toggle(showMessages, "show messages [game <-> controller]");
-            GUILayout.Label(@"debug [log stuff] eg.
+            GUILayout.Label("Debug:");
+            string newDebug = EditorGUILayout.TextArea(debug, textAreaStyle, GUILayout.Height(100));
+            GUILayout.Label(@"Example:
 name1
 name2
 prefix1*
 prefix2*
 
 '*' = all", labelStyle);
-            string newDebug = EditorGUILayout.TextArea(debug, textAreaStyle, GUILayout.Height(100));
 
+            HFTHappyFunTimesSettings.showInstructions = newShowInstructions;
+            HFTHappyFunTimesSettings.instructionsPosition = newInstructionsPosition;
+            HFTHappyFunTimesSettings.instructions = newInstructions;
             HFTHappyFunTimesSettings.installationMode = newInstallationMode;
             HFTHappyFunTimesSettings.showMessages = newShowMessages;
             HFTHappyFunTimesSettings.debug = newDebug;
