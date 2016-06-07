@@ -225,12 +225,12 @@ do shell script myFile %(admin)s
 
             List<string> addresses = new List<string>();
             addresses.Add("http://[::0]:18679");
-//            addresses.Add("http://0.0.0.0:18679");
+            addresses.Add("http://0.0.0.0:18679");
 
             if (m_options.installationMode)
             {
                 addresses.Add("http://[::0]:80");
-//                addresses.Add("http://0.0.0.0:80");
+                addresses.Add("http://0.0.0.0:80");
             }
             else
             {
