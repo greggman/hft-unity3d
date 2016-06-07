@@ -1,6 +1,11 @@
 ﻿TODO
 ====
 
+*   Write docs for instructions on site
+*   Write docs for installation mode
+*   add installation mode to HFT settings dialog
+*   write docs for running own hft.net
+*   test local hft.net
 *   fix audio in safari or at least wrap in try/catch
 *   make starup emit status messages
     *   make object that displays status
