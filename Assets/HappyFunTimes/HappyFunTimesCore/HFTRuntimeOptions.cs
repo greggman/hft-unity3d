@@ -77,6 +77,11 @@ namespace HappyFunTimes
             args.ipv4DnsAddress.GetIfSet(ref ipv4DnsAddress);
             args.ipv6DnsAddress.GetIfSet(ref ipv6DnsAddress);
 
+            if (HFTHappyFunTimesSettings.installationMode)
+            {
+                installationMode = true;
+            }
+
             if (String.IsNullOrEmpty(url))
             {
                 url = "ws://localhost:18679";
