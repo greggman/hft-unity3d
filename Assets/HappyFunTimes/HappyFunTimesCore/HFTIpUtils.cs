@@ -32,7 +32,8 @@ namespace HappyFunTimes
                 {
                     socket.Connect(address, 65530);
                     IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
-                    localIP = endPoint.Address.ToString();
+                    string s = endPoint.Address.ToString();
+                    localIP = System.Text.RegularExpressions.Regex.Replace(s, "%.+", "");
                 }
                 return localIP;
             }
