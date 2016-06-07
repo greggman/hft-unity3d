@@ -16,9 +16,11 @@
         *   getting certificate
         *   ready
         *   disconnected
+        *   make installation mode ping itself by randomish domain name. If it can't put up error!
 *   test android
 *   test ios
 *   refactor for standalone
+    *   make gameId be unity-project name
     *   test on XP, Win8, Win10
     *   check all refs to Deserialize, try/catch
     *   test ipv6
