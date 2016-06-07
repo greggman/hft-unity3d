@@ -226,6 +226,7 @@ namespace HappyFunTimes
                         oldAddressesStr_ = newAddressesStr;
                         var data = new InformData(addresses, options_.port);
                         var json = Serializer.Serialize(data);
+                        log_.Info("sending: " + json);
                         addressBytes_ = System.Text.Encoding.UTF8.GetBytes(json);
                         haveNewAddresses = true;
                     }

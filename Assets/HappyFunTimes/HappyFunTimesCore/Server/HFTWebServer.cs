@@ -66,9 +66,11 @@ namespace HappyFunTimes
         {
             foreach (string address in m_addresses)
             {
+                m_log.Info("Trying address: " + address);
                 HttpServer server = StartServer(address);
                 if (server != null)
                 {
+                    m_log.Info("Added address: " + address);
                     m_servers.Add(server);
                 }
             }
