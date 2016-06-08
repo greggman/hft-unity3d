@@ -9,6 +9,8 @@
 *   write docs for running own hft.net
 *   test local hft.net
 *   fix audio in safari or at least wrap in try/catch
+*   fix touch issue - slide finger on touch area loses touch
+*   make touch areas large
 *   make starup emit status messages
     *   make object that displays status
         *   checking for server
@@ -21,7 +23,7 @@
 *   test android
 *   test ios
 *   refactor for standalone
-    *   make gameId be unity-project name
+    *   on shutdown disconnect all messages, then stop server
     *   test on XP, Win8, Win10
     *   check all refs to Deserialize, try/catch
     *   test ipv6
@@ -41,6 +43,7 @@
 DONE
 ====
 
+*   make gameId be unity-project name
 *   make hft.net keep trying
 *   make GameServer stop Server?
 *   link all samples to online docs
