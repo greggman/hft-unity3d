@@ -137,22 +137,46 @@ namespace HappyFunTimes
             {
                 m_gotMessages = false;
                 m_socket = new WebSocket(m_url);
+                StartListening();
+                m_socket.Connect();
+            }
+        }
+
+        public void StartListening()
+        {
+            if (m_socket == null)
+            {
+                throw new System.InvalidOperationException("not connected");
+            }
+
+            if (!m_listening)
+            {
+                m_listening = true;
                 m_socket.OnOpen += SocketOpened;
                 m_socket.OnMessage += SocketMessage;
                 m_socket.OnClose += SocketClosed;
                 m_socket.OnError += SocketError;
-                m_socket.Connect();
+            }
+        }
+
+        public void StopListening()
+        {
+            if (m_listening)
+            {
+                m_listening = false;
+                m_socket.OnOpen -= SocketOpened;
+                m_socket.OnMessage -= SocketMessage;
+                m_socket.OnClose -= SocketClosed;
+                m_socket.OnError -= SocketError;
             }
         }
 
         public void Close()
         {
+            StopListening();
+
             if (m_socket != null)
             {
-                m_socket.OnOpen -= SocketOpened;
-                m_socket.OnMessage -= SocketMessage;
-                m_socket.OnClose -= SocketClosed;
-                m_socket.OnError -= SocketError;
                 Cleanup();
                 m_socket.Close();
                 m_socket = null;
@@ -321,24 +345,6 @@ namespace HappyFunTimes
             System.Uri uri = new System.Uri(m_url);
             return "http://" + uri.Host + ":" + uri.Port + "/";
         }
-
-        private HFTRuntimeOptions m_options;
-        private bool m_connected = false;
-        private int m_totalPlayerCount = 0;
-        private int m_recvCount = 0;
-        private int m_sendCount = 0;
-        private int m_queueCount = 0;
-        private bool m_gotMessages = false;
-        private WebSocket m_socket;
-        private Dictionary<string, NetPlayer> m_players;
-        private List<String> m_sendQueue;
-        private Deserializer m_deserializer;
-        private GameObject m_gameObject;
-        private HFTEventProcessor m_eventProcessor;
-        private Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
-        private string m_id = null;
-        private string m_url;
-        private Dictionary<string, MessageHandler> m_msgHandlers = new Dictionary<string, MessageHandler>();
 
         public class MessageToClient
         {
@@ -679,6 +685,24 @@ namespace HappyFunTimes
             public string __hft_name__ = "";
         }
 
+        HFTRuntimeOptions m_options;
+        bool m_connected = false;
+        bool m_listening = false;
+        int m_totalPlayerCount = 0;
+        int m_recvCount = 0;
+        int m_sendCount = 0;
+        int m_queueCount = 0;
+        bool m_gotMessages = false;
+        WebSocket m_socket;
+        Dictionary<string, NetPlayer> m_players;
+        List<String> m_sendQueue;
+        Deserializer m_deserializer;
+        GameObject m_gameObject;
+        HFTEventProcessor m_eventProcessor;
+        Dictionary<string, CmdEventHandler> m_handlers;  // handlers by command name
+        string m_id = null;
+        string m_url;
+        Dictionary<string, MessageHandler> m_msgHandlers = new Dictionary<string, MessageHandler>();
         HFTLog m_log = new HFTLog("GameServer");
     };
 

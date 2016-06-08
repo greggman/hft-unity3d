@@ -94,6 +94,21 @@ namespace HappyFunTimes
             }
         }
 
+        public void StopListening()
+        {
+            m_listening = false;
+            if (m_hftSite != null)
+            {
+                m_hftSite.Stop();
+            }
+            if (m_webServer != null)
+            {
+                m_webServer.StopListening();
+            }
+            CleanupCheck();
+            StopSyncedClock();
+        }
+
         public void Stop()
         {
             StopServer();
@@ -112,7 +127,7 @@ namespace HappyFunTimes
 
         void Failed()
         {
-            CleanupCheck();
+            StopListening();
             var handler = OnFail;
             if (handler != null) {
                 handler();
@@ -181,13 +196,13 @@ do shell script myFile %(admin)s
             psi.RedirectStandardError = true;
             psi.RedirectStandardOutput = true;
             p.ErrorDataReceived += new System.Diagnostics.DataReceivedEventHandler((sender, e) => {
-                if (!String.IsNullOrEmpty(e.Data))
+                if (m_listening && !String.IsNullOrEmpty(e.Data))
                 {
                     m_log.Tell("webserver: stderr: " + e.Data);
                 }
             });
             p.OutputDataReceived += new System.Diagnostics.DataReceivedEventHandler((sender, e) => {
-                if (!String.IsNullOrEmpty(e.Data))
+                if (m_listening && !String.IsNullOrEmpty(e.Data))
                 {
                     m_log.Info("webserver: stdout: " + e.Data);
                 }
@@ -206,6 +221,8 @@ do shell script myFile %(admin)s
         public void StartServer()
         {
             m_log.Info("Start Server");
+            m_listening = true;
+
             // Where should this be checked?
             string controllerPath = "/" + m_options.controllerFilename;
             if (!HFTWebFileDB.GetInstance().FileExists(controllerPath))
@@ -261,7 +278,7 @@ do shell script myFile %(admin)s
 
         public void StopServer()
         {
-            CleanupCheck();
+            StopListening();
 
             #if UNITY_STANDALONE_OSX
             if (m_webServerProcess != null)
@@ -288,6 +305,7 @@ do shell script myFile %(admin)s
             }
         }
 
+        bool m_listening;
         HFTLog m_log = new HFTLog("HFTManager");
         HFTRuntimeOptions m_options;
         GameObject m_gameObject;

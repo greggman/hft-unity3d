@@ -103,6 +103,23 @@ namespace HappyFunTimes
             {
                 m_started = false;
 
+                // This has to be done in 2 stages
+                // The issue is because things are async let's stay
+                // the GameServer disconnects. The server will then see
+                // the disconnection and report it (player disconnected, game disconected, etc...)
+                // so first we tell both "stop listening for messages/status changes" then
+                // we can actually disconnect them,
+                // Note this is mostly a matter of stopping superfulous messages in the console
+                if (m_server != null)
+                {
+                    m_server.StopListening();
+                }
+
+                if (m_hftManager != null)
+                {
+                    m_hftManager.StopListening();
+                }
+
                 if (m_server != null)
                 {
                     m_server.Close();

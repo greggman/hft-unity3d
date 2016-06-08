@@ -276,11 +276,16 @@ namespace HappyFunTimes
             return server;
         }
 
-        public void Stop()
+        public void StopListening()
         {
             // It's not clear to me where this belongs. Ideally I'd like to pass in the HFTGameManager
             // but how to pass it to new connections I have no idea.
             HFTGameManager.GetInstance().Close();
+        }
+
+        public void Stop()
+        {
+            StopListening();
 
             while (m_servers.Count > 0)
             {
