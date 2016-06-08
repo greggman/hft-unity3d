@@ -62,10 +62,13 @@ namespace HappyFunTimesEditor
 
             bool newShowInstructions = GUILayout.Toggle(showInstructions, "Show Instructions");
             bool newInstructionsPosition = GUILayout.Toggle(instructionsPosition, "Instructions on bottom");
+            string newInstructions;
 
-            GUILayout.Label("Instructions:");
-            string newInstructions = EditorGUILayout.TextArea(instructions, textAreaStyle, GUILayout.Height(100));
-            GUILayout.Label(@"example:
+            using (var v = new EditorGUILayout.VerticalScope ("Box"))
+            {
+                GUILayout.Label("Instructions:");
+                newInstructions = EditorGUILayout.TextArea(instructions, textAreaStyle, GUILayout.Height(100));
+                GUILayout.Label(@"example:
 
 connect to (WIFI) and go to happyfuntimes.net
 
@@ -74,18 +77,24 @@ connect to (WIFI) and go to happyfuntimes.net
   eg: < color=red >msg< /color >
 
 <b>NOTE: you must have an HFTInstructions component in your scene</b>", labelStyle);
+            }
             GUILayout.Space(20);
             bool newInstallationMode = GUILayout.Toggle(installationMode, "Installation Mode");
             bool newShowMessages = GUILayout.Toggle(showMessages, "show messages [game <-> controller]");
-            GUILayout.Label("Debug:");
-            string newDebug = EditorGUILayout.TextArea(debug, textAreaStyle, GUILayout.Height(100));
-            GUILayout.Label(@"Example:
+
+            string newDebug;
+            using (var v = new EditorGUILayout.VerticalScope ("Box"))
+            {
+                GUILayout.Label("Debug:");
+                newDebug = EditorGUILayout.TextArea(debug, textAreaStyle, GUILayout.Height(100));
+                GUILayout.Label(@"Example:
 name1
 name2
 prefix1*
 prefix2*
 
 '*' = all", labelStyle);
+            }
 
             HFTHappyFunTimesSettings.showInstructions = newShowInstructions;
             HFTHappyFunTimesSettings.instructionsPosition = newInstructionsPosition;
