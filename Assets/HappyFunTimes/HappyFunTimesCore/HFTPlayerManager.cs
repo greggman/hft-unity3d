@@ -154,7 +154,7 @@ public class HFTPlayerManager
         SendSpawnInfoToGameObject("WaitingNetPlayer", m_gameObject, netPlayerState, SendMessageOptions.DontRequireReceiver);
     }
 
-    void StartNewPlayer(object sender, PlayerConnectMessageArgs e)
+    void StartNewPlayer(PlayerConnectMessageArgs e)
     {
         NetPlayerState netPlayerState = new NetPlayerState(e.netPlayer, e.data);
         string id = e.netPlayer.GetSessionId();

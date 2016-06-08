@@ -32,19 +32,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace HappyFunTimes {
+namespace HappyFunTimes
+{
 
-public class PlayerConnectMessageArgs : EventArgs {
-    public PlayerConnectMessageArgs(NetPlayer _netPlayer, string _name, object _data) {
-        netPlayer = _netPlayer;
-        name = _name;
-        data = _data;
-    }
+    public class PlayerConnectMessageArgs
+    {
+        public PlayerConnectMessageArgs(NetPlayer _netPlayer, string _name, object _data) {
+            netPlayer = _netPlayer;
+            name = _name;
+            data = _data;
+        }
 
-    public NetPlayer netPlayer;
-    public string name;
-    public object data;
-};
+        public NetPlayer netPlayer;
+        public string name;
+        public object data;
+    };
 
 }
 

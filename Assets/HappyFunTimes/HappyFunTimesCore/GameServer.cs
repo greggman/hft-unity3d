@@ -41,6 +41,8 @@ namespace HappyFunTimes
     // This manages a happyfuntimes "game" and it's players
     public class GameServer
     {
+        public delegate void PlayerConnectFunc(PlayerConnectMessageArgs msg);
+
         public delegate void UntypedCmdEventHandler(Dictionary<string, object> data, string id);
         public delegate void TypedCmdEventHandler<T>(T eventArgs, string id);
 
@@ -271,10 +273,10 @@ namespace HappyFunTimes
         /// <param name="server">This needs the server because messages need to be queued as they need to be delivered on anther thread</param>.
         private delegate void CmdEventHandler(Deserializer deserializer, GameServer server, object dict, string id);
 
-        public event EventHandler<PlayerConnectMessageArgs> OnPlayerConnect;
-        public event EventHandler<EventArgs> OnConnect;
-        public event EventHandler<EventArgs> OnDisconnect;
-        public event EventHandler<EventArgs> OnConnectFailure;
+        public event PlayerConnectFunc OnPlayerConnect;
+        public event Action OnConnect;
+        public event Action OnDisconnect;
+        public event Action OnConnectFailure;
 
         /// <summary>
         /// Id of the machine assigned by HappyFunTimes.
@@ -444,9 +446,10 @@ namespace HappyFunTimes
                 Close();
                 QueueEvent(() =>
                 {
-                    if (OnConnectFailure != null)
+                    var handler = OnConnectFailure;
+                    if (handler != null)
                     {
-                        OnConnectFailure.Emit(this, new EventArgs());
+                        handler();
                     }
                 });
             }
@@ -467,9 +470,10 @@ namespace HappyFunTimes
             {
                 QueueEvent(() =>
                 {
-                    if (OnDisconnect != null)
+                    var handler = OnDisconnect;
+                    if (handler != null)
                     {
-                        OnDisconnect.Emit(this, new EventArgs());
+                        handler();
                     }
                 });
             }
@@ -508,11 +512,10 @@ namespace HappyFunTimes
             m_players[msg.id] = player;
             QueueEvent(() =>
             {
-                // UGH! This is not thread safe because someone might add handler to OnPlayerConnect
-                // Odds are low though?
-                if (OnPlayerConnect != null)
+                var handler = OnPlayerConnect;
+                if (handler != null)
                 {
-                    OnPlayerConnect.Emit(this, new PlayerConnectMessageArgs(player, name, msg.data));
+                    handler(new PlayerConnectMessageArgs(player, name, msg.data));
                 }
             });
         }
@@ -539,9 +542,10 @@ namespace HappyFunTimes
             m_id = data.id;
             QueueEvent(() =>
             {
-                if (OnConnect != null)
+                var handler = OnConnect;
+                if (handler != null)
                 {
-                    OnConnect.Emit(this, new EventArgs());
+                    handler();
                 }
             });
         }

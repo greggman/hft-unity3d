@@ -143,11 +143,11 @@ public class PlayerConnector : MonoBehaviour
         return players[ndx];
     }
 
-    void Connected(object sender, EventArgs e)
+    void Connected()
     {
     }
 
-    void Disconnected(object sender, EventArgs e)
+    void Disconnected()
     {
     }
 
