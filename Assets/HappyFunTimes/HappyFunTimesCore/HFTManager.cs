@@ -40,8 +40,8 @@ namespace HappyFunTimes
     // Starting the server and or checking that it's running
     public class HFTManager {
 
-        public event EventHandler<EventArgs> OnReady;
-        public event EventHandler<EventArgs> OnFail;
+        public event Action OnReady;
+        public event Action OnFail;
 
         public HFTManager()
         {
@@ -104,18 +104,18 @@ namespace HappyFunTimes
             CleanupCheck();
             StartSyncedClock();
 
-            EventHandler<EventArgs> handler = OnReady;
+            var handler = OnReady;
             if (handler != null) {
-                handler(this, new EventArgs());
+                handler();
             }
         }
 
         void Failed()
         {
             CleanupCheck();
-            EventHandler<EventArgs> handler = OnFail;
+            var handler = OnFail;
             if (handler != null) {
-                handler(this, new EventArgs());
+                handler();
             }
         }
 

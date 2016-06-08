@@ -96,12 +96,12 @@ public class PlayerConnector : MonoBehaviour
         }
     }
 
-    void FailedToStart(object sender, System.EventArgs e)
+    void FailedToStart()
     {
         m_log.Error("could not connect to server:");
     }
 
-    void StartGameServer(object sender, System.EventArgs e)
+    void StartGameServer()
     {
         m_server.Init();
     }
