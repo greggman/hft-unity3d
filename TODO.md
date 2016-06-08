@@ -2,7 +2,6 @@
 ====
 
 *   test local hft.net
-*   fix audio in safari or at least wrap in try/catch
 *   fix touch issue - slide finger on touch area loses touch
 *   make touch areas large
 *   make starup emit status messages
@@ -18,16 +17,11 @@
 *   refactor for standalone
     *   test on XP, Win8, Win10
     *   make installation mode ping itself by randomish domain name. If it can't put up error!
-    *   check all refs to Deserialize, try/catch
     *   test ipv6
     *   check controllers work on windows
     *   check controller path with / and \
-    *   Check if port busy
-        *   inc port
-    *   check passing port
     *   remove showInList
     *   remove disonnectPlayersIfGameDisonnects
-*   ../
 *   Check lots of clients
 *   Make DNS server not on mobile?
 *   try to support Android captive portal
@@ -36,6 +30,8 @@
 DONE
 ====
 
+*   fix audio in safari or at least wrap in try/catch (not for now)
+*   check all refs to Deserialize, try/catch
 *   write docs for running own hft.net
 *   Write docs for instructions on site
 *   add instructions settings to HFT settings dialog? (or separate settings)
@@ -74,6 +70,9 @@ DONE
     *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
     *   add dnsAddress and --hft-dns-address ?
     *   check DNS address?
+    *   Check if port busy
+        *   inc port (no)
+    *   check passing port
     *   make web laucher launch a launcher or not quit so user doesn't have to enter stuff multiple times?
 
         going to hold off on this. It's only installation mode. Sucks but ....
