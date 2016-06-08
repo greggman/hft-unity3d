@@ -67,7 +67,7 @@ namespace HappyFunTimes
         public HFTPlayer(HFTSocket client, HFTGameManager server, string id)
         {
             client_ = client;
-            relayServer_ = server;
+            gameManager_ = server;
             id_ = id;
 
             log_ = new HFTLog("HFTPlayer[" + id + "]");
@@ -89,7 +89,7 @@ namespace HappyFunTimes
 
         void AddPlayerToGame(AddPlayerToGameMessage data)
         {
-            var game = relayServer_.AddPlayerToGame(this, data.gameId, data.data);
+            var game = gameManager_.AddPlayerToGame(this, data.gameId, data.data);
             if (game == null)
             {
                 log_.Error("game does not exist:" + data.gameId);
@@ -106,7 +106,7 @@ namespace HappyFunTimes
         {
             client_.OnMessageEvent -= HandleMessage;
             client_.OnCloseEvent   -= HandleDisconnect;
-            relayServer_.AssignAsClientForGame(data, client_);
+            gameManager_.AssignAsClientForGame(data, client_);
         }
 
         void PassMessageFromPlayerToGame(object data) {
@@ -191,7 +191,7 @@ namespace HappyFunTimes
         Deserializer deserializer_ = new Deserializer();
         Dictionary<string, CmdEventHandler> messageHandlers_ = new Dictionary<string, CmdEventHandler>();
         HFTSocket client_ = null;
-        HFTGameManager relayServer_ = null;
+        HFTGameManager gameManager_ = null;
         HFTGame game_ = null;
         HFTLog log_;
         string id_ = "";
