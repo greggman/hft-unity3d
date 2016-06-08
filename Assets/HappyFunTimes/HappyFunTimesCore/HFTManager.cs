@@ -224,9 +224,9 @@ do shell script myFile %(admin)s
             #endif
 
             List<string> addresses = new List<string>();
-            addresses.Add("http://[::0]:18679");
+            addresses.Add("http://[::0]:" + m_options.serverPort);
             #if UNITY_STANDALONE_WIN
-            addresses.Add("http://0.0.0.0:18679");
+            addresses.Add("http://0.0.0.0:" + m_options.serverPort);
             #endif
 
             if (m_options.installationMode)

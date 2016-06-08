@@ -48,6 +48,7 @@ namespace HappyFunTimes
             id = userOptions.id;
             gameId = String.IsNullOrEmpty(Application.productName) ? "HFTUnityUnnamed" : HFTUtil.SafeName(Application.productName);
             serverPort = userOptions.serverPort;
+            serverPort = String.IsNullOrEmpty(userOptions.serverPort) ? "18679" : userOptions.serverPort;
             rendezvousUrl = userOptions.rendezvousUrl;
             master = userOptions.master;
             url = userOptions.url;
@@ -85,7 +86,7 @@ namespace HappyFunTimes
 
             if (String.IsNullOrEmpty(url))
             {
-                url = "ws://localhost:18679";
+                url = "ws://localhost:" + serverPort;
                 startServer = true;
             } else {
                 startServer = false;

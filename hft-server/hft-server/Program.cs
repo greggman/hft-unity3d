@@ -36,7 +36,7 @@ namespace HappyFunTimes
             //}
 
             List<string> addresses = new List<string>();
-            addresses.Add("http://[::0]:18679");
+            addresses.Add("http://[::0]:" + m_options.serverPort);
             //            addresses.Add("http://0.0.0.0:18679");
 
             if (m_options.installationMode)
