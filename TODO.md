@@ -1,13 +1,6 @@
 ﻿TODO
 ====
 
-*   fix installation mode on OSX
-*   Write docs for instructions on site
-*   Write docs for installation mode
-*   add installation mode to HFT settings dialog
-*   add instructions settings to HFT settings dialog? (or separate settings)
-*   document start/stop
-*   write docs for running own hft.net
 *   test local hft.net
 *   fix audio in safari or at least wrap in try/catch
 *   fix touch issue - slide finger on touch area loses touch
@@ -20,12 +13,11 @@
         *   getting certificate
         *   ready
         *   disconnected
-        *   make installation mode ping itself by randomish domain name. If it can't put up error!
 *   test android
 *   test ios
 *   refactor for standalone
-    *   on shutdown disconnect all messages, then stop server
     *   test on XP, Win8, Win10
+    *   make installation mode ping itself by randomish domain name. If it can't put up error!
     *   check all refs to Deserialize, try/catch
     *   test ipv6
     *   check controllers work on windows
@@ -44,6 +36,13 @@
 DONE
 ====
 
+*   write docs for running own hft.net
+*   Write docs for instructions on site
+*   add instructions settings to HFT settings dialog? (or separate settings)
+*   document start/stop
+*   add installation mode to HFT settings dialog
+*   Write docs for installation mode
+*   fix installation mode on OSX
 *   make gameId be unity-project name
 *   make hft.net keep trying
 *   make GameServer stop Server?
@@ -71,6 +70,7 @@ DONE
     *   Make it return 1 where it's currently returning 0
 *   refactor for standlone
     *   change color to public field
+    *   on shutdown disconnect all messages, then stop server
     *   fix 5.6.7.8 and http://192.168.2.9 hard coded shit
     *   add dnsAddress and --hft-dns-address ?
     *   check DNS address?
