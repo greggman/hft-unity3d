@@ -45,119 +45,70 @@ namespace HappyFunTimes
     {
         public HFTGameOptions happyfuntimesOptions = new HFTGameOptions();
 
+        // two accessors for the same thing
         public GameServer server
         {
             get
             {
-                return m_server;
+                return m_connectionManager.gameServer;
+            }
+        }
+        public GameServer GameServer
+        {
+            get
+            {
+                return m_connectionManager.gameServer;
             }
         }
 
         public void StartHappyFunTimes()
         {
-            StartConnection();
+            if (!m_started)
+            {
+                m_started = true;
+                enabled = true;
+                m_connectionManager.StartHappyFunTimes();
+            }
         }
 
         public void StopHappyFunTimes()
         {
-            Cleanup();
-        }
-
-        void StartConnection()
-        {
-            if (!m_started)
+            if (m_started)
             {
-                enabled = true;
-                m_started = true;
-                m_hftManager.Start(m_options, gameObject);
+                m_started = false;
+                enabled = false;
+                m_connectionManager.StopHappyFunTimes();
             }
-        }
-
-        void FailedToStart()
-        {
-            m_log.Error("could not connect to server:");
-        }
-
-        void StartGameServer()
-        {
-            m_server.Init();
         }
 
         void Awake()
         {
             m_connectToServerOnStart = enabled;
-            m_options = new HFTRuntimeOptions(happyfuntimesOptions);
-
-            m_server = new GameServer(m_options, gameObject);
-            m_server.OnConnect += Connected;
-            m_server.OnDisconnect += Disconnected;
-
-            m_hftManager = new HFTManager();
-            m_hftManager.OnReady += StartGameServer;
-            m_hftManager.OnFail += FailedToStart;
+            m_connectionManager = new HFTConnectionManager(gameObject, happyfuntimesOptions);
         }
 
         void Start()
         {
             if (m_connectToServerOnStart)
             {
-                StartConnection();
-            }
-        }
-
-        void Connected()
-        {
-        }
-
-        void Disconnected()
-        {
-        }
-
-        void Cleanup()
-        {
-            if (m_started)
-            {
-                enabled = false;
-                m_started = false;
-
-                if (m_server != null)
-                {
-                    m_server.Close();
-                }
-
-                if (m_hftManager != null)
-                {
-                    m_hftManager.Stop();
-                }
+                StartHappyFunTimes();
             }
         }
 
         void OnDestroy()
         {
-            Cleanup();
+            StopHappyFunTimes();
         }
 
         void OnApplicationExit()
         {
-            Cleanup();
-        }
-
-        public GameServer GameServer
-        {
-            get
-            {
-                return m_server;
-            }
-            private set
-            {
-            }
+            StopHappyFunTimes();
         }
 
         private bool m_started;
         private bool m_connectToServerOnStart;
-        private GameServer m_server;
-        private HFTManager m_hftManager;
-        private HFTLog m_log = new HFTLog("HFTNoPlayers");
+        private HFTConnectionManager m_connectionManager;
+        //private HFTLog m_log = new HFTLog("HFTNoPlayers");
         private HFTRuntimeOptions m_options;
     };
 
