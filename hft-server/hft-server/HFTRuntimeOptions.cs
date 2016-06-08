@@ -19,7 +19,7 @@ namespace HappyFunTimes
         public bool startServer;
         public bool dns;
         public bool captivePortal;
-        public string serverPort = "";
+        public string serverPort = "18679";
         public string rendezvousUrl;
         public string ipv4DnsAddress = "";
         public string ipv6DnsAddress = "";
