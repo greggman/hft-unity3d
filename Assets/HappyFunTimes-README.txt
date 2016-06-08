@@ -93,7 +93,8 @@ https://github.com/sta/websocket-sharp
 and the `DNS` library (MIT)
 https://github.com/kapetan/dns
 
-http://docs.happyfuntimes.net/docs/unity/running-your-own-happyfuntimes-net.html
+also see some details about publishing your game here
+http://docs.happyfuntimes.net/docs/unity/rendezvous-server.html
 
 
 
