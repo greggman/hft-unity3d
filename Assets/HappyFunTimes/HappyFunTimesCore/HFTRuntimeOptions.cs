@@ -46,8 +46,10 @@ namespace HappyFunTimes
             name = String.IsNullOrEmpty(userOptions.name) ? Application.productName : userOptions.name;
 
             id = userOptions.id;
-            gameId = String.IsNullOrEmpty(Application.productName) ? "HFTUnityUnnamed" : HFTUtil.SafeName(Application.productName);
-            serverPort = userOptions.serverPort;
+            // gameId = String.IsNullOrEmpty(Application.productName) ? "HFTUnityUnnamed" : HFTUtil.SafeName(Application.productName);
+            // This currently has to be HFTUnity because the controller doesn't know what gameId to use
+            // We could send it with "?gameId=" but does it really matter?
+            gameId = "HFTUnity";
             serverPort = String.IsNullOrEmpty(userOptions.serverPort) ? "18679" : userOptions.serverPort;
             rendezvousUrl = userOptions.rendezvousUrl;
             master = userOptions.master;
@@ -116,7 +118,7 @@ namespace HappyFunTimes
         public string url = "";
         public string id = "";
         public string name = "";
-        public string gameId = "HFTUnityUnnamed";
+        public string gameId = "HFTUnity";
         public string controllerFilename = "";
         public bool disconnectPlayersIfGameDisconnects = true;
         public bool installationMode = false;
