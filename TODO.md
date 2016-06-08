@@ -6,6 +6,7 @@
 *   Write docs for installation mode
 *   add installation mode to HFT settings dialog
 *   add instructions settings to HFT settings dialog? (or separate settings)
+*   document start/stop
 *   write docs for running own hft.net
 *   test local hft.net
 *   fix audio in safari or at least wrap in try/catch
