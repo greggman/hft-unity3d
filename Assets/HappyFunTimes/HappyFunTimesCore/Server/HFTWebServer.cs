@@ -58,6 +58,7 @@ namespace HappyFunTimes
             m_postCmdHandlers["happyFunTimesPing"]        = HandleCmdPing;
             m_postCmdHandlers["happyFunTimesRedir"]       = HandleCmdRedir;
             m_postCmdHandlers["time"]                     = HandleCmdTime;
+            m_postCmdHandlers["quit"]                     = HandleCmdQuit;
 
             m_addresses = addresses;
         }
@@ -221,6 +222,7 @@ namespace HappyFunTimes
                     return;
                 }
 
+                m_log.Error("Unknown cmd: " + cmd);
                 res.ContentType = "application/json";
                 res.StatusCode = (int)HttpStatusCode.BadRequest;
                 res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"unknown cmd: " + cmd + "\"}"));
@@ -376,6 +378,13 @@ namespace HappyFunTimes
             string timeStr = Serializer.Serialize(new HFTTimePing(seconds));
             byte[] time = System.Text.Encoding.UTF8.GetBytes(timeStr);
             m_webServerUtils.SendJsonBytes(res, time);
+        }
+
+        void HandleCmdQuit(HttpListenerRequest req, HttpListenerResponse res)
+        {
+            m_webServerUtils.SendContent(res, "quit.txt", "quit");
+            Stop();
+            System.Environment.Exit(0);
         }
 
         class SystemSettings
