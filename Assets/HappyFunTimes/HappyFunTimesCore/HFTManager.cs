@@ -286,7 +286,38 @@ do shell script myFile %(admin)s
             #if UNITY_STANDALONE_OSX
             if (m_webServerProcess != null)
             {
-                m_webServerProcess.Kill();
+                m_log.Info("Killing external webserver");
+                try
+                {
+                    m_webServerProcess.Kill();
+                }
+                catch (System.Exception)
+                {
+                }
+
+                try
+                {
+                    System.Uri uri = new System.Uri(m_options.url);
+                    string url = "http://" + uri.Host + ":" + uri.Port;
+                    m_log.Info("Sending quit to: " + url);
+                    var req = System.Net.HttpWebRequest.Create(url);
+                    req.Proxy = null;
+                    req.Method = "POST";
+                    req.ContentType = "application/json";
+                    using (System.IO.Stream requestStream = req.GetRequestStream())
+                    {
+                        byte[] bytes = System.Text.Encoding.UTF8.GetBytes("{\"cmd\":\"quit\"}");
+                        requestStream.Write(bytes, 0, bytes.Length);
+                    }
+                    var res = req.GetResponse();
+                    System.IO.Stream dataStream = res.GetResponseStream();
+                    System.IO.StreamReader reader = new System.IO.StreamReader(dataStream);
+                    m_log.Info("Server Response: " + reader.ReadToEnd());
+                }
+                catch (System.Exception ex)
+                {
+                    m_log.Error(ex);
+                }
             }
             #endif
 
