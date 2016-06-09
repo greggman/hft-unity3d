@@ -96,7 +96,10 @@ namespace HappyFunTimes
 
         public void StopListening()
         {
-            m_listening = false;
+            if (m_listening)  // just to make sure this is used
+            {
+                m_listening = false;
+            }
             if (m_hftSite != null)
             {
                 m_hftSite.Stop();
