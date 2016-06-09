@@ -9,7 +9,6 @@ namespace HappyFunTimes {
 
         public HFTCaptivePortalHandler(HFTWebServerUtils utils)
         {
-            m_log.Tell("Fix hard coded url");
             m_webServerUtils = utils;
             m_appleResponseContent = System.Text.Encoding.UTF8.GetBytes("<HTML><HEAD><TITLE>Success</TITLE></HEAD><BODY>Success</BODY></HTML>");
         }
