@@ -3,6 +3,8 @@ Assets/AssetStoreTools.meta
 Assembly-CSharp-Editor.csproj
 Assembly-CSharp.csproj
 hft-unity3d.sln
+hft-unity.unitypackage
+hft-unity3d.unitypackage
 bin
 node_modules
 bower_components
