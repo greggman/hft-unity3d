@@ -96,7 +96,6 @@ namespace HappyFunTimes
 
         public void StopListening()
         {
-            m_listening = false;
             if (m_hftSite != null)
             {
                 m_hftSite.Stop();
@@ -221,7 +220,6 @@ do shell script myFile %(admin)s
         public void StartServer()
         {
             m_log.Info("Start Server");
-            m_listening = true;
 
             // Where should this be checked?
             string controllerPath = "/" + m_options.controllerFilename;
@@ -305,7 +303,6 @@ do shell script myFile %(admin)s
             }
         }
 
-        bool m_listening;
         HFTLog m_log = new HFTLog("HFTManager");
         HFTRuntimeOptions m_options;
         GameObject m_gameObject;
