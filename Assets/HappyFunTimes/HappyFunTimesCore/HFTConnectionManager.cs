@@ -48,16 +48,6 @@ namespace HappyFunTimes
 
         public void StartHappyFunTimes()
         {
-            StartConnection();
-        }
-
-        public void StopHappyFunTimes()
-        {
-            Cleanup();
-        }
-
-        void StartConnection()
-        {
             if (!m_started)
             {
                 m_started = true;
@@ -65,39 +55,7 @@ namespace HappyFunTimes
             }
         }
 
-        void FailedToStart()
-        {
-            m_log.Error("could not connect to server:");
-        }
-
-        void StartGameServer()
-        {
-            m_server.Init();
-        }
-
-        public HFTConnectionManager(GameObject gameObject, HFTGameOptions options)
-        {
-            m_gameObject = gameObject;
-            m_options = new HFTRuntimeOptions(options);
-
-            m_server = new GameServer(m_options, gameObject);
-            m_server.OnConnect += Connected;
-            m_server.OnDisconnect += Disconnected;
-
-            m_hftManager = new HFTManager();
-            m_hftManager.OnReady += StartGameServer;
-            m_hftManager.OnFail += FailedToStart;
-        }
-
-        void Connected()
-        {
-        }
-
-        void Disconnected()
-        {
-        }
-
-        void Cleanup()
+        public void StopHappyFunTimes()
         {
             if (m_started)
             {
@@ -132,14 +90,36 @@ namespace HappyFunTimes
             }
         }
 
-        void OnDestroy()
+        void FailedToStart()
         {
-            Cleanup();
+            m_log.Error("could not connect to server:");
         }
 
-        void OnApplicationExit()
+        void StartGameServer()
         {
-            Cleanup();
+            m_server.Init();
+        }
+
+        public HFTConnectionManager(GameObject gameObject, HFTGameOptions options)
+        {
+            m_gameObject = gameObject;
+            m_options = new HFTRuntimeOptions(options);
+
+            m_server = new GameServer(m_options, gameObject);
+            m_server.OnConnect += Connected;
+            m_server.OnDisconnect += Disconnected;
+
+            m_hftManager = new HFTManager();
+            m_hftManager.OnReady += StartGameServer;
+            m_hftManager.OnFail += FailedToStart;
+        }
+
+        void Connected()
+        {
+        }
+
+        void Disconnected()
+        {
         }
 
         private bool m_started;
