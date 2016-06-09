@@ -108,6 +108,7 @@ namespace HappyFunTimes
         {
             if (m_started)
             {
+                m_log.Info("Stopping HappyFunTimes");
                 m_started = false;
                 enabled = false;
                 m_connectionManager.StopHappyFunTimes();

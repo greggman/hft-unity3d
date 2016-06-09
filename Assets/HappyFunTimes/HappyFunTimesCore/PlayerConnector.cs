@@ -83,6 +83,7 @@ public class PlayerConnector : MonoBehaviour
     {
         if (!m_started)
         {
+            m_log.Info("Starting HappyFunTimes");
             m_started = true;
             enabled = true;
             m_connectionManager.StartHappyFunTimes();
@@ -93,6 +94,7 @@ public class PlayerConnector : MonoBehaviour
     {
         if (m_started)
         {
+            m_log.Info("Stopping HappyFunTimes");
             m_started = false;
             enabled = false;
             m_connectionManager.StopHappyFunTimes();
@@ -142,7 +144,7 @@ public class PlayerConnector : MonoBehaviour
     private bool m_connectToServerOnStart;
     private HFTPlayerManager m_playerManager;
     private HFTConnectionManager m_connectionManager;
-    //private HFTLog m_log = new HFTLog("PlayerConnector");
+    private HFTLog m_log = new HFTLog("PlayerConnector");
     private HFTRuntimeOptions m_options;
 };
 

@@ -65,6 +65,7 @@ namespace HappyFunTimes
         {
             if (!m_started)
             {
+                m_log.Info("Starting HappyFunTimes");
                 m_started = true;
                 enabled = true;
                 m_connectionManager.StartHappyFunTimes();
@@ -75,6 +76,7 @@ namespace HappyFunTimes
         {
             if (m_started)
             {
+                m_log.Info("Stopping HappyFunTimes");
                 m_started = false;
                 enabled = false;
                 m_connectionManager.StopHappyFunTimes();
@@ -110,6 +112,7 @@ namespace HappyFunTimes
         private HFTConnectionManager m_connectionManager;
         //private HFTLog m_log = new HFTLog("HFTNoPlayers");
         private HFTRuntimeOptions m_options;
+        private HFTLog m_log = new HFTLog("HFTNoPlayers");
     };
 
 }   // namespace HappyFunTimes
