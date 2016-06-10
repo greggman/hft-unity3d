@@ -344,7 +344,9 @@ namespace HappyFunTimes
         {
             res.ContentType = "text/text";
             res.StatusCode = (int)HttpStatusCode.NotFound;
-            res.WriteContent(System.Text.Encoding.UTF8.GetBytes("unknown path: " + path + "\n"));
+            string error = "unknown path: " + req.RawUrl;
+            res.WriteContent(System.Text.Encoding.UTF8.GetBytes(error));
+            m_log.Info(error);
             return true;
         }
 
