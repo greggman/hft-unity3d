@@ -1,0 +1,128 @@
+# Migrating from 1.x to 2.x
+
+Please **BACKUP YOUR WORK**. Copy your entire project to a new folder and try this in the new folder
+
+Steps
+
+1.  Close Unity
+
+2.  Delete `Assets/Plugins/HFTRunner.cs`, `Assets/Plugins/HappyFunTimes.dll`, and
+    `Assets/Plugins/Editor/HappyFunTimesEditor.dll`
+
+3.  Download the [new plugin file](https://github.com/greggman/hft-unity3d/releases/download/v2.0.0/hft-unity3d-v2.0.2.unitypackage)
+
+4.  Install everything to your project **EXCEPT** files you changed.
+    For example if you have a custom `Assets/WebPlayerTemplates/HappyFunTimes/controller.html`
+    don't install over that.
+
+5.  Now open the project in Unity. You were probably using the `PlayerSpawner` or
+    `PlayerConnector` script on one of your objects. (in the samples that's usually on
+    an object called `LevelManager`). That script is probably missing now so reconnect
+    it. Click the circle next to "Missing Script" and select `PlayerSpawner` or
+    `PlayerConnector`, which ever one you were using before.
+
+6.  Rename `Assets/WebPlayerTemplates/HappyFunTimes` to `Assets/WebPlayerTemplates/HappyFunTimes2`.
+    Make sure Unity is the front app. Then rename it back to `Assets/WebPlayerTemplates/HappyFunTimes`
+    (this is because the new happyfuntimes has to copy files but it only copies new or modified files.
+    Since your files already exist it can't tell. This rename makes it appear all the files are new).
+
+7.  Go to your `PlayerSpawner` or `PlayerConnector`. Under HappyFunTimes.Options put in the
+    path to your controller.html The path is relative to `Assets/WebPlayerTemplates/HappyFunTimes`.
+    If you were using the gamepad controller set the path to `controllers/gamepad/controller.html`
+
+8.  If you have a custom controller see below
+
+## Things to note:
+
+*  No need to run HappyFunTimes any more
+
+*  [Installation mode](http://docs.happyfuntimes.net/docs/unity/installation-mode.html) can be
+   run from inside the editor or from your exported game with a command line switch
+
+*  Just build using the regular Unity build process. Publish on itch.io or whereever you want.
+   (please tag with `happyfuntimes`)
+
+*  No more crazy weird HTML or CSS. You're in complete control. The only file you absolutely
+   must include is `/hft/hft.js` (or it minimized version) `/hft/hft-min.js`  Everything else
+   is optional and up to you.
+
+## Fixing up custom controllers
+
+If you had a custom `controller.js` or `controller.html` you'll need to do some editing.
+Look at one of the other `controller.html` files in `Assets/WebPlayerTemplates/HappyFunTimes/controllers/...`.
+Copy everything from the top of the file to the line
+
+    <div id="hft-content">
+
+into the top of your `controller.html`. Then copy everything from
+
+    <div id="hft-menu"><img src="/hft/assets/gear-icon.svg"></div>
+
+to the end to the bottom of your `controller.html` file.
+
+Similarly compare your `controller.js` to one of the new `controller.js` files
+
+The old structure looked like
+
+    requirejs([
+       ....
+      ], function(
+       ...
+      ) {
+         .. lots of code ..
+    });
+
+The new structure removes everything except
+
+        .. lots of code ..
+
+And adds a few things.
+
+At the top of `controller.js` the samples get a bunch of global variables like this
+
+```
+var commonUI = window.sampleUI.commonUI;
+var input = window.sampleUI.input;
+var misc = window.sampleUI.misc;
+var mobileHacks = window.sampleUI.mobileHacks;
+var strings = window.sampleUI.strings;
+var touch = window.sampleUI.touch;
+```
+
+Make sure those variables match your code. For example maybe you used upper case names like
+
+```
+var CommonUI = window.sampleUI.commonUI;
+var Input = window.sampleUI.input;
+var Misc = window.sampleUI.misc;
+var MobileHacks = window.sampleUI.mobileHacks;
+var Strings = window.sampleUI.strings;
+var Touch = window.sampleUI.touch;
+```
+
+Look for your line
+
+    g_client = new GameClient();
+
+And change it to
+
+    g_client = new hft.GameClient();
+
+If your code was using `client` or some other variable keep the variable the same name.
+The important part is to change `GameClient` to `hft.GameClient`
+
+Look for a line like this
+
+    commonUI.setupStandardControllerUI(g_client, globals);
+
+Add these two lines after
+
+    commonUI.askForNameOnce();  // ask for the user's name if they haven't set one
+    commonUI.showMenu(true);    // show the gear menu
+
+Make sure `commonUI`'s case matches your's. If you used `CommonUI` with an uppercase `C`
+then that instead. **NOTE** if you don't want the user to be asked for a name or you don't
+want the gear menu just leave those lines out.
+
+
+
