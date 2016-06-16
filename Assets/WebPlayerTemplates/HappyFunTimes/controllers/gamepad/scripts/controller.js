@@ -140,7 +140,7 @@ function handleColor(data) {
   };
   var style = $("background-style").text;
   style = strings.replaceParams(style, subs).replace(/[\n ]+/g, ' ').trim();
-  document.body.style.background = style;
+  $("hft-content").style.background = style;
 }
 
 function notLayout(name) {
