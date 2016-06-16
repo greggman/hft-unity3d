@@ -67,6 +67,11 @@ phone if not possible. It asks the user for a name. It manages the `gear` icon m
 ou are free to use that or delete it and write your own. If you write your own
 feel free to delete `WebPlayerTemplates/HappyFunTimes/sample-ui` and `HFTPlayerNameManager.cs`
 
+## Upgrading from 1.x
+
+If you are upgrading from 1.x, follow the directions in
+`HappyFunTimes-1.x-to-2.x-Migration-README.txt`
+
 ## Debugging
 
 If you are making custom controllers I hope I'd provided enough info to get started. For example
