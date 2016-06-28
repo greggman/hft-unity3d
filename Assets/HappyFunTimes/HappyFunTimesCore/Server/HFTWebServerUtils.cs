@@ -12,21 +12,22 @@ namespace HappyFunTimes {
             m_gamePath = gamePath;
         }
 
-        public void SendJsonBytes(HttpListenerResponse res, byte[] data)
+        public bool SendJsonBytes(HttpListenerResponse res, byte[] data)
         {
             res.StatusCode = (int)HttpStatusCode.OK;
             res.ContentType = "application/json";
             res.ContentEncoding = System.Text.Encoding.UTF8;
             res.AddHeader("Access-Control-Allow-Origin", "*");
             res.WriteContent(data);
+            return true;
         }
 
-        public void SendContent(HttpListenerResponse res, string path, string content)
+        public bool SendContent(HttpListenerResponse res, string path, string content)
         {
-            SendContent(res, path, System.Text.Encoding.UTF8.GetBytes(content));
+            return SendContent(res, path, System.Text.Encoding.UTF8.GetBytes(content));
         }
 
-        public void SendContent(HttpListenerResponse res, string path, byte[] content)
+        public bool SendContent(HttpListenerResponse res, string path, byte[] content)
         {
             string mimeType = HFTMimeType.GetMimeType(path);
             res.ContentType = mimeType;
@@ -40,6 +41,7 @@ namespace HappyFunTimes {
             res.AddHeader("Pragma",        "no-cache");                            // HTTP 1.0.
             res.AddHeader("Expires",       "0");                                   // Proxies.
             res.WriteContent(content);
+            return true;
         }
 
         public bool GetGameFile(string path, out byte[] content)
@@ -64,8 +66,7 @@ namespace HappyFunTimes {
                 return false;
             }
 
-            SendContent(res, path, content);
-            return true;
+            return SendContent(res, path, content);
         }
 
         private string m_gamePath;
