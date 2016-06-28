@@ -15,6 +15,16 @@ namespace HappyFunTimes {
 
         public bool HandleRequest(string path, HttpListenerRequest req, HttpListenerResponse res)
         {
+            if (path.Equals("/generate_204"))
+            {
+                return m_webServerUtils.SendContent(res, path, "");
+            }
+
+            if (path.Equals("/xtra2.bin"))
+            {
+                return m_webServerUtils.SendFile("/hft/captive-portal/xtra2.bin", req, res);
+            }
+
             return Check(path, req, res);
         }
 
@@ -43,8 +53,7 @@ namespace HappyFunTimes {
                 if (isLoginURL)
                 {
                     session.loggedIn = true;
-                    SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/game-login.html");
-                    return true;
+                    return SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/game-login.html");
                 }
 
                 // We've seen this device before. Either it's checking that it can connect or it's asking for a normal webpage.
@@ -57,8 +66,7 @@ namespace HappyFunTimes {
                         return true;
                     }
                 }
-                SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/captive-portal.html");
-                return true;
+                return SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/captive-portal.html");
             }
 
             if (!isCheckingForApple)
@@ -70,8 +78,7 @@ namespace HappyFunTimes {
             m_log.Info("send captive-portal.html with new session: " + sessionId);
             // We are checking for apple for the first time so remember the path
             m_sessions[sessionId] = new Session();
-            SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/captive-portal.html");
-            return true;
+            return SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/captive-portal.html");
         }
 
         string GetBaseUrl(HttpListenerRequest req)
@@ -84,14 +91,14 @@ namespace HappyFunTimes {
                 + ":" + localEndPoint.Port.ToString();
         }
 
-        void SendCaptivePortalHTML(HttpListenerRequest req, HttpListenerResponse res, string sessionId, string path)
+        bool SendCaptivePortalHTML(HttpListenerRequest req, HttpListenerResponse res, string sessionId, string path)
         {
             //var fullPath = path.normalize(path.join(this.options.baseDir, opt_path));
             byte[] content = null;
             if (!m_webServerUtils.GetGameFile(path, out content))
             {
                 res.StatusCode = (int)HttpStatusCode.NotFound;
-                return;
+                return true;
             }
 
             string str = System.Text.Encoding.UTF8.GetString(content);
@@ -100,7 +107,7 @@ namespace HappyFunTimes {
             subs["sessionId"] = sessionId;
             str = HFTUtil.ReplaceParamsFlat(str, subs);
             m_log.Info("SCPH: Sending " + path);
-            m_webServerUtils.SendContent(res, path, str);
+            return m_webServerUtils.SendContent(res, path, str);
         }
 
         class Session
