@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>Clean Controls</title>
+  <style>
+  body {
+      margin: 0;
+      color: white;
+      font-size: xx-large;
+      font-weight: bold;
+      font-family: sans-serif;
+  }
+  #toucharea {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+  }
+  </style>
+</head>
+<body>
+<div id="toucharea">
+    <div id="msg">touch to move</div>
+</div>
+</body>
+<!--
+The following script line includes happyfuntimes which defines `hft`.
+-->
+<script src="/hft/hft.js"></script>
+<script>
+// Connect to the game
+const client = new hft.GameClient();
+client.addEventListener('connect', handleConnect);
+client.addEventListener('disconnect', handleDisconnect);
+client.addEventListener('color', handleColor);
+client.addEventListener('scored', handleScored);
+
+let points = 0;
+
+function handleConnect() {
+  // nothing to do here though maybe we don't want to
+  // send any touch events until we've connected for example.
+}
+
+function handleDisconnect() {
+  touchArea.textContent = "...disconnected...";
+}
+
+function to255(v) {
+  return v * 255 | 0;
+}
+
+function handleColor(data) {
+  var color = "rgb(" + to255(data.color.r) + "," + to255(data.color.g) + "," + to255(data.color.b) + ")";
+  touchArea.style.backgroundColor = color;
+}
+
+function handleScored(data) {
+  points += data.points;
+  touchArea.textContent = "points: " + points;
+}
+
+const touchArea = document.querySelector('#toucharea');
+touchArea.addEventListener('mousemove', handleMouseMove);
+touchArea.addEventListener('touchmove', handleTouchMove);
+touchArea.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+});
+
+function handleTouchMove(event) {
+  // only handle the first touch
+  sendMoveCmd(getRelativePosition(event.touches[0], touchArea), touchArea);
+}
+
+function handleMouseMove(event) {
+  sendMoveCmd(getRelativePosition(event, touchArea), touchArea);
+}
+
+// This will generate a 'move' event in the corresponding
+// NetPlayer object in the game.
+function sendMoveCmd(position, target) {
+  // normalize the position from 0 to 1 because
+  // different players smartphones will have different size
+  // screens
+  client.sendCmd('move', {
+    x: position.x / target.clientWidth,
+    y: position.y / target.clientHeight,
+  });
+};
+
+
+function getRelativePosition(event, target) {
+  target = target || event.target;
+  var rect = target.getBoundingClientRect();
+
+  return {
+    x: event.clientX - rect.left,
+    y: event.clientY - rect.top,
+  }
+}
+
+</script>
+</html>
+
+

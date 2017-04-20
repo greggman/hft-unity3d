@@ -172,6 +172,14 @@
 	    };
 
 	    /**
+	     * synonym for addEventListener
+	     * @param {string} eventType name of event
+	     * @param {GameClient~Listener} listener callback to call for
+	     *        event.
+	     */
+	    this.on = this.addEventListener;
+
+	    /**
 	     * Removes an eventListener
 	     * @param {string} eventType name of event
 	     */
