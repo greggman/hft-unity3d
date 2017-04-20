@@ -145,7 +145,8 @@ namespace HappyFunTimes
             // BUT, if the user specifices an address URL or a local URL I'm SOL basically
             // I just pass them through if I can't find them
             if (rendezvousUri_.HostNameType != System.UriHostNameType.IPv4 &&
-                rendezvousUri_.HostNameType != System.UriHostNameType.IPv6)
+                rendezvousUri_.HostNameType != System.UriHostNameType.IPv6 &&
+                !rendezvousUri_.IsLoopback)
             {
                 string[] addresses = HFTDnsUtils.GetIPAddresses(rendezvousUri_.DnsSafeHost, type);
                 if (addresses != null && addresses.Length > 0)
@@ -183,7 +184,10 @@ namespace HappyFunTimes
 
             foreach (Informer informer in informers_)
             {
-                informer.Stop(this);
+                if (informer != null)
+                {
+                    informer.Stop(this);
+                }
             }
         }
 
