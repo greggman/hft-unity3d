@@ -222,7 +222,7 @@ namespace HappyFunTimes
                     return;
                 }
 
-                m_log.Error("Unknown cmd: " + cmd);
+                m_log.Error("Unknown cmd: " + cmd.cmd);
                 res.ContentType = "application/json";
                 res.StatusCode = (int)HttpStatusCode.BadRequest;
                 res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"unknown cmd: " + cmd + "\"}"));
@@ -360,10 +360,12 @@ namespace HappyFunTimes
             // Yes reaching up this far is shit :(
             if (!HFTGameManager.GetInstance().HaveGame())
             {
-                res.StatusCode = (int)HttpStatusCode.NotFound;
+                res.ContentType = "application/json";
+                res.StatusCode = (int)HttpStatusCode.BadRequest;
+                res.WriteContent(System.Text.Encoding.UTF8.GetBytes("{\"error\":\"game not ready:\"}"));
+            } else {
+                m_webServerUtils.SendJsonBytes(res, m_ping);
             }
-
-            m_webServerUtils.SendJsonBytes(res, m_ping);
         }
 
         void HandleCmdRedir(HttpListenerRequest req, HttpListenerResponse res)
