@@ -12,7 +12,7 @@ public class ExamplePickARandomColor : MonoBehaviour {
         foreach (var c in gameObject.name) {
             seed += c;
         }
-        Random.seed = seed;
+        Random.InitState(seed);
         material.color = Random.ColorHSV(0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
     }
 }

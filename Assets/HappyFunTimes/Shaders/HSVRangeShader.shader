@@ -1,4 +1,6 @@
-﻿Shader "Custom/HSVRangeShader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/HSVRangeShader"
 {
     Properties
     {
@@ -49,7 +51,7 @@
             {
                 Fragment o;
 
-                o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+                o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv_MainTex = v.uv_MainTex;
 
                 return o;
