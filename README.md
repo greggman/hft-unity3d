@@ -81,3 +81,15 @@ Install the [Xamarin Platform](https://www.xamarin.com/platform)
 
 Note I have no made build scripts for windows. Feel free to submit a PR.
 
+## Dev Notes
+
+### macOS
+
+For whatever reason I can't seem to get the output of the macOS external server
+to deliver debug messages. To test that you can put a `return;` at the top of
+`HFTManager.StartExternalServer`. Then run the external server manually something
+like this
+
+    sudo  ~/Library/Application\ Support/Greggman/hft-unity3d/hft-server --hft-args="{\"debug\":\"*\",\"dns\":true,\"installationMode\":true,\"controllerFilename\":\"controllers/gamepad/controller.html\"}"
+
+
