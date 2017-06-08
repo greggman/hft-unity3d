@@ -163,6 +163,8 @@ namespace HappyFunTimes
 
         void StartExternalServer(bool admin)
         {
+//return;
+            m_log.Info("StartExternalServer");
             TextAsset serverData = LoadTextAsset("HFTOSXServer");
             TextAsset shaData = LoadTextAsset("HFTOSXServer.sha256");
             if (serverData == null || shaData == null)
@@ -173,6 +175,7 @@ namespace HappyFunTimes
             string serverPath = Application.persistentDataPath + "/hft-server";
             string shaPath = Application.persistentDataPath + "/hft-server.sha";
 
+            m_log.Info("Checking: " + serverPath);
             if (!FileExistsAndSame(serverPath, shaPath, shaData.text))
             {
                 HFTUtil.WriteBytes(serverPath, serverData.bytes);
@@ -210,14 +213,17 @@ do shell script myFile %(admin)s
                     m_log.Info("webserver: stdout: " + e.Data);
                 }
             });
+            m_log.Info("StartExternalServer: start");
             p.Start();
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
             if (p.WaitForExit(2000)) {
                 // If it exited there was an error
                 m_log.Tell("error starting webserver: exit code = " + p.ExitCode);
+            } else {
+                m_webServerProcess = p;
+                m_log.Info("StartExternalServer: started");
             }
-            m_webServerProcess = p;
         }
         #endif
 

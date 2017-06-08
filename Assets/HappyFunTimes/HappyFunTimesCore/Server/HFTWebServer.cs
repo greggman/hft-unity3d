@@ -151,7 +151,7 @@ namespace HappyFunTimes
                 //    Debug.Log("Header: " + key + " = " + value);
                 //}
 
-                m_log.Info(path);
+                m_log.Info(req.Url.ToString() + "(" + path + ")");
                 if (!m_getRouter.Route(path, req, res))
                 {
                     throw new System.InvalidOperationException("no route for request: " + path);
