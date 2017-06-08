@@ -36,7 +36,7 @@ Steps
 
 *  No need to run HappyFunTimes any more
 
-*  [Installation mode](http://docs.happyfuntimes.net/docs/unity/installation-mode.html) can be
+*  [Installation mode](http://docs.happyfuntimes.net/docs/network.html) can be
    run from inside the editor or from your exported game with a command line switch
 
 *  Just build using the regular Unity build process. Publish on itch.io or whereever you want.
