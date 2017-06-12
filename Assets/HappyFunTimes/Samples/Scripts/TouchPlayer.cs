@@ -46,8 +46,8 @@ class TouchPlayer : MonoBehaviour
         m_renderer = GetComponent<Renderer>();
         m_position = transform.localPosition;
 
-        m_text = transform.FindChild("NameUI/Name").gameObject.GetComponent<UnityEngine.UI.Text>();
-        m_rawImage = transform.FindChild("NameUI/NameBackground").gameObject.GetComponent<UnityEngine.UI.RawImage>();
+        m_text = transform.Find("NameUI/Name").gameObject.GetComponent<UnityEngine.UI.Text>();
+        m_rawImage = transform.Find("NameUI/NameBackground").gameObject.GetComponent<UnityEngine.UI.RawImage>();
         m_rawImage.material = (Material)Instantiate(m_rawImage.material);
 
         // Notify us if the name changes.
