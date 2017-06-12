@@ -49,7 +49,8 @@
 <body>
   <div class="hft-center hft-fullsize">
       <h1>HappyFunTimes</h1>
-      <a id="start" href="%(startUrl)s">Start</a>
+      <h1>Please open your browser and go to hft.com</h1>
+<!--      <a id="start" href="%(startUrl)s" target="_blank">Start</a> -->
   </div>
 </body>
 </html>
