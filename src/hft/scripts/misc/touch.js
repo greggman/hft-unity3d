@@ -235,7 +235,7 @@ define(
 
     var updatePad = function(pad, padId, out) {
       var newDir = -1;
-      if (!out && pad.pointerId >= 0) {
+      if (!out /* && pad.pointerId !== 0*/) {
         var distSq = pad.vector.x * pad.vector.x + pad.vector.y * pad.vector.y;
         if (distSq > deadSpaceRadiusSq) {
           newDir = computeDir(pad.vector.x, pad.vector.y);
