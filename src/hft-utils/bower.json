@@ -1,6 +1,6 @@
 {
   "name": "hft-utils",
-  "version": "0.5.1",
+  "version": "0.8.3",
   "authors": [
     "Gregg Tavares <github@greggman.com>"
   ],
@@ -30,6 +30,6 @@
   ],
   "dependencies": {
     "tdl": "https://github.com/greggman/tdl.git#0.0.8",
-    "pako": "~0.2.5"
+    "pako": "http://github.com/nodeca/pako.git#0.2.5"
   }
 }

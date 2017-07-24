@@ -31,7 +31,7 @@
 "use strict";
 
 define([
-  'hft/misc/strings',
+  './strings',
   './io',
   './tiled',
 ], function(

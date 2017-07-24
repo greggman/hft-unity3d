@@ -176,10 +176,10 @@ define([
   };
 
   var setCanvasFontStyles = function(ctx, options) {
-    if (options.font        ) { ctx.font         = options.font;        }
-    if (options.fillStyle   ) { ctx.fillStyle    = options.fillStyle;   }
-    if (options.textAlign   ) { ctx.textAlign    = options.textAlign;   }
-    if (options.textBaseline) { ctx.textBaseline = options.textBaselne; }
+    if (options.font        ) { ctx.font         = options.font;         }
+    if (options.fillStyle   ) { ctx.fillStyle    = options.fillStyle;    }
+    if (options.textAlign   ) { ctx.textAlign    = options.textAlign;    }
+    if (options.testBaseline) { ctx.textBaseline = options.textBaseline; }
   };
 
   /**

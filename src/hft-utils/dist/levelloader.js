@@ -31,8 +31,8 @@
 "use strict";
 
 define([
-    'hft/misc/cssparse',
-    'hft/misc/strings',
+    './cssparse',
+    './strings',
     '../../tdl/tdl/textures',
     './imageloader',
     './tiledloader',
