@@ -445,6 +445,31 @@
 	      return s;
 	    }.bind(this);
 
+	    this.loadSounds = function(sounds, opt_callback) {
+	      var soundsPending = 1;
+	      var soundsLoaded = function() {
+	        --soundsPending;
+	        if (soundsPending == 0 && opt_callback) {
+	          opt_callback();
+	        }
+	      };
+
+	      Object.keys(sounds).forEach(function(sound) {
+	        var data = sounds[sound];
+	        ++soundsPending;
+	        if (data.jsfx) {
+	          this.makeJSFXSound(sound, data.jsfx, data.samples, soundsLoaded);
+	        } else {
+	          this.loadSound(sound, data.filename, data.samples, soundsLoaded);
+	        }
+	      }.bind(this));
+
+	      // so that we generate a callback even if there are no sounds.
+	      // That way users don't have to restructure their code if they have no sounds or if they
+	      // disable sounds by passing none in.
+	      setTimeout(soundsLoaded, 0);
+	    };
+
 	    this.init = function(sounds) {
 	      var a = new Audio()
 	      g_canPlayOgg = a.canPlayType("audio/ogg");
@@ -1634,10 +1659,10 @@
 	  };
 
 	  var setCanvasFontStyles = function(ctx, options) {
-	    if (options.font        ) { ctx.font         = options.font;        }
-	    if (options.fillStyle   ) { ctx.fillStyle    = options.fillStyle;   }
-	    if (options.textAlign   ) { ctx.textAlign    = options.textAlign;   }
-	    if (options.textBaseline) { ctx.textBaseline = options.textBaselne; }
+	    if (options.font        ) { ctx.font         = options.font;         }
+	    if (options.fillStyle   ) { ctx.fillStyle    = options.fillStyle;    }
+	    if (options.textAlign   ) { ctx.textAlign    = options.textAlign;    }
+	    if (options.testBaseline) { ctx.textBaseline = options.textBaseline; }
 	  };
 
 	  /**
