@@ -103,7 +103,8 @@ namespace HappyFunTimes {
 
             string str = System.Text.Encoding.UTF8.GetString(content);
             Dictionary<string, string> subs = new Dictionary<string, string>();
-            subs["startUrl"] = GetBaseUrl(req) + m_firstPath + "?sessionId=" + sessionId;
+///            subs["startUrl"] = GetBaseUrl(req) + m_firstPath + "?sessionId=" + sessionId;
+            subs["startUrl"] = m_firstPath + "?sessionId=" + sessionId;
             subs["sessionId"] = sessionId;
             str = HFTUtil.ReplaceParamsFlat(str, subs);
             m_log.Info("SCPH: Sending " + path);
