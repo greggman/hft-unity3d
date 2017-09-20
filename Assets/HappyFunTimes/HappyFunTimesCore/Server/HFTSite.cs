@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace HappyFunTimes
 {
@@ -39,7 +40,7 @@ namespace HappyFunTimes
             int tryCount_ = 0;
             bool done_ = false;
             bool haveNewAddresses_ = false;
-            WWW www_;
+            UnityWebRequest www_;
             HFTLog log_;
 
             public Informer(HFTLog log, SharedState sharedState, string url, string domain)
@@ -85,20 +86,19 @@ namespace HappyFunTimes
 
             IEnumerator InformCoroutine()
             {
-                var headers = new Dictionary<string, string>();
-                headers["Content-Type"] = "application/json";
-                headers["Host"] = domain_;
+                www_ = new UnityWebRequest(url_, UnityWebRequest.kHttpVerbPOST);
+                www_.uploadHandler = new UploadHandlerRaw(addressesBytes_);
+                www_.uploadHandler.contentType = "application/json";
+                www_.downloadHandler = new DownloadHandlerBuffer();
 
-                www_ = new WWW(url_, addressesBytes_, headers);
+                yield return www_.Send();
 
-                yield return www_;
-
-                string err = www_.error;
-                string result = www_.text;
+                bool isError = (www_.isNetworkError || www_.isHttpError);
+                string result = www_.downloadHandler.text;
                 www_ = null;
 
                 // Was it successful?
-                if (String.IsNullOrEmpty(err))
+                if (!isError)
                 {
                     // Yes
                     log_.Info("registered: " + addressesStr_ + " with " + domain_ + " for: " + result);
@@ -230,7 +230,6 @@ namespace HappyFunTimes
                         oldAddressesStr_ = newAddressesStr;
                         var data = new InformData(addresses, options_.port);
                         var json = Serializer.Serialize(data);
-                        log_.Info("sending: " + json);
                         addressBytes_ = System.Text.Encoding.UTF8.GetBytes(json);
                         haveNewAddresses = true;
                     }
