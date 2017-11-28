@@ -38,6 +38,7 @@ Assets
     └── HappyFunTimes
         ├── 3rdparty                see below
         ├── controllers
+        │   ├── camera              deletable
         │   ├── character-select    deletable
         │   ├── clean               deletable
         │   ├── gamepad             see below
@@ -103,6 +104,30 @@ also see some details about publishing your game here
 http://docs.happyfuntimes.net/docs/unity/rendezvous-server.html
 
 ## Change List
+
+*   2.1.4
+
+    *   Added MoreSamples/Camera sample
+
+*   2.1.3
+
+    *   Updated for 2017
+
+*   2.1.2
+
+    *   Fix sounds example
+
+*   2.1.1
+
+    *   Disable auto connect on iOS installation mode.
+
+        Apple either removed or broke this feature on iOS
+
+    *   Upadte to Unity 5.6.1
+
+*   2.1.0
+
+    *   Add Character example
 
 *   2.0.6
 
