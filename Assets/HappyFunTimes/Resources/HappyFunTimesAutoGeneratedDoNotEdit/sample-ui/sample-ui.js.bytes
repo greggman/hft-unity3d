@@ -3486,6 +3486,7 @@
 	    };
 
 	    var onPointerDown = function(e) {
+	      e.preventDefault();
 	      var padId = getClosestPad(e);
 	      checkStart(padId, e);
 	    };
@@ -3631,6 +3632,7 @@
 	    //};
 
 	    var handleButtonDown = function(e, buttonInfo) {
+	      e.preventDefault();
 	      addPointerId(buttonInfo, e.pointerId, e.timeStamp);
 	    };
 
