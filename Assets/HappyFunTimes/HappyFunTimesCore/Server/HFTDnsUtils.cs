@@ -14,11 +14,19 @@ namespace HappyFunTimes
             // the system DNS but ATM (a) I don't know how to find it and (b)
             // .NET/mono is broken
             DNS.Client.DnsClient client = new DNS.Client.DnsClient("8.8.8.8");
-            IList<System.Net.IPAddress> ips = client.Lookup(domain, type);
             List<string> addresses = new List<string>();
-            foreach (var ip in ips)
+            try 
             {
-                addresses.Add(ip.ToString());
+              IList<System.Net.IPAddress> ips = client.Lookup(domain, type);
+              foreach (var ip in ips)
+              {
+                  addresses.Add(ip.ToString());
+              }
+            }
+            catch(DNS.Client.ResponseException ex)
+            {
+              var log = new HFTLog("HFTDnsUtils");
+              log.Warn(String.Format("error getting DNS {0} record for {1}: {2}", type, domain, ex.ToString()));
             }
             return addresses.ToArray();
         }
