@@ -91,7 +91,7 @@ namespace HappyFunTimes
                 www_.uploadHandler.contentType = "application/json";
                 www_.downloadHandler = new DownloadHandlerBuffer();
 
-                yield return www_.Send();
+                yield return www_.SendWebRequest();
 
                 bool isError = (www_.isNetworkError || www_.isHttpError);
                 string result = www_.downloadHandler.text;
