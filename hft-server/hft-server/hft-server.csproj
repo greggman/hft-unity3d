@@ -162,6 +162,9 @@
     <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\DNS\Server\MasterFile.cs">
       <Link>DNS\Server\MasterFile.cs</Link>
     </Compile>
+    <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTBrowserVersion.cs">
+      <Link>HappyFunTimesCore\Server\HFTBrowserVersion.cs</Link>
+    </Compile>
     <Compile Include="..\..\Assets\HappyFunTimes\HappyFunTimesCore\Server\HFTCaptivePortalHandler.cs">
       <Link>HappyFunTimesCore\Server\HFTCaptivePortalHandler.cs</Link>
     </Compile>

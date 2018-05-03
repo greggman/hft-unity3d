@@ -38,6 +38,7 @@ namespace HappyFunTimes {
             bool isIndexURL = path.Equals("/index.html", StringComparison.Ordinal) ||
                               path.Equals("/", StringComparison.Ordinal)  ||
                               path.Equals(m_firstPath, StringComparison.Ordinal);
+            bool isIOS10 = HFTBrowserVersion.IsIOS10(req.UserAgent);
 
             if (isIndexURL)
             {
@@ -53,7 +54,7 @@ namespace HappyFunTimes {
                 if (isLoginURL)
                 {
                     session.loggedIn = true;
-                    return SendCaptivePortalHTML(req, res, sessionId, "/hft/captive-portal/game-login.html");
+                    return SendCaptivePortalHTML(req, res, sessionId, isIOS10 ? "/hft/captive-portal/game-login-manual.html" : "/hft/captive-portal/game-login.html");
                 }
 
                 // We've seen this device before. Either it's checking that it can connect or it's asking for a normal webpage.
