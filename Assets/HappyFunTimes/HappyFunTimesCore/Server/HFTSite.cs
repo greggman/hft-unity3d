@@ -135,7 +135,11 @@ namespace HappyFunTimes
 
         string MakeDirectUrl(string address)
         {
-            return rendezvousUri_.Scheme + "://" + address + ":" + rendezvousUri_.Port + rendezvousUri_.PathAndQuery;
+            if (address.Contains(":")) {
+                return rendezvousUri_.Scheme + "://[" + address + "]:" + rendezvousUri_.Port + rendezvousUri_.PathAndQuery;
+            } else {
+                return rendezvousUri_.Scheme + "://" + address + ":" + rendezvousUri_.Port + rendezvousUri_.PathAndQuery;
+            }
         }
 
         string[] GetIPAddresses(DNS.Protocol.RecordType type)

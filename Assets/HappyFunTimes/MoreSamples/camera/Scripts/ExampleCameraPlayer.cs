@@ -14,7 +14,7 @@ class ExampleCameraPlayer : MonoBehaviour {
     };
 
     private class MessagePic {
-        public string dataUrl;
+        public string dataUrl = "";
     }
 
     void InitializeNetPlayer(SpawnInfo spawnInfo) {

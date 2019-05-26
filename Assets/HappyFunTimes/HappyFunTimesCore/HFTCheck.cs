@@ -29,6 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 using UnityEngine;
+using UnityEngine.Networking;
 using HappyFunTimes;
 using System;
 using System.Collections;
@@ -46,7 +47,6 @@ namespace HappyFunTimes
         string m_url;
         int m_tries;
         bool m_found;
-        WWW m_www;
         const int s_maxTries = 500;
 
         public void Init(string url, Action onConnect, Action onFail)
@@ -88,27 +88,28 @@ namespace HappyFunTimes
         {
             string json = JsonUtility.ToJson(new PostCmd("happyFunTimesPingForGame"));
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
-            var headers = new Dictionary<string, string>();
-            headers["Content-Type"] = "application/json";
-            m_www = new WWW(m_url, bytes, headers);
+            using (var www = new UnityWebRequest(m_url, UnityWebRequest.kHttpVerbPOST)) {
+                www.uploadHandler = new UploadHandlerRaw(bytes);
+                www.uploadHandler.contentType = "application/json";
+                www.downloadHandler = new DownloadHandlerBuffer();
+                www.SetRequestHeader("Content-Type", "application/json");
+                yield return www.SendWebRequest();
 
-            yield return m_www;
-
-            string err = m_www.error;
-            string result = m_www.text;
-            m_www = null;
-
-            if (String.IsNullOrEmpty(err))
-            {
-                HFTPing ping = JsonUtility.FromJson<HFTPing>(result);
-                if (ping != null && ping.id.Equals("HappyFunTimes")) {
-                    m_found = true;
+                string err = www.error;
+                string result = www.downloadHandler.text;
+            
+                if (!www.isHttpError && !www.isNetworkError && String.IsNullOrEmpty(err))
+                {
+                    HFTPing ping = JsonUtility.FromJson<HFTPing>(result);
+                    if (ping != null && ping.id.Equals("HappyFunTimes")) {
+                        m_found = true;
+                    }
                 }
-            }
 
-            if (!m_found)
-            {
-                m_log.Tell("error: " + err + ", result:" + result);
+                if (!m_found)
+                {
+                    m_log.Tell("error: " + err + ", result:" + result);
+                }
             }
         }
     }

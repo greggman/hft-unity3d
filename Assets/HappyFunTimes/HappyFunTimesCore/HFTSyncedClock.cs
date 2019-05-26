@@ -34,6 +34,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DeJson;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace HappyFunTimes
 {
@@ -96,28 +97,31 @@ namespace HappyFunTimes
 
         IEnumerator PingClock()
         {
-            m_www = new WWW(m_url, m_timeCmdBytes, m_headers);
+            using (var www = new UnityWebRequest(m_url, UnityWebRequest.kHttpVerbPOST)) {
+                www.uploadHandler = new UploadHandlerRaw(m_timeCmdBytes);
+                www.uploadHandler.contentType = "application/json";
+                www.downloadHandler = new DownloadHandlerBuffer();
+                www.SetRequestHeader("Content-Type", "application/json");
+                double sendTime = HFTUtil.GetJSTimeInSeconds();
+                yield return www.SendWebRequest();
+                double receiveTime = HFTUtil.GetJSTimeInSeconds();
 
-            double sendTime = HFTUtil.GetJSTimeInSeconds();
-            yield return m_www;
-            double receiveTime = HFTUtil.GetJSTimeInSeconds();
+                string err = www.error;
+                string result = www.downloadHandler.text;
 
-            string err = m_www.error;
-            string result = m_www.text;
-            m_www = null;
-
-            if (!String.IsNullOrEmpty(err))
-            {
-                m_log.Tell("error: " + err + ", result:" + result);
-            }
-            else
-            {
-                HFTTimePing ping = JsonUtility.FromJson<HFTTimePing>(result);
-                if (ping != null && ping.time > 0.0)
+                if (www.isHttpError || www.isNetworkError && !String.IsNullOrEmpty(err)) {
+                    m_log.Tell("error: " + err + ", result:" + result);
+                }
+                else
                 {
-                    double duration = receiveTime - sendTime;
-                    double serverTime = ping.time + duration / 2;
-                    s_timeOffsetSeconds = serverTime - receiveTime;
+                    HFTTimePing ping = JsonUtility.FromJson<HFTTimePing>(result);
+                    if (ping != null && ping.time > 0.0)
+                    {
+                        double duration = receiveTime - sendTime;
+                        double serverTime = ping.time + duration / 2;
+                        s_timeOffsetSeconds = serverTime - receiveTime;
+                    }
+
                 }
             }
         }
@@ -125,11 +129,7 @@ namespace HappyFunTimes
         bool m_running = false;
         HFTLog m_log = new HFTLog("HFTSyncedClock");
         string m_url;
-        WWW m_www;
         byte[] m_timeCmdBytes = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(new PostCmd("time")));
-        Dictionary<string, string> m_headers = new Dictionary<string, string>() {
-            { "Content-Type", "application/json" },
-        };
 
         static bool s_haveSyncedClock = false;
         static double s_timeOffsetSeconds = 0.0;
