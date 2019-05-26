@@ -29,7 +29,7 @@
 <!--
 The following script line includes happyfuntimes which defines `hft`.
 -->
-<script src="/hft/hft.hft-js"></script>
+<script src="/hft/hft.js"></script>
 <script>
 // Connect to the game
 const client = new hft.GameClient();
