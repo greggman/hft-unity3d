@@ -1,6 +1,6 @@
 {
   "name": "hft-unity3d",
-  "version": "2.1.5",
+  "version": "2.1.7",
   "description": "builder for happyfuntimes unity javascript runtime support",
   "main": "index.js",
   "scripts": {
