@@ -26,7 +26,7 @@ namespace HappyFunTimes
             catch(DNS.Client.ResponseException ex)
             {
               var log = new HFTLog("HFTDnsUtils");
-              log.Warn(String.Format("error getting DNS {0} record for {1}: {2}", type, domain, ex.ToString()));
+              log.Warn(String.Format("no {0} DNS record for {1}", type, domain, ex));
             }
             return addresses.ToArray();
         }

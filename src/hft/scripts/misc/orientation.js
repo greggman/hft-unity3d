@@ -42,7 +42,7 @@ define([
   var currentOrientation = "none";
   var _canOrient = true;
 
-  if (!hftSettings.isApp && window.screen.orientation && window.screen.orientation.lock) {
+  if (false && !hftSettings.isApp && window.screen.orientation && window.screen.orientation.lock) {
     lockOrientation = function(orientation) {
       window.screen.orientation.lock(orientation).then(function() {
         console.log("orientation set");

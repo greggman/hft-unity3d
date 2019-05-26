@@ -36,7 +36,7 @@ then
 
 If you want to use this repo directly you should be aware of a few requirements
 
-### hft.js and hft.min.hs
+### hft.hft-js and hft.min.hs
 
 These are generated from files in `src/hft` using webpack.
 
@@ -62,7 +62,7 @@ The sample-ui is also in `src/hft` and is also generated with webpack
 
 #### Building
 
-Follow the instructions for `hft.js` above
+Follow the instructions for `hft.hft-js` above
 
 ### The OSX installation mode server
 

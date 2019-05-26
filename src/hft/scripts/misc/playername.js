@@ -58,6 +58,7 @@ define([
     "Eric",     "Anita",
     "Rick",     "Joss",
     "Colin",    "Angel",
+    "Shu",      "Misa",
   ];
 
   var PlayerNameHandler = function(client, element) {

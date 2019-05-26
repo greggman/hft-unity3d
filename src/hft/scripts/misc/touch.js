@@ -331,10 +331,26 @@ define(
       }
     };
 
-    container.addEventListener('pointerdown', onPointerDown, false);
-    container.addEventListener('pointermove', onPointerMove, false);
-    container.addEventListener('pointerup', onPointerUp, false);
-    container.addEventListener('pointerout', onPointerOut, false);
+    container.addEventListener('pointerdown', onPointerDown, {passive:false});
+    container.addEventListener('pointermove', onPointerMove, {passive:false});
+    container.addEventListener('pointerup', onPointerUp, {passive:false});
+    container.addEventListener('pointerout', onPointerOut, {passive:false});
+
+    // stop pinch to zoom?
+    document.addEventListener('touchmove', function (event) {
+      // if (event.scale !== 1) { event.preventDefault(); }
+      event.preventDefault();
+    }, {passive:false});
+
+    // prevent double click zoom
+    var lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+      var now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, {passive:false});
   };
 
   /**

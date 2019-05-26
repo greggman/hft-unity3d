@@ -6,7 +6,7 @@ module.exports = {
     entry: './hft.js',
     output: {
         path: path.join(__dirname, '../Assets/WebPlayerTemplates/HappyFunTimes/hft'),
-        filename: 'hft-min.js',
+        filename: 'hft-min.hft-js',
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({

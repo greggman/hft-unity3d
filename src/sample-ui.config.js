@@ -6,7 +6,7 @@ module.exports = {
     entry: './sample-ui.js',
     output: {
         path: path.join(__dirname, '../Assets/WebPlayerTemplates/HappyFunTimes/sample-ui'),
-        filename: 'sample-ui.js',
+        filename: 'sample-ui.hft-js',
     },
 }
 

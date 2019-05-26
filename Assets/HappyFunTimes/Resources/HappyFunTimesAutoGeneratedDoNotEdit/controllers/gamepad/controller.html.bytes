@@ -61,7 +61,7 @@
         <div class="button" id="buttonB"></div>
         <div id="touch">
            <div class="hft-instruction hft-fullcenter whiteoutline noevents">
-               Touch to Control
+               Touch to Control v3
            </div>
         </div>
         <div id="orient">
@@ -229,12 +229,12 @@ linear-gradient(
   <div id="hft-touchstart">
   </div>
 </div>
-<script src="/3rdparty/gyronorm.complete.min.js"></script>
-<script src="/3rdparty/chroma.min.js"></script>
-<script src="/3rdparty/game-utils-min.js"></script>
-<script src="/hft/hft.js"></script>
-<script src="/sample-ui/sample-ui-min.js"></script>
-<script src="scripts/controller.js"></script>
+<script src="/3rdparty/gyronorm.complete.min.hft-js"></script>
+<script src="/3rdparty/chroma.min.hft-js"></script>
+<script src="/3rdparty/game-utils-min.hft-js"></script>
+<script src="/hft/hft.hft-js"></script>
+<script src="/sample-ui/sample-ui-min.hft-js?123"></script>
+<script src="scripts/controller.hft-js"></script>
 </body>
 </html>
 

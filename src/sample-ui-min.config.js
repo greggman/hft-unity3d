@@ -6,7 +6,7 @@ module.exports = {
     entry: './sample-ui.js',
     output: {
         path: path.join(__dirname, '../Assets/WebPlayerTemplates/HappyFunTimes/sample-ui'),
-        filename: 'sample-ui-min.js',
+        filename: 'sample-ui-min.hft-js',
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({

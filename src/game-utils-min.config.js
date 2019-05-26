@@ -5,7 +5,7 @@ module.exports = {
     entry: './game-utils.js',
     output: {
         path: path.join(__dirname, '../Assets/WebPlayerTemplates/HappyFunTimes/3rdparty'),
-        filename: 'game-utils-min.js',
+        filename: 'game-utils-min.hft-js',
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
